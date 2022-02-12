@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="fragment"
+            type="com.rustamft.tasksft.screens.editor.EditorFragment" />
+
+        <variable
+            name="viewModel"
+            type="com.rustamft.tasksft.screens.editor.EditorViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".screens.editor.EditorFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <EditText
+                android:id="@+id/editor_title_edittext"
+                style="@style/EditText"
+                android:autofillHints="name,username"
+                android:hint="@string/title"
+                android:inputType="textShortMessage"
+                android:text="@={viewModel.observableTask.title}"
+                android:theme="@style/EditText" />
+
+            <EditText
+                android:id="@+id/editor_description_edittext"
+                style="@style/EditText"
+                android:autofillHints="name,username,emailAddress,postalAddress"
+                android:hint="@string/description"
+                android:inputType="textShortMessage"
+                android:text="@={viewModel.observableTask.description}"
+                android:theme="@style/EditText" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/editor_datetime_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.observableTask.hasReminder}"
+                android:minHeight="48dp"
+                android:text="@string/set_reminder"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:id="@+id/editor_datetime_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.observableTask.hasReminder ? View.VISIBLE : View.GONE}">
+
+                <Button
+                    android:id="@+id/editor_date_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginHorizontal="10dp"
+                    android:minHeight="48dp"
+                    android:onClick="@{() -> fragment.displayDatePicker()}"
+                    android:text="@={viewModel.observableTask.date}"
+                    android:textAllCaps="false"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/editor_time_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_toEndOf="@+id/editor_date_button"
+                    android:minHeight="48dp"
+                    android:onClick="@{() -> fragment.displayTimePicker()}"
+                    android:text="@={viewModel.observableTask.time}"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/editor_save_fab"
+            style="@style/FAB"
+            android:contentDescription="@string/save"
+            android:onClick="@{() -> fragment.save()}"
+            android:src="@drawable/ic_save"
+            android:theme="@style/FAB"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
