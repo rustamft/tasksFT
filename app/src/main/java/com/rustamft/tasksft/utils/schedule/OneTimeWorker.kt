@@ -32,20 +32,6 @@ class OneTimeWorker(
         val title = data.getString(Const.TASK_TITLE)
         val description = data.getString(Const.TASK_DESCRIPTION)
 
-        /*
-        val intent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra(Const.TASK_ID, id)
-        }
-
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.FLAG_UPDATE_CURRENT and PendingIntent.FLAG_MUTABLE
-        } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-        }
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, flags)
-        */
-
         val pendingIntent = NavDeepLinkBuilder(context)
             .setComponentName(MainActivity::class.java)
             .setGraph(R.navigation.nav_graph)
@@ -54,7 +40,7 @@ class OneTimeWorker(
             .createPendingIntent()
 
         val builder = NotificationCompat.Builder(context, Const.CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_checkbox_checked)
+            .setSmallIcon(R.drawable.ic_event)
             .setContentTitle(title)
             .setContentText(description)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

@@ -20,7 +20,7 @@
     <string name="sample_text">Sample text</string>
     <string name="save">Save</string>
     <string name="set_reminder">Set a reminder</string>
-    <string name="switch_night_mode">Switch to dark theme</string>
+    <string name="switch_night_mode">Switch night mode</string>
     <string name="task_details_drop_down_arrow">Task details drop down arrow</string>
     <string name="task_title_empty">Task title is empty</string>
     <string name="title">Title</string>

@@ -21,9 +21,9 @@ class ListViewModel @Inject constructor(
     private val workManager: AppWorkManager
 ) : ViewModel() {
 
-    fun getNightMode(): Int {
-        return prefs.getNightMode()
-    }
+    fun setNightMode(mode: Int)  = prefs.setNightMode(mode)
+
+    fun getNightMode(): Int = prefs.getNightMode()
 
     fun getList() = repo.getList()
 
@@ -52,11 +52,6 @@ class ListViewModel @Inject constructor(
         } else { // If there is a reminder time inside the task.
             DateTimeUtil.millisToString(task.millis).string
         }
-    }
-
-    fun millisIsInFuture(millis: Long): Boolean {
-        // TODO: remove if not used.
-        return DateTimeUtil.isInFuture(millis)
     }
 
     fun buildAppVersion(): String {

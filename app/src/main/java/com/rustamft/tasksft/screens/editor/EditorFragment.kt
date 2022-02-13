@@ -28,7 +28,6 @@ class EditorFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         enableBackCallback() // Override system back behaviour.
         setActionbarBackEnabled(true) // Display ActionBar back button
         setHasOptionsMenu(true) // Make onCreateOptionsMenu work.
@@ -76,6 +75,48 @@ class EditorFragment : Fragment() {
         _binding = null
     }
 
+    fun displayDatePicker() {
+        val datePicker = DatePickerFragment(binding.editorDateButton)
+        datePicker.show(childFragmentManager, Const.DATE_PICKER_DIALOG_TAG)
+    }
+
+    fun displayTimePicker() {
+        val timePicker = TimePickerFragment(binding.editorTimeButton)
+        timePicker.show(childFragmentManager, Const.TIME_PICKER_DIALOG_TAG)
+    }
+
+    fun save() {
+        lifecycleScope.launch {
+            val deferred = lifecycleScope.async {
+                try {
+                    viewModel.save()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    displayToast(e.message.toString())
+                }
+            }
+            deferred.await()
+            if (viewModel.hasTaskReminder()) {
+                val dateTime = viewModel.dateTimeUntilReminder()
+                var message = getString(R.string.reminder_in)
+                if (dateTime.month > 0) {
+                    message += dateTime.month.toString() + getString(R.string.reminder_months)
+                }
+                if (dateTime.day > 0) {
+                    message += dateTime.day.toString() + getString(R.string.reminder_days)
+                }
+                if (dateTime.hour > 0) {
+                    message += dateTime.hour.toString() + getString(R.string.reminder_hours)
+                }
+                if (dateTime.minute > 0) {
+                    message += dateTime.minute.toString() + getString(R.string.reminder_minutes)
+                }
+                displayToast(message)
+            }
+            navigateBack()
+        }
+    }
+
     private fun enableBackCallback() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -97,16 +138,6 @@ class EditorFragment : Fragment() {
         }
     }
 
-    fun displayDatePicker() {
-        val datePicker = DatePickerFragment(binding.editorDateButton)
-        datePicker.show(childFragmentManager, Const.DATE_PICKER_DIALOG_TAG)
-    }
-
-    fun displayTimePicker() {
-        val timePicker = TimePickerFragment(binding.editorTimeButton)
-        timePicker.show(childFragmentManager, Const.TIME_PICKER_DIALOG_TAG)
-    }
-
     private fun displaySaveDialog() {
         val builder = AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.unsaved_changes))
@@ -119,34 +150,6 @@ class EditorFragment : Fragment() {
 
     private fun displayToast(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_LONG).show()
-    }
-
-    fun save() {
-        lifecycleScope.launch {
-            val deferred = lifecycleScope.async {
-                try {
-                    viewModel.save()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    displayToast(e.message.toString())
-                }
-            }
-            deferred.await()
-            if (viewModel.hasTaskReminder()) {
-                val dateTime = viewModel.dateTimeUntilReminder()
-                var message = getString(R.string.reminder_in)
-                if (dateTime.month > 0)
-                    message += dateTime.month.toString() + getString(R.string.reminder_months)
-                if (dateTime.day > 0)
-                    message += dateTime.day.toString() + getString(R.string.reminder_days)
-                if (dateTime.hour > 0)
-                    message += dateTime.hour.toString() + getString(R.string.reminder_hours)
-                if (dateTime.minute > 0)
-                    message += dateTime.minute.toString() + getString(R.string.reminder_minutes)
-                displayToast(message)
-            }
-            navigateBack()
-        }
     }
 
     private fun navigateBack() {

@@ -2,6 +2,7 @@ package com.rustamft.tasksft.database.prefs
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import com.rustamft.tasksft.utils.Const
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -11,17 +12,15 @@ class TasksSharedPrefs @Inject constructor(
 
     private val prefs =
         context.getSharedPreferences("com.rustamft.tasksFT.shared_prefs", Context.MODE_PRIVATE)
-    private val nightMode = "night_mode"
 
-    // TODO: Add night mode changing func.
     override fun setNightMode(mode: Int) {
         prefs
             .edit()
-            .putInt(nightMode, mode)
+            .putInt(Const.NIGHT_MODE, mode)
             .apply()
     }
 
     override fun getNightMode(): Int {
-        return prefs.getInt(nightMode, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        return prefs.getInt(Const.NIGHT_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
     }
 }

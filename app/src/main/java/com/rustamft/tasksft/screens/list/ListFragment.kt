@@ -1,7 +1,10 @@
 package com.rustamft.tasksft.screens.list
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
@@ -44,6 +47,9 @@ class ListFragment : Fragment() {
             R.id.action_delete_finished -> {
                 viewModel.deleteFinished()
             }
+            R.id.action_switch_night -> {
+                switchNightMode()
+            }
             R.id.action_about_app -> {
                 displayAboutApp()
             }
@@ -65,7 +71,6 @@ class ListFragment : Fragment() {
     }
 
     fun onTaskChecked(task: AppTask) {
-        // TODO: try ckange date time color without data binding.
         task.isFinished = !task.isFinished
         viewModel.update(task)
     }
@@ -85,6 +90,10 @@ class ListFragment : Fragment() {
         return true
     }
 
+    private fun displayToast(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+
     private fun displayAboutApp() {
         val message = getString(R.string.about_app_content) + viewModel.buildAppVersion()
         val builder = AlertDialog.Builder(requireContext())
@@ -99,7 +108,33 @@ class ListFragment : Fragment() {
         builder.show()
     }
 
+    private fun switchNightMode() {
+        val mode: Int
+        val message: String
+        when (AppCompatDelegate.getDefaultNightMode()) {
+            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> {
+                mode = AppCompatDelegate.MODE_NIGHT_YES
+                message = "Night mode is on"
+            }
+            AppCompatDelegate.MODE_NIGHT_YES -> {
+                mode = AppCompatDelegate.MODE_NIGHT_NO
+                message = "Day mode is on"
+            }
+            else -> {
+                mode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                message = "Auto night mode is on"
+            }
+        }
+        AppCompatDelegate.setDefaultNightMode(mode)
+        viewModel.setNightMode(mode)
+        displayToast(message)
+    }
+
     private fun openGitHub() {
-        // TODO: implement.
+        val webPage = Uri.parse(Const.GITHUB_LINK)
+        val intent = Intent(Intent.ACTION_VIEW, webPage)
+        if (intent.resolveActivity(requireContext().packageManager) != null) {
+            startActivity(intent)
+        }
     }
 }
