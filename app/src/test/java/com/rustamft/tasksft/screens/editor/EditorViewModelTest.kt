@@ -2,11 +2,12 @@ package com.rustamft.tasksft.screens.editor
 
 import androidx.lifecycle.SavedStateHandle
 import com.rustamft.tasksft.database.entity.AppTask
-import com.rustamft.tasksft.database.repository.TasksRoomRepoMock
-import com.rustamft.tasksft.utils.Const
+import com.rustamft.tasksft.database.repository.TasksRoomRepo
+import com.rustamft.tasksft.utils.Constants
 import com.rustamft.tasksft.utils.TaskWorkManagerMock
 import com.rustamft.tasksft.utils.datetime.DateTimeString
 import com.rustamft.tasksft.utils.datetime.DateTimeUtil
+import io.mockk.mockk
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,6 +24,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.assertThrows
 
 // https://kotlinlang.org/docs/jvm-test-using-junit.html#run-a-test
 @DelicateCoroutinesApi
@@ -35,14 +37,14 @@ internal class EditorViewModelTest {
     private var _state: SavedStateHandle? = null
     private val state get() = _state
 
-    private var _repo: TasksRoomRepoMock? = null
+    private var _repo: TasksRoomRepo? = null
     private val repo get() = _repo
 
     private var _workManager: TaskWorkManagerMock? = null
     private val workManager get() = _workManager
 
-    private var _editorViewModel: EditorViewModel? = null
-    private val editorViewModel get() = _editorViewModel!!
+    private var _viewModel: EditorViewModel? = null
+    private val viewModel get() = _viewModel!!
 
     @BeforeAll
     fun setUp() {
@@ -58,15 +60,15 @@ internal class EditorViewModelTest {
     @BeforeEach
     fun init() {
 
-        _state = SavedStateHandle(mapOf(Pair<String, AppTask?>(Const.TASK_ID, null)))
-        _repo = TasksRoomRepoMock()
+        _state = SavedStateHandle(mapOf(Pair<String, AppTask?>(Constants.TASK_ID, null)))
+        _repo = mockk()
         _workManager = TaskWorkManagerMock()
 
         val id = 0
 
-        state!!.set(Const.TASK_ID, id)
+        state!!.set(Constants.TASK_ID, id)
 
-        _editorViewModel = EditorViewModel(
+        _viewModel = EditorViewModel(
             state!!,
             repo!!,
             workManager!!
@@ -75,27 +77,10 @@ internal class EditorViewModelTest {
 
     @Test
     fun saveThrowsExceptionIfTitleEmpty() {
-
-        runBlocking {
-            coroutineScope {
-                launch {
-
-                    editorViewModel.observableTask.title.set("")
-                    var message = ""
-
-                    val deferred = coroutineScope {
-                        async {
-                            try {
-                                editorViewModel.save()
-                            } catch (e: Exception) {
-                                message = e.message.toString()
-                            }
-                        }
-                    }
-                    deferred.await()
-
-                    assertTrue(message == "Title is empty")
-                }
+        viewModel.observableTask.title.set("")
+        assertThrows<java.lang.Exception>("Title is empty") {
+            runBlocking {
+                viewModel.save()
             }
         }
     }
@@ -114,9 +99,9 @@ internal class EditorViewModelTest {
                             millisToSchedule =
                                 DateTimeUtil.stringToMillis(dateTime)
 
-                            editorViewModel.observableTask.hasReminder.set(true)
-                            editorViewModel.observableTask.date.set(dateTime.date)
-                            editorViewModel.observableTask.time.set(dateTime.time)
+                            viewModel.observableTask.hasReminder.set(true)
+                            viewModel.observableTask.date.set(dateTime.date)
+                            viewModel.observableTask.time.set(dateTime.time)
                         }
                     }
                     deferred1.await()
@@ -124,7 +109,7 @@ internal class EditorViewModelTest {
                     val deferred2 = coroutineScope {
                         async {
                             try {
-                                editorViewModel.save()
+                                viewModel.save()
                             } catch (e: Exception) {
                                 print("PRINT_EXCEPTION: ${e.message}")
                             }

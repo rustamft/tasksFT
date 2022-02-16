@@ -3,7 +3,7 @@ package com.rustamft.tasksft.utils
 /**
  * Constants used throughout the application.
  */
-object Const {
+object Constants {
 
     const val NIGHT_MODE = "com.rustamft.tasksft.NIGHT_MODE"
 

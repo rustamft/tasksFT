@@ -5,7 +5,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.rustamft.tasksft.database.entity.AppTask
-import com.rustamft.tasksft.utils.Const
+import com.rustamft.tasksft.utils.Constants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -21,9 +21,9 @@ class TaskWorkManager @Inject constructor(
         val now = Calendar.getInstance().timeInMillis
         val delay: Long = task.millis.minus(now)
         val data = workDataOf(
-            Pair(Const.TASK_ID, task.id),
-            Pair(Const.TASK_TITLE, task.title),
-            Pair(Const.TASK_DESCRIPTION, task.description)
+            Pair(Constants.TASK_ID, task.id),
+            Pair(Constants.TASK_TITLE, task.title),
+            Pair(Constants.TASK_DESCRIPTION, task.description)
         )
         val work = OneTimeWorkRequestBuilder<OneTimeWorker>()
             .setInitialDelay(delay, TimeUnit.MILLISECONDS)

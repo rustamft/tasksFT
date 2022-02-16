@@ -89,7 +89,7 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/editor_save_fab"
             style="@style/FAB"
-            android:contentDescription="@string/save"
+            android:contentDescription="@string/action_save"
             android:onClick="@{() -> fragment.save()}"
             android:src="@drawable/ic_save"
             android:theme="@style/FAB"

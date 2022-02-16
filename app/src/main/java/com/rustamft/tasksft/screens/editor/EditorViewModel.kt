@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.rustamft.tasksft.database.entity.AppTask
 import com.rustamft.tasksft.database.entity.ObservableTask
 import com.rustamft.tasksft.database.repository.AppRepo
-import com.rustamft.tasksft.utils.Const
+import com.rustamft.tasksft.utils.Constants
 import com.rustamft.tasksft.utils.datetime.DateTimeString
 import com.rustamft.tasksft.utils.datetime.DateTimeUtil
 import com.rustamft.tasksft.utils.schedule.AppWorkManager
@@ -28,7 +28,7 @@ class EditorViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val id = state.get<Int>(Const.TASK_ID)
+            val id = state.get<Int>(Constants.TASK_ID)
             withContext(viewModelScope.coroutineContext) {
                 _task = if (id == null || id == -1) {
                     AppTask()

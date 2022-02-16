@@ -9,7 +9,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.activities.MainActivity
-import com.rustamft.tasksft.utils.Const
+import com.rustamft.tasksft.utils.Constants
 import kotlin.random.Random
 
 class OneTimeWorker(
@@ -28,18 +28,18 @@ class OneTimeWorker(
         // TODO: Implement notification buttons.
 
         val data = workerParams.inputData
-        val id = data.getInt(Const.TASK_ID, -1)
-        val title = data.getString(Const.TASK_TITLE)
-        val description = data.getString(Const.TASK_DESCRIPTION)
+        val id = data.getInt(Constants.TASK_ID, -1)
+        val title = data.getString(Constants.TASK_TITLE)
+        val description = data.getString(Constants.TASK_DESCRIPTION)
 
         val pendingIntent = NavDeepLinkBuilder(context)
             .setComponentName(MainActivity::class.java)
             .setGraph(R.navigation.nav_graph)
             .setDestination(R.id.editorFragment)
-            .setArguments(bundleOf(Pair(Const.TASK_ID, id)))
+            .setArguments(bundleOf(Pair(Constants.TASK_ID, id)))
             .createPendingIntent()
 
-        val builder = NotificationCompat.Builder(context, Const.CHANNEL_ID)
+        val builder = NotificationCompat.Builder(context, Constants.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_event)
             .setContentTitle(title)
             .setContentText(description)

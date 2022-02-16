@@ -2,7 +2,7 @@ package com.rustamft.tasksft.database.prefs
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import com.rustamft.tasksft.utils.Const
+import com.rustamft.tasksft.utils.Constants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -16,11 +16,11 @@ class TasksSharedPrefs @Inject constructor(
     override fun setNightMode(mode: Int) {
         prefs
             .edit()
-            .putInt(Const.NIGHT_MODE, mode)
+            .putInt(Constants.NIGHT_MODE, mode)
             .apply()
     }
 
     override fun getNightMode(): Int {
-        return prefs.getInt(Const.NIGHT_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        return prefs.getInt(Constants.NIGHT_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
     }
 }

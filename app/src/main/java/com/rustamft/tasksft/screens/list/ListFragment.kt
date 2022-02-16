@@ -19,7 +19,7 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.database.entity.AppTask
 import com.rustamft.tasksft.databinding.FragmentListBinding
 import com.rustamft.tasksft.screens.list.adapter.TasksListAdapter
-import com.rustamft.tasksft.utils.Const
+import com.rustamft.tasksft.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -89,7 +89,7 @@ class ListFragment : Fragment() {
 
     fun navigateNext(id: Int): Boolean {
         val bundle = Bundle()
-        bundle.putInt(Const.TASK_ID, id)
+        bundle.putInt(Constants.TASK_ID, id)
         val navController = NavHostFragment.findNavController(this)
         navController.navigate(R.id.action_listFragment_to_editorFragment, bundle)
         return true
@@ -119,15 +119,15 @@ class ListFragment : Fragment() {
         when (AppCompatDelegate.getDefaultNightMode()) {
             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> {
                 mode = AppCompatDelegate.MODE_NIGHT_YES
-                message = "Night mode is on"
+                message = getString(R.string.night_mode_on)
             }
             AppCompatDelegate.MODE_NIGHT_YES -> {
                 mode = AppCompatDelegate.MODE_NIGHT_NO
-                message = "Day mode is on"
+                message = getString(R.string.night_mode_off)
             }
             else -> {
                 mode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                message = "Auto night mode is on"
+                message = getString(R.string.night_mode_auto)
             }
         }
         AppCompatDelegate.setDefaultNightMode(mode)
@@ -136,7 +136,7 @@ class ListFragment : Fragment() {
     }
 
     private fun openGitHub() {
-        val webPage = Uri.parse(Const.GITHUB_LINK)
+        val webPage = Uri.parse(Constants.GITHUB_LINK)
         val intent = Intent(Intent.ACTION_VIEW, webPage)
         if (intent.resolveActivity(requireContext().packageManager) != null) {
             startActivity(intent)

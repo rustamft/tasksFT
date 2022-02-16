@@ -19,7 +19,7 @@ import com.rustamft.tasksft.activities.MainActivity
 import com.rustamft.tasksft.databinding.FragmentEditorBinding
 import com.rustamft.tasksft.screens.editor.picker.DatePickerFragment
 import com.rustamft.tasksft.screens.editor.picker.TimePickerFragment
-import com.rustamft.tasksft.utils.Const
+import com.rustamft.tasksft.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -82,12 +82,12 @@ class EditorFragment : Fragment() {
 
     fun displayDatePicker() {
         val datePicker = DatePickerFragment(binding.editorDateButton)
-        datePicker.show(childFragmentManager, Const.DATE_PICKER_DIALOG_TAG)
+        datePicker.show(childFragmentManager, Constants.DATE_PICKER_DIALOG_TAG)
     }
 
     fun displayTimePicker() {
         val timePicker = TimePickerFragment(binding.editorTimeButton)
-        timePicker.show(childFragmentManager, Const.TIME_PICKER_DIALOG_TAG)
+        timePicker.show(childFragmentManager, Constants.TIME_PICKER_DIALOG_TAG)
     }
 
     fun save() {

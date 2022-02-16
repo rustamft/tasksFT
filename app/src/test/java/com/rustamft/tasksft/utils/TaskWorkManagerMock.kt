@@ -14,4 +14,8 @@ class TaskWorkManagerMock : AppWorkManager {
     override fun cancel(task: AppTask) {
         scheduledMillis = 0
     }
+
+    override fun cancel(list: List<AppTask>) {
+        TODO("Not yet implemented")
+    }
 }

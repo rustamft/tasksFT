@@ -6,14 +6,14 @@
         android:id="@+id/action_delete_finished"
         android:icon="@drawable/ic_delete_finished"
         android:orderInCategory="0"
-        android:title="@string/delete_finished"
+        android:title="@string/action_delete_finished"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_switch_night"
         android:icon="@drawable/ic_switch_night"
         android:orderInCategory="1"
-        android:title="@string/switch_night_mode"
+        android:title="@string/night_mode_switch"
         app:showAsAction="ifRoom" />
 
     <item
