@@ -4,13 +4,25 @@ import androidx.lifecycle.SavedStateHandle
 import com.rustamft.tasksft.database.entity.AppTask
 import com.rustamft.tasksft.database.repository.TasksRoomRepoMock
 import com.rustamft.tasksft.utils.Const
-import com.rustamft.tasksft.utils.datetime.DateTimeUtil
 import com.rustamft.tasksft.utils.TaskWorkManagerMock
-import kotlinx.coroutines.*
+import com.rustamft.tasksft.utils.datetime.DateTimeString
+import com.rustamft.tasksft.utils.datetime.DateTimeUtil
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 
 // https://kotlinlang.org/docs/jvm-test-using-junit.html#run-a-test
 @DelicateCoroutinesApi
@@ -83,7 +95,6 @@ internal class EditorViewModelTest {
                     deferred.await()
 
                     assertTrue(message == "Title is empty")
-
                 }
             }
         }
@@ -95,18 +106,17 @@ internal class EditorViewModelTest {
             coroutineScope {
                 launch {
 
-                    val dateString = "01 Jan 2025"
-                    val timeString = "01:00"
+                    val dateTime = DateTimeString("01 Jan 2025", "01:00")
                     var millisToSchedule = 0L
 
                     val deferred1 = coroutineScope {
                         async {
                             millisToSchedule =
-                                DateTimeUtil.stringToMillis("$dateString $timeString", 2)
+                                DateTimeUtil.stringToMillis(dateTime)
 
                             editorViewModel.observableTask.hasReminder.set(true)
-                            editorViewModel.observableTask.date.set(dateString)
-                            editorViewModel.observableTask.time.set(timeString)
+                            editorViewModel.observableTask.date.set(dateTime.date)
+                            editorViewModel.observableTask.time.set(dateTime.time)
                         }
                     }
                     deferred1.await()
@@ -123,7 +133,6 @@ internal class EditorViewModelTest {
                     deferred2.await()
 
                     assertTrue(workManager!!.scheduledMillis == millisToSchedule)
-
                 }
             }
         }

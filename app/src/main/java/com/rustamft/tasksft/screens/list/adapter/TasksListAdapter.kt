@@ -39,9 +39,7 @@ class TasksListAdapter(
         }
     }
 
-
     class ViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root)
-
 
     class DiffCallback : DiffUtil.ItemCallback<AppTask>() {
         override fun areItemsTheSame(oldItem: AppTask, newItem: AppTask): Boolean {

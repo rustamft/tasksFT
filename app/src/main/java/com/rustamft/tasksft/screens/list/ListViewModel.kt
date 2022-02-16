@@ -21,7 +21,7 @@ class ListViewModel @Inject constructor(
     private val workManager: AppWorkManager
 ) : ViewModel() {
 
-    fun setNightMode(mode: Int)  = prefs.setNightMode(mode)
+    fun setNightMode(mode: Int) = prefs.setNightMode(mode)
 
     fun getNightMode(): Int = prefs.getNightMode()
 
@@ -55,7 +55,7 @@ class ListViewModel @Inject constructor(
     }
 
     fun buildAppVersion(): String {
-        var appVersion =  "Not available"
+        var appVersion = "Not available"
         try {
             val packageInfo = application.packageManager.getPackageInfo(application.packageName, 0)
             appVersion = packageInfo.versionName
