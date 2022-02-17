@@ -9,9 +9,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -43,25 +43,6 @@ class ListFragment : Fragment() {
         return binding.root // Return the view.
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.list_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_delete_finished -> {
-                viewModel.deleteFinished()
-            }
-            R.id.action_switch_night -> {
-                switchNightMode()
-            }
-            R.id.action_about_app -> {
-                displayAboutApp()
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(viewModel.getNightMode())
@@ -69,10 +50,31 @@ class ListFragment : Fragment() {
         binding.adapter = TasksListAdapter(this, viewModel.getList())
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.list_menu, menu)
+        updateNightModeMenuIcon(menu.getItem(1))
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding.adapter!!.job.cancel() // There's view reference leak in LeakCanary without this.
         _binding = null
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.list_menu_delete_finished -> {
+                viewModel.deleteFinished()
+            }
+            R.id.list_menu_switch_night -> {
+                switchNightMode()
+                updateNightModeMenuIcon(item)
+            }
+            R.id.list_menu_about_app -> {
+                displayAboutApp()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     fun onTaskChecked(task: AppTask) {
@@ -95,10 +97,6 @@ class ListFragment : Fragment() {
         return true
     }
 
-    private fun displayToast(text: String) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
-    }
-
     private fun displayAboutApp() {
         val message = getString(R.string.about_app_content) + viewModel.buildAppVersion()
         val builder = AlertDialog.Builder(requireContext())
@@ -114,25 +112,37 @@ class ListFragment : Fragment() {
     }
 
     private fun switchNightMode() {
-        val mode: Int
-        val message: String
-        when (AppCompatDelegate.getDefaultNightMode()) {
+        val mode: Int = when (AppCompatDelegate.getDefaultNightMode()) {
             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> {
-                mode = AppCompatDelegate.MODE_NIGHT_YES
-                message = getString(R.string.night_mode_on)
+                AppCompatDelegate.MODE_NIGHT_YES
             }
             AppCompatDelegate.MODE_NIGHT_YES -> {
-                mode = AppCompatDelegate.MODE_NIGHT_NO
-                message = getString(R.string.night_mode_off)
+                AppCompatDelegate.MODE_NIGHT_NO
             }
             else -> {
-                mode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                message = getString(R.string.night_mode_auto)
+                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
             }
         }
         AppCompatDelegate.setDefaultNightMode(mode)
         viewModel.setNightMode(mode)
-        displayToast(message)
+    }
+
+    private fun updateNightModeMenuIcon(item: MenuItem) {
+        val drawableID: Int = when (AppCompatDelegate.getDefaultNightMode()) {
+            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> {
+                R.drawable.ic_night_mode_auto
+            }
+            AppCompatDelegate.MODE_NIGHT_YES -> {
+                R.drawable.ic_night_mode_on
+            }
+            else -> {
+                R.drawable.ic_night_mode_off
+            }
+        }
+        val drawable = ContextCompat.getDrawable(requireContext(), drawableID)
+        if (item.icon != drawable) {
+            item.icon = drawable
+        }
     }
 
     private fun openGitHub() {

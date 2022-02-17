@@ -47,8 +47,20 @@ class EditorFragment : Fragment() {
         return binding.root // Return the view.
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.fragment = this // Bind Fragment to XML var.
+        binding.viewModel = viewModel // Bind ViewModel to XML var.
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.editor_menu, menu)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -57,7 +69,7 @@ class EditorFragment : Fragment() {
                 onBackClicked()
                 return true
             }
-            R.id.action_delete -> {
+            R.id.editor_menu_delete -> {
                 if (viewModel.observableTask.id != -1) {
                     viewModel.delete()
                 }
@@ -66,18 +78,6 @@ class EditorFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.fragment = this // Bind Fragment to XML var.
-        binding.viewModel = viewModel // Bind ViewModel to XML var.
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     fun displayDatePicker() {

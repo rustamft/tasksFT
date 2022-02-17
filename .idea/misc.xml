@@ -9,6 +9,10 @@
         <entry key="app/src/main/res/drawable/ic_checkbox_checked.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/drawable/ic_checkbox_unchecked.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.203" />
+        <entry key="app/src/main/res/drawable/ic_night_mode_auto.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_night_mode_off.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_night_mode_on.xml" value="0.205" />
+        <entry key="app/src/main/res/drawable/ic_switch_night.xml" value="0.205" />
         <entry key="app/src/main/res/drawable/radio_button_selector.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout-v23/list_item.xml" value="0.30416666666666664" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.32708333333333334" />
