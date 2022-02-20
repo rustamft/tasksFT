@@ -20,6 +20,9 @@
     <string name="night_mode_off">Night mode is off</string>
     <string name="night_mode_on">Night mode is on</string>
     <string name="night_mode_switch">Switch night mode</string>
+    <string name="notification_finish">Finish</string>
+    <string name="notification_snooze">Snooze for 1 hour</string>
+    <string name="notification_snoozed">Reminder snoozed for 1 hour</string>
     <string name="reminder_days">\ d.\ </string>
     <string name="reminder_hours">\ h.\ </string>
     <string name="reminder_in">Reminder in\ </string>

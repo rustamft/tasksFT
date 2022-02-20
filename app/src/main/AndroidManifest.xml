@@ -27,6 +27,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".utils.schedule.TaskBroadcastReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="com.rustamft.tasksft.FINISH"/>
+                <action android:name="com.rustamft.tasksft.SNOOZE"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

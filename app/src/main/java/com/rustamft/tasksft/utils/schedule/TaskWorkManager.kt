@@ -28,7 +28,7 @@ class TaskWorkManager @Inject constructor(
         val work = OneTimeWorkRequestBuilder<OneTimeWorker>()
             .setInitialDelay(delay, TimeUnit.MILLISECONDS)
             .setInputData(data)
-            .addTag(task.title)
+            .addTag(task.id.toString())
             .build()
         workManager.enqueue(work)
     }
