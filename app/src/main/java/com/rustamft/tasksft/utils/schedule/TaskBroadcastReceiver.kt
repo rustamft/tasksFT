@@ -11,7 +11,6 @@ import com.rustamft.tasksft.database.repository.AppRepo
 import com.rustamft.tasksft.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -24,31 +23,33 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
     @Inject
     lateinit var workManager: AppWorkManager
 
+    lateinit var task: AppTask
+
     override fun onReceive(context: Context?, intent: Intent?) {
+        val pendingResult = goAsync()
         runBlocking {
             val id = intent!!.extras!!.getInt(Constants.TASK_ID)
-            val task = withContext(coroutineContext) {
-                repo.getEntity(id)
-            }
+            task = repo.getEntity(id)
             when (intent.action) {
                 Constants.FINISH -> {
-                    finish(task)
+                    finishTask()
                 }
                 Constants.SNOOZE -> {
-                    snooze(task)
+                    snoozeTask()
                     displayToast(context!!, context.getString(R.string.notification_snoozed))
                 }
             }
             NotificationManagerCompat.from(context!!).cancel(id)
+            pendingResult.finish()
         }
     }
 
-    private suspend fun finish(task: AppTask) {
+    private suspend fun finishTask() {
         task.isFinished = true
         repo.update(task)
     }
 
-    private suspend fun snooze(task: AppTask) {
+    private suspend fun snoozeTask() {
         val now = Calendar.getInstance().timeInMillis
         val delay: Long = 60 * 60 * 1000 // One hour.
         task.millis = now + delay
