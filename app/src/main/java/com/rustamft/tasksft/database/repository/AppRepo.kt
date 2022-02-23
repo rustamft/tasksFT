@@ -23,7 +23,7 @@ interface AppRepo {
     suspend fun delete(task: AppTask)
     suspend fun delete(list: List<AppTask>)
     fun getList(): Flow<List<AppTask>>
-    suspend fun getIds(): List<Int>
+    suspend fun getNonExistingId(): Int
     suspend fun getFinished(): List<AppTask>
     suspend fun getEntity(id: Int): AppTask
 }

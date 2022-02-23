@@ -65,7 +65,7 @@ class OneTimeWorker(
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            0,
+            1,
             intent,
             flags
         )
@@ -83,7 +83,7 @@ class OneTimeWorker(
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            1,
+            2,
             intent,
             flags
         )

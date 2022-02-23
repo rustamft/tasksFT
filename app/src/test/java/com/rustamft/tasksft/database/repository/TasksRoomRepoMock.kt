@@ -11,12 +11,14 @@ class TasksRoomRepoMock : AppRepo {
         AppTask(0, "1", "111", 0L, false)
     )
 
-    override suspend fun getIds(): List<Int> {
+    override suspend fun getNonExistingId(): Int {
         val listIDs = mutableListOf<Int>()
         for (task in listTasks) {
             listIDs.add(task.id)
         }
-        return listIDs
+        return with(listIDs) {
+            indexOf(last()) + 1
+        }
     }
 
     override suspend fun getEntity(id: Int) = listTasks[id]

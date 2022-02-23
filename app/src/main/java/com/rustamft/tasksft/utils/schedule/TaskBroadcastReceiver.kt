@@ -26,7 +26,8 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
     lateinit var task: AppTask
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        val pendingResult = goAsync()
+        // TODO: multiple notifications work incorrectly
+        //val pendingResult = goAsync()
         runBlocking {
             val id = intent!!.extras!!.getInt(Constants.TASK_ID)
             task = repo.getEntity(id)
@@ -40,7 +41,7 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
                 }
             }
             NotificationManagerCompat.from(context!!).cancel(id)
-            pendingResult.finish()
+            //pendingResult.finish()
         }
     }
 

@@ -21,7 +21,6 @@ import com.rustamft.tasksft.screens.editor.picker.DatePickerFragment
 import com.rustamft.tasksft.screens.editor.picker.TimePickerFragment
 import com.rustamft.tasksft.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -92,31 +91,14 @@ class EditorFragment : Fragment() {
 
     fun save() {
         lifecycleScope.launch {
-            val deferred = lifecycleScope.async {
-                try {
-                    viewModel.save()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    displayToast(e.message.toString())
-                }
+            try {
+                viewModel.save()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                displayToast(e.message.toString())
             }
-            deferred.await()
             if (viewModel.hasTaskReminder()) {
-                val dateTime = viewModel.dateTimeUntilReminder()
-                var message = getString(R.string.reminder_in)
-                if (dateTime.month > 0) {
-                    message += dateTime.month.toString() + getString(R.string.reminder_months)
-                }
-                if (dateTime.day > 0) {
-                    message += dateTime.day.toString() + getString(R.string.reminder_days)
-                }
-                if (dateTime.hour > 0) {
-                    message += dateTime.hour.toString() + getString(R.string.reminder_hours)
-                }
-                if (dateTime.minute > 0) {
-                    message += dateTime.minute.toString() + getString(R.string.reminder_minutes)
-                }
-                displayToast(message)
+                displayToast(buildUntilReminderString())
             }
             navigateBack()
         }
@@ -141,6 +123,24 @@ class EditorFragment : Fragment() {
         } else {
             navigateBack()
         }
+    }
+
+    private fun buildUntilReminderString(): String {
+        val dateTime = viewModel.dateTimeUntilReminder()
+        var string = getString(R.string.reminder_in)
+        if (dateTime.month > 0) {
+            string += dateTime.month.toString() + getString(R.string.reminder_months)
+        }
+        if (dateTime.day > 0) {
+            string += dateTime.day.toString() + getString(R.string.reminder_days)
+        }
+        if (dateTime.hour > 0) {
+            string += dateTime.hour.toString() + getString(R.string.reminder_hours)
+        }
+        if (dateTime.minute > 0) {
+            string += dateTime.minute.toString() + getString(R.string.reminder_minutes)
+        }
+        return string
     }
 
     private fun displaySaveDialog() {

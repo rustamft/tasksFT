@@ -29,16 +29,12 @@ class EditorViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val id = state.get<Int>(Constants.TASK_ID)
-            withContext(viewModelScope.coroutineContext) {
-                _task = if (id == null || id == -1) {
-                    AppTask()
-                } else {
-                    repo.getEntity(id)
-                }
+            _task = if (id == null || id == -1) {
+                AppTask()
+            } else {
+                repo.getEntity(id)
             }
-            withContext(viewModelScope.coroutineContext) {
-                observableTask.fillFrom(task)
-            }
+            observableTask.fillFrom(task)
             observableTask.observeChanges()
         }
     }
@@ -48,32 +44,16 @@ class EditorViewModel @Inject constructor(
         if (observableTask.title.get().isNullOrBlank()) { // If the entered title is empty.
             throw Exception("Title is empty")
         } else { // If the entered title is valid.
+            val taskIsNew = task.id == -1
+            updateTaskFromObservableTask()
+            workManager.cancel(task)
             if (task.millis != 0L) {
-                workManager.cancel(task)
+                workManager.scheduleOneTime(task)
             }
-            task.title = observableTask.title.get()!!
-            task.description = observableTask.description.get()!!
-            task.isFinished = false
-            if (task.id == -1) { // If it's a new task.
-                val ids = repo.getIds() // Get the list of all entity ids in database.
-                var i = 0
-                while (ids.indexOf(i) != -1) {
-                    i++
-                }
-                task.id = i // A non-existing id.
+            if (taskIsNew) {
                 repo.save(task)
             } else { // If it's an existing task.
                 repo.update(task)
-            }
-            if (observableTask.hasReminder.get()!!) { // If reminder should be set.
-                val dateTime = DateTimeString(
-                    observableTask.date.get()!!,
-                    observableTask.time.get()!!
-                )
-                task.millis = DateTimeUtil.stringToMillis(dateTime)
-                workManager.scheduleOneTime(task)
-            } else { // If reminder is not needed.
-                task.millis = 0L
             }
         }
     }
@@ -90,4 +70,24 @@ class EditorViewModel @Inject constructor(
     fun hasTaskReminder() = observableTask.hasReminder.get()!!
 
     fun dateTimeUntilReminder() = DateTimeUtil.dateTimeUntil(task.millis)
+
+    private suspend fun updateTaskFromObservableTask() {
+        with(task) {
+            if (id == -1) {
+                id = repo.getNonExistingId()
+            }
+            title = observableTask.title.get()!!
+            description = observableTask.description.get()!!
+            isFinished = false
+            millis = if (observableTask.hasReminder.get()!!) { // If reminder should be set.
+                val dateTime = DateTimeString(
+                    observableTask.date.get()!!,
+                    observableTask.time.get()!!
+                )
+                DateTimeUtil.stringToMillis(dateTime)
+            } else { // If reminder is not needed.
+                0L
+            }
+        }
+    }
 }
