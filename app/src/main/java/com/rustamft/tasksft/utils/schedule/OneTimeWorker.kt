@@ -24,7 +24,7 @@ class OneTimeWorker(
     private val title = data.getString(Constants.TASK_TITLE)
     private val description = data.getString(Constants.TASK_DESCRIPTION)
     private val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        PendingIntent.FLAG_UPDATE_CURRENT and PendingIntent.FLAG_MUTABLE
+        PendingIntent.FLAG_UPDATE_CURRENT and PendingIntent.FLAG_IMMUTABLE
     } else {
         PendingIntent.FLAG_UPDATE_CURRENT
     }
@@ -65,7 +65,7 @@ class OneTimeWorker(
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            1,
+            id,
             intent,
             flags
         )
@@ -83,7 +83,7 @@ class OneTimeWorker(
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            2,
+            id,
             intent,
             flags
         )

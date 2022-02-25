@@ -17,7 +17,7 @@ class TasksListAdapter(
     list: Flow<List<AppTask>>,
 ) : ListAdapter<AppTask, TasksListAdapter.ViewHolder>(DiffCallback()) {
 
-    val job = owner.lifecycleScope.launch {
+    private val job = owner.lifecycleScope.launch {
         list.collect {
             submitList(it)
         }
@@ -37,6 +37,10 @@ class TasksListAdapter(
                 binding.task = this
             }
         }
+    }
+
+    fun destroy() {
+        job.cancel()
     }
 
     class ViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root)

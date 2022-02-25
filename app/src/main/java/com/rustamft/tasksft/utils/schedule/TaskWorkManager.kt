@@ -34,12 +34,14 @@ class TaskWorkManager @Inject constructor(
     }
 
     override fun cancel(task: AppTask) {
-        workManager.cancelAllWorkByTag(task.title)
+        // TODO: fix, doesn't cancel
+        workManager.cancelAllWorkByTag(task.id.toString())
     }
 
-    override fun cancel(list: List<AppTask>) {
+    override suspend fun cancel(list: List<AppTask>) {
+        // TODO: fix as above
         for (task in list) {
-            workManager.cancelAllWorkByTag(task.title)
+            workManager.cancelAllWorkByTag(task.id.toString())
         }
     }
 }

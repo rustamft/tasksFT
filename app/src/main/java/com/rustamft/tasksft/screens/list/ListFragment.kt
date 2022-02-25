@@ -57,7 +57,7 @@ class ListFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.adapter!!.job.cancel() // There's view reference leak in LeakCanary without this.
+        binding.adapter?.destroy()
         _binding = null
     }
 

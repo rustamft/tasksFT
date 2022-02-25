@@ -10,12 +10,17 @@ import com.rustamft.tasksft.database.entity.AppTask
 import com.rustamft.tasksft.database.repository.AppRepo
 import com.rustamft.tasksft.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
 import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class TaskBroadcastReceiver : BroadcastReceiver() {
+
+    @Inject
+    @ApplicationContext
+    lateinit var context: Context
 
     @Inject
     lateinit var repo: AppRepo
@@ -25,23 +30,24 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
 
     lateinit var task: AppTask
 
-    override fun onReceive(context: Context?, intent: Intent?) {
-        // TODO: multiple notifications work incorrectly
-        //val pendingResult = goAsync()
+    override fun onReceive(contextNullable: Context?, intent: Intent?) {
+        val pendingResult = goAsync()
         runBlocking {
-            val id = intent!!.extras!!.getInt(Constants.TASK_ID)
-            task = repo.getEntity(id)
-            when (intent.action) {
-                Constants.FINISH -> {
-                    finishTask()
-                }
-                Constants.SNOOZE -> {
-                    snoozeTask()
-                    displayToast(context!!, context.getString(R.string.notification_snoozed))
+            val id = intent?.extras?.getInt(Constants.TASK_ID) ?: -1
+            if (id != -1) {
+                task = repo.getEntity(id)
+                when (intent?.action ?: "") {
+                    Constants.FINISH -> {
+                        finishTask()
+                    }
+                    Constants.SNOOZE -> {
+                        snoozeTask()
+                        displayToast(context.getString(R.string.notification_snoozed))
+                    }
                 }
             }
-            NotificationManagerCompat.from(context!!).cancel(id)
-            //pendingResult.finish()
+            NotificationManagerCompat.from(context).cancel(id)
+            pendingResult.finish()
         }
     }
 
@@ -58,7 +64,7 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
         repo.update(task)
     }
 
-    private fun displayToast(context: Context, text: String) {
+    private fun displayToast(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 }

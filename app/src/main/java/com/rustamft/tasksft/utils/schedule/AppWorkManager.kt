@@ -19,5 +19,5 @@ interface AppWorkManager {
 
     fun scheduleOneTime(task: AppTask)
     fun cancel(task: AppTask)
-    fun cancel(list: List<AppTask>)
+    suspend fun cancel(list: List<AppTask>)
 }

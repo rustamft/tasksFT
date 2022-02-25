@@ -12,7 +12,6 @@ import com.rustamft.tasksft.utils.datetime.DateTimeUtil
 import com.rustamft.tasksft.utils.schedule.AppWorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -60,7 +59,9 @@ class EditorViewModel @Inject constructor(
 
     fun delete() {
         viewModelScope.launch {
-            repo.delete(task)
+            launch {
+                repo.delete(task)
+            }
             workManager.cancel(task)
         }
     }
@@ -79,14 +80,14 @@ class EditorViewModel @Inject constructor(
             title = observableTask.title.get()!!
             description = observableTask.description.get()!!
             isFinished = false
-            millis = if (observableTask.hasReminder.get()!!) { // If reminder should be set.
+            millis = if (!observableTask.hasReminder.get()!!) { // If reminder is not needed.
+                0L
+            } else { // If reminder should be set.
                 val dateTime = DateTimeString(
                     observableTask.date.get()!!,
                     observableTask.time.get()!!
                 )
                 DateTimeUtil.stringToMillis(dateTime)
-            } else { // If reminder is not needed.
-                0L
             }
         }
     }

@@ -29,10 +29,11 @@ class ListViewModel @Inject constructor(
 
     fun update(task: AppTask) {
         viewModelScope.launch {
-            repo.update(task)
-            if (task.isFinished) {
-                workManager.cancel(task)
-            } else if (DateTimeUtil.isInFuture(task.millis)) {
+            launch {
+                repo.update(task)
+            }
+            workManager.cancel(task)
+            if (DateTimeUtil.isInFuture(task.millis)) {
                 workManager.scheduleOneTime(task)
             }
         }
@@ -41,8 +42,12 @@ class ListViewModel @Inject constructor(
     fun deleteFinished() {
         viewModelScope.launch {
             val list = repo.getFinished()
-            repo.delete(list)
-            workManager.cancel(list)
+            launch {
+                repo.delete(list)
+            }
+            launch {
+                workManager.cancel(list)
+            }
         }
     }
 
