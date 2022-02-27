@@ -2,6 +2,7 @@ package com.rustamft.tasksft.screens.list.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -35,6 +36,7 @@ class TasksListAdapter(
         with(holder) {
             with(getItem(position)) {
                 binding.task = this
+                binding.checked = ObservableBoolean(isFinished)
             }
         }
     }

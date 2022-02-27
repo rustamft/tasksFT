@@ -14,9 +14,6 @@ data class AppTask(
     @NonNull @ColumnInfo(name = "is_finished") var isFinished: Boolean
 ) {
 
-    constructor() : this(-1, "", "", 0L, false)
+    constructor() : this(-1, "", "", 0L, false) // Empty task.
 
-    fun setIsFinished(isFinished: Boolean) {
-        this.isFinished = isFinished
-    }
 }
