@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     /**
      * Creates the NotificationChannel.
      * API 26+ required because the NotificationChannel class is new and not in the support library.

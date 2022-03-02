@@ -13,6 +13,7 @@ class TasksSharedPrefs @Inject constructor(
     private val prefs =
         context.getSharedPreferences("com.rustamft.tasksFT.shared_prefs", Context.MODE_PRIVATE)
 
+
     override fun setNightMode(mode: Int) {
         prefs
             .edit()

@@ -6,13 +6,17 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
+import com.rustamft.tasksft.utils.Constants
 import com.rustamft.tasksft.utils.datetime.DateTimeInt
 import com.rustamft.tasksft.utils.datetime.DateTimeString
 import com.rustamft.tasksft.utils.datetime.DateTimeUtil
 import java.util.Calendar
 
-open class DatePickerFragment(private val button: Button) :
-    DialogFragment(), DatePickerDialog.OnDateSetListener {
+open class DatePickerFragment(
+    private val manager: FragmentManager,
+    private val button: Button
+    ) : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val string = button.text.toString()
@@ -30,4 +34,6 @@ open class DatePickerFragment(private val button: Button) :
         val date = DateTimeInt(p1, p2, p3) // year, month, day.
         button.text = DateTimeUtil.intToDateString(date)
     }
+
+    fun show() = show(manager, Constants.DATE_PICKER_DIALOG_TAG)
 }

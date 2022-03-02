@@ -7,12 +7,16 @@
         <import type="android.view.View" />
 
         <variable
-            name="fragment"
-            type="com.rustamft.tasksft.screens.editor.EditorFragment" />
-
-        <variable
             name="viewModel"
             type="com.rustamft.tasksft.screens.editor.EditorViewModel" />
+
+        <variable
+            name="datePicker"
+            type="com.rustamft.tasksft.screens.editor.picker.DatePickerFragment" />
+
+        <variable
+            name="timePicker"
+            type="com.rustamft.tasksft.screens.editor.picker.TimePickerFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
@@ -66,7 +70,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginHorizontal="10dp"
                     android:minHeight="48dp"
-                    android:onClick="@{() -> fragment.displayDatePicker()}"
+                    android:onClick="@{() -> datePicker.show()}"
                     android:text="@={viewModel.observableTask.date}"
                     android:textAllCaps="false"
                     android:textSize="18sp" />
@@ -78,7 +82,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_toEndOf="@+id/editor_date_button"
                     android:minHeight="48dp"
-                    android:onClick="@{() -> fragment.displayTimePicker()}"
+                    android:onClick="@{() -> timePicker.show()}"
                     android:text="@={viewModel.observableTask.time}"
                     android:textSize="18sp" />
 
@@ -90,7 +94,7 @@
             android:id="@+id/editor_save_fab"
             style="@style/FAB"
             android:contentDescription="@string/action_save"
-            android:onClick="@{() -> fragment.save()}"
+            android:onClick="@{(view) -> viewModel.save(view)}"
             android:src="@drawable/ic_save"
             android:theme="@style/FAB"
             app:layout_constraintBottom_toBottomOf="parent"

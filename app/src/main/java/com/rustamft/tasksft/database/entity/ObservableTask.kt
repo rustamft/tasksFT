@@ -7,11 +7,11 @@ import com.rustamft.tasksft.utils.datetime.DateTimeUtil
 class ObservableTask {
 
     var id = -1
-    val title = ObservableField("") // Two-way binding.
-    val description = ObservableField("") // Two-way binding.
-    val hasReminder = ObservableField(false) // Two-way binding.
-    val date = ObservableField("") // Updated via fragment method.
-    val time = ObservableField("") // Updated via fragment method.
+    val title = ObservableField("")
+    val description = ObservableField("")
+    val hasReminder = ObservableField(false)
+    val date = ObservableField("")
+    val time = ObservableField("")
     var isChanged = false
 
     fun fillFrom(task: AppTask) {

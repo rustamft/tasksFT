@@ -7,8 +7,8 @@
         <import type="android.view.View" />
 
         <variable
-            name="fragment"
-            type="com.rustamft.tasksft.screens.list.ListFragment" />
+            name="viewModel"
+            type="com.rustamft.tasksft.screens.list.ListViewModel" />
 
         <variable
             name="task"
@@ -45,8 +45,8 @@
                     android:button="@drawable/checkbox_selector"
                     android:checked="@={checked}"
                     android:maxLines="1"
-                    android:onCheckedChanged="@{() -> fragment.onTaskChecked(task)}"
-                    android:onLongClick="@{() -> fragment.navigateNext(task.id)}"
+                    android:onCheckedChanged="@{() -> viewModel.onTaskChecked(task)}"
+                    android:onLongClick="@{(view) -> viewModel.navigateNext(view, task.id)}"
                     android:paddingHorizontal="9dp"
                     android:text="@{task.title}"
                     android:textColor="@color/checkbox_selector"
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:enabled="@{checked}"
-                    android:text="@{fragment.defineDateTimeText(task)}"
+                    android:text="@{viewModel.defineDateTimeText(task)}"
                     android:textColor="@color/textview_selector"
                     android:textSize="14sp" />
 

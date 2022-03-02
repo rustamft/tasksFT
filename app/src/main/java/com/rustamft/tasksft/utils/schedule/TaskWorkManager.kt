@@ -1,12 +1,15 @@
 package com.rustamft.tasksft.utils.schedule
 
 import android.content.Context
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.rustamft.tasksft.database.entity.AppTask
 import com.rustamft.tasksft.utils.Constants
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -16,6 +19,7 @@ class TaskWorkManager @Inject constructor(
 ) : AppWorkManager {
 
     private val workManager = WorkManager.getInstance(context)
+
 
     override fun scheduleOneTime(task: AppTask) {
         val now = Calendar.getInstance().timeInMillis
@@ -34,12 +38,17 @@ class TaskWorkManager @Inject constructor(
     }
 
     override fun cancel(task: AppTask) {
+        NotificationManagerCompat.from(context).cancel(task.id)
         workManager.cancelAllWorkByTag(task.id.toString())
     }
 
     override suspend fun cancel(list: List<AppTask>) {
-        for (task in list) {
-            workManager.cancelAllWorkByTag(task.id.toString())
+        coroutineScope {
+            for (task in list) {
+                launch {
+                    cancel(task)
+                }
+            }
         }
     }
 }

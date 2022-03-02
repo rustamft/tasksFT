@@ -5,11 +5,11 @@
     <data>
 
         <variable
-            name="fragment"
-            type="com.rustamft.tasksft.screens.list.ListFragment" />
+            name="viewModel"
+            type="com.rustamft.tasksft.screens.list.ListViewModel" />
 
         <variable
-            name="adapter"
+            name="listAdapter"
             type="com.rustamft.tasksft.screens.list.adapter.TasksListAdapter" />
     </data>
 
@@ -22,7 +22,7 @@
             android:id="@+id/recyclerview_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:adapter="@{adapter}"
+            android:adapter="@{listAdapter}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/list_item" />
 
@@ -30,7 +30,7 @@
             android:id="@+id/fab_add"
             style="@style/FAB"
             android:contentDescription="@string/action_add"
-            android:onClick="@{() -> fragment.navigateNext()}"
+            android:onClick="@{(view) -> viewModel.navigateNext(view)}"
             android:src="@drawable/ic_add"
             android:theme="@style/FAB"
             app:layout_constraintBottom_toBottomOf="parent"

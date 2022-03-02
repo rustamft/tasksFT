@@ -7,21 +7,15 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.activities.MainActivity
 import com.rustamft.tasksft.databinding.FragmentEditorBinding
 import com.rustamft.tasksft.screens.editor.picker.DatePickerFragment
 import com.rustamft.tasksft.screens.editor.picker.TimePickerFragment
-import com.rustamft.tasksft.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class EditorFragment : Fragment() {
@@ -29,6 +23,7 @@ class EditorFragment : Fragment() {
     private var _binding: FragmentEditorBinding? = null
     private val binding get() = _binding!!
     private val viewModel: EditorViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +43,9 @@ class EditorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.fragment = this // Bind Fragment to XML var.
         binding.viewModel = viewModel // Bind ViewModel to XML var.
+        binding.datePicker = DatePickerFragment(childFragmentManager, binding.editorDateButton)
+        binding.timePicker = TimePickerFragment(childFragmentManager, binding.editorTimeButton)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -59,55 +54,32 @@ class EditorFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        setActionbarBackEnabled(false)
         _binding = null
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                onBackClicked()
+                viewModel.onBackClicked(requireView())
                 return true
             }
             R.id.editor_menu_delete -> {
                 if (viewModel.observableTask.id != -1) {
                     viewModel.delete()
                 }
-                navigateBack()
+                viewModel.navigateBack(requireView())
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun displayDatePicker() {
-        val datePicker = DatePickerFragment(binding.editorDateButton)
-        datePicker.show(childFragmentManager, Constants.DATE_PICKER_DIALOG_TAG)
-    }
-
-    fun displayTimePicker() {
-        val timePicker = TimePickerFragment(binding.editorTimeButton)
-        timePicker.show(childFragmentManager, Constants.TIME_PICKER_DIALOG_TAG)
-    }
-
-    fun save() {
-        lifecycleScope.launch {
-            try {
-                viewModel.save()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                displayToast(e.message.toString())
-            }
-            if (viewModel.hasTaskReminder()) {
-                displayToast(buildUntilReminderString())
-            }
-            navigateBack()
-        }
-    }
 
     private fun enableBackCallback() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                onBackClicked()
+                viewModel.onBackClicked(requireView())
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(callback)
@@ -115,51 +87,5 @@ class EditorFragment : Fragment() {
 
     private fun setActionbarBackEnabled(isEnabled: Boolean) {
         (requireActivity() as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(isEnabled)
-    }
-
-    private fun onBackClicked() {
-        if (viewModel.isTaskChanged()) {
-            displaySaveDialog()
-        } else {
-            navigateBack()
-        }
-    }
-
-    private fun buildUntilReminderString(): String {
-        val dateTime = viewModel.dateTimeUntilReminder()
-        var string = getString(R.string.reminder_in)
-        if (dateTime.month > 0) {
-            string += dateTime.month.toString() + getString(R.string.reminder_months)
-        }
-        if (dateTime.day > 0) {
-            string += dateTime.day.toString() + getString(R.string.reminder_days)
-        }
-        if (dateTime.hour > 0) {
-            string += dateTime.hour.toString() + getString(R.string.reminder_hours)
-        }
-        if (dateTime.minute > 0) {
-            string += dateTime.minute.toString() + getString(R.string.reminder_minutes)
-        }
-        return string
-    }
-
-    private fun displaySaveDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.unsaved_changes))
-            .setMessage(getString(R.string.what_to_do))
-            .setPositiveButton(getString(R.string.action_save)) { _, _ -> save() }
-            .setNegativeButton(getString(R.string.action_cancel)) { _, _ -> /* Close the dialog */ }
-            .setNeutralButton(getString(R.string.action_discard)) { _, _ -> navigateBack() }
-        builder.show()
-    }
-
-    private fun displayToast(text: String) {
-        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
-    }
-
-    private fun navigateBack() {
-        val navController = NavHostFragment.findNavController(this)
-        setActionbarBackEnabled(false)
-        navController.navigate(R.id.action_editorFragment_to_listFragment)
     }
 }
