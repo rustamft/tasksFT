@@ -73,8 +73,8 @@ class ListViewModel @Inject constructor(
                 AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
             }
         }
-        AppCompatDelegate.setDefaultNightMode(mode)
         prefs.setNightMode(mode)
+        AppCompatDelegate.setDefaultNightMode(mode)
     }
 
     fun updateNightModeMenuIcon(item: MenuItem) {

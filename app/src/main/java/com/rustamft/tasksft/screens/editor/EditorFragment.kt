@@ -82,7 +82,7 @@ class EditorFragment : Fragment() {
                 viewModel.onBackClicked(requireView())
             }
         }
-        requireActivity().onBackPressedDispatcher.addCallback(callback)
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     private fun setActionbarBackEnabled(isEnabled: Boolean) {

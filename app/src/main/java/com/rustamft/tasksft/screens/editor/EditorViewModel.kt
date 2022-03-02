@@ -47,6 +47,11 @@ class EditorViewModel @Inject constructor(
     }
 
 
+    fun navigateBack(view: View) {
+        val navController = view.findNavController()
+        navController.navigate(R.id.action_editorFragment_to_listFragment)
+    }
+
     fun save(view: View) {
         if (observableTask.title.get().isNullOrBlank()) { // If the entered title is empty.
             displayToast(app.getString(R.string.task_title_empty))
@@ -88,11 +93,6 @@ class EditorViewModel @Inject constructor(
         } else {
             navigateBack(view)
         }
-    }
-
-    fun navigateBack(view: View) {
-        val navController = view.findNavController()
-        navController.navigate(R.id.action_editorFragment_to_listFragment)
     }
 
 
