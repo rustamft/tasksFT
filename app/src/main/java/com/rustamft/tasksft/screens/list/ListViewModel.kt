@@ -11,6 +11,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
@@ -77,8 +78,8 @@ class ListViewModel @Inject constructor(
         AppCompatDelegate.setDefaultNightMode(mode)
     }
 
-    fun updateNightModeMenuIcon(item: MenuItem) {
-        val drawableID: Int = when (AppCompatDelegate.getDefaultNightMode()) {
+    fun updateNightModeMenuIcon(context: Context, item: MenuItem) {
+        val drawableId: Int = when (AppCompatDelegate.getDefaultNightMode()) {
             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> {
                 R.drawable.ic_night_mode_auto
             }
@@ -89,7 +90,7 @@ class ListViewModel @Inject constructor(
                 R.drawable.ic_night_mode_off
             }
         }
-        val drawable = ContextCompat.getDrawable(app, drawableID)
+        val drawable = ContextCompat.getDrawable(context, drawableId)
         if (item.icon != drawable) {
             item.icon = drawable
         }
@@ -107,8 +108,9 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    fun onTaskChecked(task: AppTask) {
+    fun onTaskChecked(task: AppTask, checked: ObservableBoolean) {
         task.isFinished = !task.isFinished
+        checked.set(!checked.get())
         update(task)
     }
 

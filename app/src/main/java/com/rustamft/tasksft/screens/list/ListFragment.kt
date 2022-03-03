@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.rustamft.tasksft.R
+import com.rustamft.tasksft.activities.MainActivity
 import com.rustamft.tasksft.databinding.FragmentListBinding
 import com.rustamft.tasksft.screens.list.adapter.TasksListAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +34,7 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        (requireActivity() as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         _binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root // Return the view.
     }
@@ -46,7 +48,7 @@ class ListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_menu, menu)
-        viewModel.updateNightModeMenuIcon(menu.getItem(1))
+        viewModel.updateNightModeMenuIcon(requireContext(), menu.getItem(1))
     }
 
     override fun onDestroyView() {
@@ -62,7 +64,7 @@ class ListFragment : Fragment() {
             }
             R.id.list_menu_switch_night -> {
                 viewModel.switchNightMode()
-                viewModel.updateNightModeMenuIcon(item)
+                viewModel.updateNightModeMenuIcon(requireContext(), item)
             }
             R.id.list_menu_about_app -> {
                 viewModel.displayAboutApp(requireContext())

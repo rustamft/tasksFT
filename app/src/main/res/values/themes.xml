@@ -24,6 +24,13 @@
         <item name="colorOnSecondary">@color/white</item>
     </style>
 
+    <!-- TextView theme. -->
+    <style name="TextView" parent="Theme.TasksFT">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <!-- EditText theme. -->
     <style name="EditText" parent="Theme.TasksFT">
         <item name="android:layout_width">match_parent</item>

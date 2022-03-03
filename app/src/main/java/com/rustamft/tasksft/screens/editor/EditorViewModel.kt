@@ -49,7 +49,7 @@ class EditorViewModel @Inject constructor(
 
     fun navigateBack(view: View) {
         val navController = view.findNavController()
-        navController.navigate(R.id.action_editorFragment_to_listFragment)
+        navController.popBackStack()
     }
 
     fun save(view: View) {

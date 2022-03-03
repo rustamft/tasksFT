@@ -18,9 +18,5 @@
         android:id="@+id/editorFragment"
         android:name="com.rustamft.tasksft.screens.editor.EditorFragment"
         android:label="editor_fragment"
-        tools:layout="@layout/fragment_editor" >
-        <action
-            android:id="@+id/action_editorFragment_to_listFragment"
-            app:destination="@id/listFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_editor" />
 </navigation>

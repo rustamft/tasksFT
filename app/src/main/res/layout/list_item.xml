@@ -23,15 +23,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="9dp"
+        android:onClick="@{() -> viewModel.onTaskChecked(task, checked)}"
+        android:onLongClick="@{(view) -> viewModel.navigateNext(view, task.id)}"
         app:cardCornerRadius="18dp">
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="9dp"
-            android:paddingEnd="9dp"
-            android:shrinkColumns="0"
-            android:stretchColumns="0">
+            android:layout_margin="9dp"
+            android:shrinkColumns="1"
+            android:stretchColumns="1">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -43,24 +44,30 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:button="@drawable/checkbox_selector"
-                    android:checked="@={checked}"
+                    android:checked="@{checked}"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:onClick="@{() -> viewModel.onTaskChecked(task, checked)}"
+                    android:onLongClick="@{(view) -> viewModel.navigateNext(view, task.id)}" />
+
+                <TextView
+                    android:id="@+id/item_title"
+                    style="@style/TextView"
+                    android:layout_marginHorizontal="9dp"
+                    android:enabled="@{checked}"
                     android:maxLines="1"
-                    android:onCheckedChanged="@{() -> viewModel.onTaskChecked(task)}"
-                    android:onLongClick="@{(view) -> viewModel.navigateNext(view, task.id)}"
-                    android:paddingHorizontal="9dp"
                     android:text="@{task.title}"
-                    android:textColor="@color/checkbox_selector"
-                    android:textSize="18sp" />
+                    android:textColor="@color/textview_selector"
+                    android:textSize="18sp"
+                    android:theme="@style/TextView" />
 
                 <TextView
                     android:id="@+id/item_date_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    style="@style/TextView"
                     android:enabled="@{checked}"
                     android:text="@{viewModel.defineDateTimeText(task)}"
                     android:textColor="@color/textview_selector"
-                    android:textSize="14sp" />
+                    android:theme="@style/TextView" />
 
             </TableRow>
 
@@ -70,16 +77,15 @@
                 android:visibility="@{task.description.empty ? View.GONE : View.VISIBLE}">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    style="@style/TextView"
+                    android:layout_column="1"
+                    android:layout_marginStart="9dp"
                     android:layout_span="2"
                     android:enabled="@{checked}"
                     android:maxLines="2"
-                    android:padding="9dp"
                     android:text="@{task.description}"
                     android:textColor="@color/textview_selector"
-                    android:textSize="14sp" />
+                    android:theme="@style/TextView" />
 
             </TableRow>
 

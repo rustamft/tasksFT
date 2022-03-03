@@ -28,7 +28,6 @@ class EditorFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableBackCallback() // Override system back behaviour.
-        setActionbarBackEnabled(true) // Display ActionBar back button
         setHasOptionsMenu(true) // Make onCreateOptionsMenu work.
     }
 
@@ -37,6 +36,7 @@ class EditorFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        (requireActivity() as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         _binding = FragmentEditorBinding.inflate(inflater, container, false)
         return binding.root // Return the view.
     }
@@ -54,7 +54,6 @@ class EditorFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        setActionbarBackEnabled(false)
         _binding = null
     }
 
@@ -83,9 +82,5 @@ class EditorFragment : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-    }
-
-    private fun setActionbarBackEnabled(isEnabled: Boolean) {
-        (requireActivity() as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(isEnabled)
     }
 }
