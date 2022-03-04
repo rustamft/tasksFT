@@ -38,9 +38,9 @@ class DateTimeUtilTest {
         val expectedDateTime = DateTimeInt(5, 19, 15, 23)
         assertTrue(
             receivedDateTime.month == expectedDateTime.month &&
-                    receivedDateTime.day == expectedDateTime.day &&
-                    receivedDateTime.hour == expectedDateTime.hour &&
-                    receivedDateTime.minute == expectedDateTime.minute
+                receivedDateTime.day == expectedDateTime.day &&
+                receivedDateTime.hour == expectedDateTime.hour &&
+                receivedDateTime.minute == expectedDateTime.minute
         )
     }
 }

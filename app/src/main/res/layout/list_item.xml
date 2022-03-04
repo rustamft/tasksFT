@@ -22,15 +22,15 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="9dp"
+        android:layout_margin="@dimen/margin_standard"
         android:onClick="@{() -> viewModel.onTaskChecked(task, checked)}"
         android:onLongClick="@{(view) -> viewModel.navigateNext(view, task.id)}"
-        app:cardCornerRadius="18dp">
+        app:cardCornerRadius="@dimen/corner_radius">
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="9dp"
+            android:layout_margin="@dimen/margin_standard"
             android:shrinkColumns="1"
             android:stretchColumns="1">
 
@@ -53,12 +53,12 @@
                 <TextView
                     android:id="@+id/item_title"
                     style="@style/TextView"
-                    android:layout_marginHorizontal="9dp"
+                    android:layout_marginHorizontal="@dimen/margin_standard"
                     android:enabled="@{checked}"
                     android:maxLines="1"
                     android:text="@{task.title}"
                     android:textColor="@color/textview_selector"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_size_standard"
                     android:theme="@style/TextView" />
 
                 <TextView
@@ -79,10 +79,11 @@
                 <TextView
                     style="@style/TextView"
                     android:layout_column="1"
-                    android:layout_marginStart="9dp"
+                    android:layout_marginStart="@dimen/margin_standard"
+                    android:layout_marginTop="@dimen/margin_standard"
                     android:layout_span="2"
                     android:enabled="@{checked}"
-                    android:maxLines="2"
+                    android:maxLines="5"
                     android:text="@{task.description}"
                     android:textColor="@color/textview_selector"
                     android:theme="@style/TextView" />

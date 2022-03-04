@@ -14,7 +14,6 @@ class TasksRoomRepo @Inject constructor(
 
     private val dao: TasksRoomDao = TasksRoomDatabase.getDatabase(context).tasksDao()
 
-
     override suspend fun save(task: AppTask) {
         dao.insert(task)
     }

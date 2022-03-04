@@ -24,7 +24,6 @@ class EditorFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: EditorViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableBackCallback() // Override system back behaviour.
@@ -73,7 +72,6 @@ class EditorFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 
     private fun enableBackCallback() {
         val callback = object : OnBackPressedCallback(true) {

@@ -20,7 +20,6 @@ class TaskWorkManager @Inject constructor(
 
     private val workManager = WorkManager.getInstance(context)
 
-
     override fun scheduleOneTime(task: AppTask) {
         val now = Calendar.getInstance().timeInMillis
         val delay: Long = task.millis.minus(now)

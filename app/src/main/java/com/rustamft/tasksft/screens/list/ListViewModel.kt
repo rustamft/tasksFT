@@ -46,7 +46,6 @@ class ListViewModel @Inject constructor(
         appVersion
     }
 
-
     fun navigateNext(view: View) {
         val navController = view.findNavController()
         navController.navigate(R.id.action_listFragment_to_editorFragment)
@@ -135,7 +134,6 @@ class ListViewModel @Inject constructor(
             }
         builder.show()
     }
-
 
     private fun update(task: AppTask) {
         viewModelScope.launch {

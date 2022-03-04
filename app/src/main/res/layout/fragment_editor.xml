@@ -28,14 +28,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="@dimen/margin_standard">
 
             <EditText
                 android:id="@+id/editor_title_edittext"
                 style="@style/EditText"
                 android:autofillHints="name,username"
                 android:hint="@string/title"
-                android:inputType="textShortMessage"
+                android:inputType="textCapSentences|textShortMessage"
                 android:text="@={viewModel.observableTask.title}"
                 android:theme="@style/EditText" />
 
@@ -44,7 +44,7 @@
                 style="@style/EditText"
                 android:autofillHints="name,username,emailAddress,postalAddress"
                 android:hint="@string/description"
-                android:inputType="textShortMessage"
+                android:inputType="textCapSentences|textMultiLine"
                 android:text="@={viewModel.observableTask.description}"
                 android:theme="@style/EditText" />
 
@@ -53,9 +53,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="@={viewModel.observableTask.hasReminder}"
-                android:minHeight="48dp"
+                android:minHeight="@dimen/min_height_standard"
                 android:text="@string/set_reminder"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_standard" />
 
             <RelativeLayout
                 android:id="@+id/editor_datetime_layout"
@@ -68,23 +68,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_marginHorizontal="10dp"
-                    android:minHeight="48dp"
+                    android:layout_marginHorizontal="@dimen/margin_standard"
+                    android:minHeight="@dimen/min_height_standard"
                     android:onClick="@{() -> datePicker.show()}"
                     android:text="@={viewModel.observableTask.date}"
                     android:textAllCaps="false"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/text_size_standard" />
 
                 <Button
                     android:id="@+id/editor_time_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_toEndOf="@+id/editor_date_button"
-                    android:minHeight="48dp"
+                    android:minHeight="@dimen/min_height_standard"
                     android:onClick="@{() -> timePicker.show()}"
                     android:text="@={viewModel.observableTask.time}"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/text_size_standard" />
 
             </RelativeLayout>
 

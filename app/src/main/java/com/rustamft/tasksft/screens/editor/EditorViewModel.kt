@@ -32,7 +32,6 @@ class EditorViewModel @Inject constructor(
     private val task get() = _task!! // Initial entity, it is not changed before saving.
     val observableTask = ObservableTask() // Temp task with observable fields.
 
-
     init {
         viewModelScope.launch {
             val id = state.get<Int>(Constants.TASK_ID)
@@ -45,7 +44,6 @@ class EditorViewModel @Inject constructor(
             observableTask.observeChanges()
         }
     }
-
 
     fun navigateBack(view: View) {
         val navController = view.findNavController()
@@ -95,7 +93,6 @@ class EditorViewModel @Inject constructor(
         }
     }
 
-
     private fun buildUntilReminderString(): String {
         val dateTime = DateTimeUtil.dateTimeUntil(task.millis)
         var string = app.getString(R.string.reminder_in)
@@ -113,7 +110,6 @@ class EditorViewModel @Inject constructor(
         }
         return string
     }
-
 
     private fun displaySaveDialog(view: View) {
         val builder = AlertDialog.Builder(view.context)
@@ -134,7 +130,6 @@ class EditorViewModel @Inject constructor(
     private fun displayToast(text: String) {
         Toast.makeText(app, text, Toast.LENGTH_LONG).show()
     }
-
 
     private suspend fun updateTaskFromObservableTask() {
         with(task) {

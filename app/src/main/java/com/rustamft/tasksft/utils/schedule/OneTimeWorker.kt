@@ -29,12 +29,10 @@ class OneTimeWorker(
         PendingIntent.FLAG_UPDATE_CURRENT
     }
 
-
     override fun doWork(): Result {
         displayNotification()
         return Result.success()
     }
-
 
     private fun displayNotification() {
         val builder = NotificationCompat.Builder(context, Constants.CHANNEL_ID)

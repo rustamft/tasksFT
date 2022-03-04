@@ -20,7 +20,7 @@
     <style name="FAB" parent="Theme.TasksFT">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">16dp</item>
+        <item name="android:layout_margin">@dimen/margin_fab</item>
         <item name="colorOnSecondary">@color/white</item>
     </style>
 
@@ -28,14 +28,14 @@
     <style name="TextView" parent="Theme.TasksFT">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
     </style>
 
     <!-- EditText theme. -->
     <style name="EditText" parent="Theme.TasksFT">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:minHeight">48dp</item>
+        <item name="android:textSize">@dimen/text_size_standard</item>
+        <item name="android:minHeight">@dimen/min_height_standard</item>
     </style>
 </resources>

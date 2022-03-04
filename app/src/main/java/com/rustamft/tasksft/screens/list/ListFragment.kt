@@ -23,7 +23,6 @@ class ListFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ListViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true) // To make onCreateOptionsMenu work.

@@ -16,7 +16,7 @@ import java.util.Calendar
 open class DatePickerFragment(
     private val manager: FragmentManager,
     private val button: Button
-    ) : DialogFragment(), DatePickerDialog.OnDateSetListener {
+) : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val string = button.text.toString()

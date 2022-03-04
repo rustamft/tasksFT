@@ -16,7 +16,7 @@ import java.util.Calendar
 class TimePickerFragment(
     private val manager: FragmentManager,
     private val button: Button
-    ) : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+) : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val string = button.text.toString()

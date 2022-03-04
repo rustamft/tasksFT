@@ -23,7 +23,6 @@ class TasksListAdapter(private val viewModel: ListViewModel) :
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ListItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -41,14 +40,11 @@ class TasksListAdapter(private val viewModel: ListViewModel) :
         }
     }
 
-
     fun clear() {
         job.cancel()
     }
 
-
     class ViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root)
-
 
     class DiffCallback : DiffUtil.ItemCallback<AppTask>() {
         override fun areItemsTheSame(oldItem: AppTask, newItem: AppTask): Boolean {

@@ -15,5 +15,4 @@ data class AppTask(
 ) {
 
     constructor() : this(-1, "", "", 0L, false) // Empty task.
-
 }

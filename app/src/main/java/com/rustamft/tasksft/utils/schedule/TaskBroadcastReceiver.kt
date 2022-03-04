@@ -30,7 +30,6 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
 
     lateinit var task: AppTask
 
-
     override fun onReceive(contextNullable: Context?, intent: Intent?) {
         val pendingResult = goAsync()
         runBlocking {
@@ -52,11 +51,9 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-
     private fun displayToast(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
-
 
     private suspend fun finishTask() {
         task.isFinished = true
