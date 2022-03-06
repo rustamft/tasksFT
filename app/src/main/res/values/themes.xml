@@ -14,6 +14,13 @@
         <!-- Customize your theme here. -->
         <item name="android:textColor">@color/black</item>
         <item name="colorControlNormal">@color/white</item>
+        <item name="colorBackgroundFloating">@color/indigo_white</item>
+        <item name="android:colorBackgroundFloating" tools:targetApi="23">@color/indigo_white</item>
+    </style>
+
+    <!-- Card theme. -->
+    <style name="Card" parent="Widget.MaterialComponents.CardView">
+        <item name="android:backgroundTint">@color/indigo_white</item>
     </style>
 
     <!-- FAB theme. -->
