@@ -33,10 +33,10 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(contextNullable: Context?, intent: Intent?) {
         val pendingResult = goAsync()
         runBlocking {
-            val id = intent?.extras?.getInt(Constants.TASK_ID) ?: -1
-            if (id != -1) {
+            val id = intent?.extras?.getInt(Constants.TASK_ID)
+            if (id != null) {
                 task = repo.getEntity(id)
-                when (intent?.action ?: "") {
+                when (intent.action) {
                     Constants.FINISH -> {
                         finishTask()
                     }
@@ -45,8 +45,8 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
                         displayToast(context.getString(R.string.notification_snoozed))
                     }
                 }
+                NotificationManagerCompat.from(context).cancel(id)
             }
-            NotificationManagerCompat.from(context).cancel(id)
             pendingResult.finish()
         }
     }
@@ -63,7 +63,7 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
     private suspend fun snoozeTask() {
         val now = Calendar.getInstance().timeInMillis
         val delay: Long = 60 * 60 * 1000 // One hour.
-        task.millis = now + delay
+        task.reminder = now + delay
         workManager.scheduleOneTime(task)
         repo.update(task)
     }

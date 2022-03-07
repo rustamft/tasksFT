@@ -35,8 +35,8 @@ class EditorViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val id = state.get<Int>(Constants.TASK_ID)
-            _task = if (id == null || id == -1) {
-                AppTask()
+            _task = if (id == null) {
+                AppTask() // New empty task.
             } else {
                 repo.getEntity(id)
             }
@@ -55,17 +55,17 @@ class EditorViewModel @Inject constructor(
             displayToast(app.getString(R.string.task_title_empty))
         } else { // If the entered title is valid.
             viewModelScope.launch {
-                val taskIsNew = task.id == -1
                 updateTaskFromObservableTask()
                 launch {
                     workManager.cancel(task)
-                    if (task.millis != 0L) {
+                    if (task.reminder != 0L) {
                         workManager.scheduleOneTime(task)
                         displayToast(buildUntilReminderString())
                     }
                 }
                 launch {
-                    if (taskIsNew) {
+                    if (task.isNew) {
+                        task.isNew = false
                         repo.save(task)
                     } else { // If it's an existing task.
                         repo.update(task)
@@ -77,11 +77,13 @@ class EditorViewModel @Inject constructor(
     }
 
     fun delete() {
-        viewModelScope.launch {
-            launch {
-                repo.delete(task)
+        if (!task.isNew) {
+            viewModelScope.launch {
+                launch {
+                    repo.delete(task)
+                }
+                workManager.cancel(task)
             }
-            workManager.cancel(task)
         }
     }
 
@@ -94,7 +96,7 @@ class EditorViewModel @Inject constructor(
     }
 
     private fun buildUntilReminderString(): String {
-        val dateTime = DateTimeUtil.dateTimeUntil(task.millis)
+        val dateTime = DateTimeUtil.dateTimeUntil(task.reminder)
         var string = app.getString(R.string.reminder_in)
         if (dateTime.month > 0) {
             string += dateTime.month.toString() + app.getString(R.string.reminder_months)
@@ -131,15 +133,12 @@ class EditorViewModel @Inject constructor(
         Toast.makeText(app, text, Toast.LENGTH_LONG).show()
     }
 
-    private suspend fun updateTaskFromObservableTask() {
+    private fun updateTaskFromObservableTask() {
         with(task) {
-            if (id == -1) {
-                id = repo.getNonExistingId()
-            }
             title = observableTask.title.get()!!
             description = observableTask.description.get()!!
             isFinished = false
-            millis = if (!observableTask.hasReminder.get()!!) { // If reminder is not needed.
+            reminder = if (!observableTask.hasReminder.get()!!) { // If reminder is not needed.
                 0L
             } else { // If reminder should be set.
                 val dateTime = DateTimeString(

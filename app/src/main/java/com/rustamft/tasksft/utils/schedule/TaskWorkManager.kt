@@ -22,7 +22,7 @@ class TaskWorkManager @Inject constructor(
 
     override fun scheduleOneTime(task: AppTask) {
         val now = Calendar.getInstance().timeInMillis
-        val delay: Long = task.millis.minus(now)
+        val delay: Long = task.reminder.minus(now)
         val data = workDataOf(
             Pair(Constants.TASK_ID, task.id),
             Pair(Constants.TASK_TITLE, task.title),

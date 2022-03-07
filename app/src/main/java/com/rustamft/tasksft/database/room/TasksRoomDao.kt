@@ -24,11 +24,8 @@ interface TasksRoomDao {
     @Delete
     suspend fun delete(list: List<AppTask>)
 
-    @Query("SELECT * FROM apptask ORDER BY millis ASC")
+    @Query("SELECT * FROM apptask ORDER BY is_finished DESC, reminder, created ASC")
     fun getAll(): Flow<List<AppTask>>
-
-    @Query("SELECT id FROM apptask")
-    suspend fun getIds(): List<Int>
 
     @Query("SELECT * FROM apptask WHERE is_finished = 1")
     suspend fun getFinished(): List<AppTask>

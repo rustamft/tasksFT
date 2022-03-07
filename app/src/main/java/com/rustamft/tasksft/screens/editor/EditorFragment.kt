@@ -63,9 +63,7 @@ class EditorFragment : Fragment() {
                 return true
             }
             R.id.editor_menu_delete -> {
-                if (viewModel.observableTask.id != -1) {
-                    viewModel.delete()
-                }
+                viewModel.delete()
                 viewModel.navigateBack(requireView())
                 return true
             }

@@ -6,7 +6,6 @@ import com.rustamft.tasksft.utils.datetime.DateTimeUtil
 
 class ObservableTask {
 
-    var id = -1
     val title = ObservableField("")
     val description = ObservableField("")
     val hasReminder = ObservableField(false)
@@ -15,14 +14,13 @@ class ObservableTask {
     var isChanged = false
 
     fun fillFrom(task: AppTask) {
-        id = task.id
-        if (id != -1) {
+        if (!task.isNew) {
             title.set(task.title)
             description.set(task.description)
-            hasReminder.set(DateTimeUtil.isInFuture(task.millis))
+            hasReminder.set(DateTimeUtil.isInFuture(task.reminder))
         }
         val dateTime = if (hasReminder.get()!!) {
-            DateTimeUtil.millisToString(task.millis)
+            DateTimeUtil.millisToString(task.reminder)
         } else {
             DateTimeUtil.nextFullHourString()
         }

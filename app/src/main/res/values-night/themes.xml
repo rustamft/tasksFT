@@ -13,13 +13,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">?android:attr/colorBackground</item>
         <!-- Customize your theme here. -->
         <item name="android:textColor">@color/white</item>
-        <item name="colorBackgroundFloating">@color/ink_color</item>
-        <item name="android:colorBackgroundFloating" tools:targetApi="23">@color/ink_color</item>
+        <item name="colorBackgroundFloating">@color/dark_blue</item>
+        <item name="android:colorBackgroundFloating" tools:targetApi="23">@color/dark_blue</item>
     </style>
 
     <!-- Card theme. -->
     <style name="Card" parent="Widget.MaterialComponents.CardView">
-        <item name="android:backgroundTint">@color/ink_color</item>
+        <item name="android:backgroundTint">@color/dark_blue</item>
     </style>
 
     <!-- FAB theme. -->

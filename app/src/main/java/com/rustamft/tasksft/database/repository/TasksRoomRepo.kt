@@ -34,15 +34,6 @@ class TasksRoomRepo @Inject constructor(
         return dao.getAll()
     }
 
-    override suspend fun getNonExistingId(): Int {
-        val ids = dao.getIds()
-        var i = 0
-        while (ids.indexOf(i) != -1) {
-            i++
-        }
-        return i
-    }
-
     override suspend fun getFinished(): List<AppTask> {
         return dao.getFinished()
     }

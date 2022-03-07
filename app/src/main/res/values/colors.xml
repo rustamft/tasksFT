@@ -1,8 +1,8 @@
 <resources>
     <color name="black">#FF000000</color>
+    <color name="dark_blue">#FF192236</color>
     <color name="gray">#FF888888</color>
     <color name="indigo_white">#FFEBF6F7</color>
-    <color name="ink_color">#FF27221F</color>
     <color name="pure_crimson">#FFC3272B</color>
     <color name="red_wisteria">#FFBB7796</color>
     <color name="transparent">#00000000</color>

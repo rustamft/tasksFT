@@ -114,10 +114,10 @@ class ListViewModel @Inject constructor(
     }
 
     fun defineDateTimeText(task: AppTask): String {
-        return if (task.millis == 0L) { // If there is no reminder.
+        return if (task.reminder == 0L) { // If there is no reminder.
             "" // Empty string.
         } else { // If there is a reminder time inside the task.
-            DateTimeUtil.millisToString(task.millis).string
+            DateTimeUtil.millisToString(task.reminder).string
         }
     }
 
@@ -141,7 +141,7 @@ class ListViewModel @Inject constructor(
                 repo.update(task)
             }
             workManager.cancel(task)
-            if (!task.isFinished && DateTimeUtil.isInFuture(task.millis)) {
+            if (!task.isFinished && DateTimeUtil.isInFuture(task.reminder)) {
                 workManager.scheduleOneTime(task)
             }
         }

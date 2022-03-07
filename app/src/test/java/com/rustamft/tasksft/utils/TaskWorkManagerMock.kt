@@ -8,7 +8,7 @@ class TaskWorkManagerMock : AppWorkManager {
     var scheduledMillis: Long = -1
 
     override fun scheduleOneTime(task: AppTask) {
-        scheduledMillis = task.millis
+        scheduledMillis = task.reminder
     }
 
     override fun cancel(task: AppTask) {
