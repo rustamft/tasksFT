@@ -1,6 +1,7 @@
 package com.rustamft.tasksft.utils.datetime
 
-import com.rustamft.tasksft.utils.Constants
+import com.rustamft.tasksft.utils.Constants.DATE_PATTERN
+import com.rustamft.tasksft.utils.Constants.TIME_PATTERN
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -124,12 +125,12 @@ object DateTimeUtil {
     }
 
     private fun formatDate(date: Date): String {
-        val formatter = SimpleDateFormat(Constants.DATE_PATTERN, Locale.getDefault())
+        val formatter = SimpleDateFormat(DATE_PATTERN, Locale.getDefault())
         return formatter.format(date)
     }
 
     private fun formatTime(time: Date): String {
-        val formatter = SimpleDateFormat(Constants.TIME_PATTERN, Locale.getDefault())
+        val formatter = SimpleDateFormat(TIME_PATTERN, Locale.getDefault())
         return formatter.format(time)
     }
 }

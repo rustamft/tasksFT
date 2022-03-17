@@ -12,7 +12,7 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.database.entity.AppTask
 import com.rustamft.tasksft.database.entity.ObservableTask
 import com.rustamft.tasksft.database.repository.AppRepo
-import com.rustamft.tasksft.utils.Constants
+import com.rustamft.tasksft.utils.Constants.TASK_ID
 import com.rustamft.tasksft.utils.datetime.DateTimeString
 import com.rustamft.tasksft.utils.datetime.DateTimeUtil
 import com.rustamft.tasksft.utils.schedule.AppWorkManager
@@ -34,7 +34,7 @@ class EditorViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val id = state.get<Int>(Constants.TASK_ID)
+            val id = state.get<Int>(TASK_ID)
             _task = if (id == null) {
                 AppTask() // New empty task.
             } else {

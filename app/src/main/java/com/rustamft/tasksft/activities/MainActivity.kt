@@ -8,7 +8,7 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.utils.Constants
+import com.rustamft.tasksft.utils.Constants.CHANNEL_ID
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         val name = getString(R.string.task_notification_name)
         val descriptionText = getString(R.string.task_notification_description)
         val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(Constants.CHANNEL_ID, name, importance).apply {
+        val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
             description = descriptionText
         }
         val notificationManager =

@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.rustamft.tasksft.utils.Constants
+import com.rustamft.tasksft.utils.Constants.TIME_PICKER_DIALOG_TAG
 import com.rustamft.tasksft.utils.datetime.DateTimeInt
 import com.rustamft.tasksft.utils.datetime.DateTimeString
 import com.rustamft.tasksft.utils.datetime.DateTimeUtil
@@ -34,5 +34,5 @@ class TimePickerFragment(
         button.text = DateTimeUtil.intToTimeString(time)
     }
 
-    fun show() = show(manager, Constants.TIME_PICKER_DIALOG_TAG)
+    fun show() = show(manager, TIME_PICKER_DIALOG_TAG)
 }

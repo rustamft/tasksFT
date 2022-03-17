@@ -8,7 +8,9 @@ import androidx.core.app.NotificationManagerCompat
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.database.entity.AppTask
 import com.rustamft.tasksft.database.repository.AppRepo
-import com.rustamft.tasksft.utils.Constants
+import com.rustamft.tasksft.utils.Constants.FINISH
+import com.rustamft.tasksft.utils.Constants.SNOOZE
+import com.rustamft.tasksft.utils.Constants.TASK_ID
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
@@ -33,14 +35,14 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(contextNullable: Context?, intent: Intent?) {
         val pendingResult = goAsync()
         runBlocking {
-            val id = intent?.extras?.getInt(Constants.TASK_ID)
+            val id = intent?.extras?.getInt(TASK_ID)
             if (id != null) {
                 task = repo.getEntity(id)
                 when (intent.action) {
-                    Constants.FINISH -> {
+                    FINISH -> {
                         finishTask()
                     }
-                    Constants.SNOOZE -> {
+                    SNOOZE -> {
                         snoozeTask()
                         displayToast(context.getString(R.string.notification_snoozed))
                     }

@@ -5,6 +5,8 @@ package com.rustamft.tasksft.utils
  */
 object Constants {
 
+    const val SHARED_PREFS = "com.rustamft.tasksft.shared_prefs"
+
     const val NIGHT_MODE = "com.rustamft.tasksft.NIGHT_MODE"
 
     const val TASK_ID = "com.rustamft.tasksft.TASK_ID"

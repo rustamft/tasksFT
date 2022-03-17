@@ -1,9 +1,11 @@
 package com.rustamft.tasksft.screens.editor
 
+import android.view.View
 import androidx.lifecycle.SavedStateHandle
+import com.rustamft.tasksft.app.App
 import com.rustamft.tasksft.database.entity.AppTask
 import com.rustamft.tasksft.database.repository.TasksRoomRepo
-import com.rustamft.tasksft.utils.Constants
+import com.rustamft.tasksft.utils.Constants.TASK_ID
 import com.rustamft.tasksft.utils.TaskWorkManagerMock
 import com.rustamft.tasksft.utils.datetime.DateTimeString
 import com.rustamft.tasksft.utils.datetime.DateTimeUtil
@@ -31,6 +33,8 @@ import org.junit.jupiter.api.assertThrows
 @ExperimentalCoroutinesApi
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class EditorViewModelTest {
+
+    private val app = App()
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
@@ -60,15 +64,16 @@ internal class EditorViewModelTest {
     @BeforeEach
     fun init() {
 
-        _state = SavedStateHandle(mapOf(Pair<String, AppTask?>(Constants.TASK_ID, null)))
+        _state = SavedStateHandle(mapOf(Pair<String, AppTask?>(TASK_ID, null)))
         _repo = mockk()
         _workManager = TaskWorkManagerMock()
 
         val id = 0
 
-        state!!.set(Constants.TASK_ID, id)
+        state!!.set(TASK_ID, id)
 
         _viewModel = EditorViewModel(
+            app,
             state!!,
             repo!!,
             workManager!!
@@ -80,7 +85,7 @@ internal class EditorViewModelTest {
         viewModel.observableTask.title.set("")
         assertThrows<java.lang.Exception>("Title is empty") {
             runBlocking {
-                viewModel.save()
+                viewModel.save(View(app))
             }
         }
     }
@@ -109,7 +114,7 @@ internal class EditorViewModelTest {
                     val deferred2 = coroutineScope {
                         async {
                             try {
-                                viewModel.save()
+                                viewModel.save(View(app))
                             } catch (e: Exception) {
                                 print("PRINT_EXCEPTION: ${e.message}")
                             }

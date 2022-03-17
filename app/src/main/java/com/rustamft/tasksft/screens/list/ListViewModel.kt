@@ -19,7 +19,8 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.database.entity.AppTask
 import com.rustamft.tasksft.database.prefs.AppSharedPrefs
 import com.rustamft.tasksft.database.repository.AppRepo
-import com.rustamft.tasksft.utils.Constants
+import com.rustamft.tasksft.utils.Constants.GITHUB_LINK
+import com.rustamft.tasksft.utils.Constants.TASK_ID
 import com.rustamft.tasksft.utils.datetime.DateTimeUtil
 import com.rustamft.tasksft.utils.schedule.AppWorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,7 +54,7 @@ class ListViewModel @Inject constructor(
 
     fun navigateNext(view: View, id: Int): Boolean {
         val bundle = Bundle()
-        bundle.putInt(Constants.TASK_ID, id)
+        bundle.putInt(TASK_ID, id)
         val navController = view.findNavController()
         navController.navigate(R.id.action_listFragment_to_editorFragment, bundle)
         return true
@@ -148,7 +149,7 @@ class ListViewModel @Inject constructor(
     }
 
     private fun openGitHub(context: Context) {
-        val webPage = Uri.parse(Constants.GITHUB_LINK)
+        val webPage = Uri.parse(GITHUB_LINK)
         val intent = Intent(Intent.ACTION_VIEW, webPage)
         if (intent.resolveActivity(app.packageManager) != null) {
             context.startActivity(intent, null)

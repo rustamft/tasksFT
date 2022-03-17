@@ -12,7 +12,12 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.activities.MainActivity
-import com.rustamft.tasksft.utils.Constants
+import com.rustamft.tasksft.utils.Constants.CHANNEL_ID
+import com.rustamft.tasksft.utils.Constants.FINISH
+import com.rustamft.tasksft.utils.Constants.SNOOZE
+import com.rustamft.tasksft.utils.Constants.TASK_DESCRIPTION
+import com.rustamft.tasksft.utils.Constants.TASK_ID
+import com.rustamft.tasksft.utils.Constants.TASK_TITLE
 
 class OneTimeWorker(
     private val context: Context,
@@ -20,9 +25,9 @@ class OneTimeWorker(
 ) : Worker(context, workerParams) {
 
     private val data = workerParams.inputData
-    private val id = data.getInt(Constants.TASK_ID, -1)
-    private val title = data.getString(Constants.TASK_TITLE)
-    private val description = data.getString(Constants.TASK_DESCRIPTION)
+    private val id = data.getInt(TASK_ID, -1)
+    private val title = data.getString(TASK_TITLE)
+    private val description = data.getString(TASK_DESCRIPTION)
     private val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         PendingIntent.FLAG_UPDATE_CURRENT and PendingIntent.FLAG_IMMUTABLE
     } else {
@@ -35,7 +40,7 @@ class OneTimeWorker(
     }
 
     private fun displayNotification() {
-        val builder = NotificationCompat.Builder(context, Constants.CHANNEL_ID)
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_event)
             .setContentTitle(title)
             .setContentText(description)
@@ -54,14 +59,14 @@ class OneTimeWorker(
             .setComponentName(MainActivity::class.java)
             .setGraph(R.navigation.nav_graph)
             .setDestination(R.id.editorFragment)
-            .setArguments(bundleOf(Pair(Constants.TASK_ID, id)))
+            .setArguments(bundleOf(Pair(TASK_ID, id)))
             .createPendingIntent()
     }
 
     private fun buildFinishAction(): NotificationCompat.Action {
         val intent = Intent(context, TaskBroadcastReceiver::class.java).apply {
-            action = Constants.FINISH
-            putExtra(Constants.TASK_ID, id)
+            action = FINISH
+            putExtra(TASK_ID, id)
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,
@@ -78,8 +83,8 @@ class OneTimeWorker(
 
     private fun buildSnoozeAction(): NotificationCompat.Action {
         val intent = Intent(context, TaskBroadcastReceiver::class.java).apply {
-            action = Constants.SNOOZE
-            putExtra(Constants.TASK_ID, id)
+            action = SNOOZE
+            putExtra(TASK_ID, id)
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,
