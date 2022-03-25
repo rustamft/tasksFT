@@ -1,8 +1,8 @@
 package com.rustamft.tasksft.utils.datetime
 
-import com.rustamft.tasksft.utils.Constants.DATE_PATTERN
-import com.rustamft.tasksft.utils.Constants.DATE_TIME_PATTERN
-import com.rustamft.tasksft.utils.Constants.TIME_PATTERN
+import com.rustamft.tasksft.utils.DATE_PATTERN
+import com.rustamft.tasksft.utils.DATE_TIME_PATTERN
+import com.rustamft.tasksft.utils.TIME_PATTERN
 
 /**
  * Contains date and time as two separate strings.

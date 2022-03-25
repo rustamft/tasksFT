@@ -6,9 +6,9 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.rustamft.tasksft.database.entity.AppTask
-import com.rustamft.tasksft.utils.Constants.TASK_DESCRIPTION
-import com.rustamft.tasksft.utils.Constants.TASK_ID
-import com.rustamft.tasksft.utils.Constants.TASK_TITLE
+import com.rustamft.tasksft.utils.TASK_DESCRIPTION
+import com.rustamft.tasksft.utils.TASK_ID
+import com.rustamft.tasksft.utils.TASK_TITLE
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch

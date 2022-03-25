@@ -8,7 +8,7 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.utils.Constants.CHANNEL_ID
+import com.rustamft.tasksft.utils.CHANNEL_ID
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

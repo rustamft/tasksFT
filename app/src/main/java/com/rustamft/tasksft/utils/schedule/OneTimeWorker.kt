@@ -12,12 +12,12 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.activities.MainActivity
-import com.rustamft.tasksft.utils.Constants.CHANNEL_ID
-import com.rustamft.tasksft.utils.Constants.FINISH
-import com.rustamft.tasksft.utils.Constants.SNOOZE
-import com.rustamft.tasksft.utils.Constants.TASK_DESCRIPTION
-import com.rustamft.tasksft.utils.Constants.TASK_ID
-import com.rustamft.tasksft.utils.Constants.TASK_TITLE
+import com.rustamft.tasksft.utils.CHANNEL_ID
+import com.rustamft.tasksft.utils.FINISH
+import com.rustamft.tasksft.utils.SNOOZE
+import com.rustamft.tasksft.utils.TASK_DESCRIPTION
+import com.rustamft.tasksft.utils.TASK_ID
+import com.rustamft.tasksft.utils.TASK_TITLE
 
 class OneTimeWorker(
     private val context: Context,

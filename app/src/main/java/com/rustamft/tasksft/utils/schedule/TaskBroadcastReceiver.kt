@@ -8,9 +8,9 @@ import androidx.core.app.NotificationManagerCompat
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.database.entity.AppTask
 import com.rustamft.tasksft.database.repository.AppRepo
-import com.rustamft.tasksft.utils.Constants.FINISH
-import com.rustamft.tasksft.utils.Constants.SNOOZE
-import com.rustamft.tasksft.utils.Constants.TASK_ID
+import com.rustamft.tasksft.utils.FINISH
+import com.rustamft.tasksft.utils.SNOOZE
+import com.rustamft.tasksft.utils.TASK_ID
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking

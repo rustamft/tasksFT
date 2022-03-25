@@ -2,8 +2,8 @@ package com.rustamft.tasksft.database.prefs
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import com.rustamft.tasksft.utils.Constants.NIGHT_MODE
-import com.rustamft.tasksft.utils.Constants.SHARED_PREFS
+import com.rustamft.tasksft.utils.NIGHT_MODE
+import com.rustamft.tasksft.utils.SHARED_PREFS
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
