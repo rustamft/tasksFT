@@ -6,17 +6,17 @@
 
         <variable
             name="viewModel"
-            type="com.rustamft.tasksft.screens.list.ListViewModel" />
+            type="com.rustamft.tasksft.ui.screens.list.ListViewModel" />
 
         <variable
             name="listAdapter"
-            type="com.rustamft.tasksft.screens.list.adapter.TasksListAdapter" />
+            type="com.rustamft.tasksft.ui.screens.list.adapter.TasksListAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".screens.list.ListFragment">
+        tools:context=".ui.screens.list.ListFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_list"

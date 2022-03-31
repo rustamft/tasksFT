@@ -17,9 +17,23 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/list_menu_export"
+        android:icon="@drawable/ic_export"
+        android:orderInCategory="2"
+        android:title="@string/action_export"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/list_menu_import"
+        android:icon="@drawable/ic_import"
+        android:orderInCategory="3"
+        android:title="@string/action_import"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/list_menu_about_app"
         android:icon="@drawable/ic_info"
-        android:orderInCategory="2"
+        android:orderInCategory="4"
         android:title="@string/about_app"
         app:showAsAction="ifRoom" />
 

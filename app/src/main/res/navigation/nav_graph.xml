@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.rustamft.tasksft.screens.list.ListFragment"
+        android:name="com.rustamft.tasksft.ui.screens.list.ListFragment"
         android:label="list_fragment"
         tools:layout="@layout/fragment_list" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/editorFragment"
-        android:name="com.rustamft.tasksft.screens.editor.EditorFragment"
+        android:name="com.rustamft.tasksft.ui.screens.editor.EditorFragment"
         android:label="editor_fragment"
         tools:layout="@layout/fragment_editor" />
 </navigation>

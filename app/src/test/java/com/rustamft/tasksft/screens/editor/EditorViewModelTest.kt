@@ -3,12 +3,13 @@ package com.rustamft.tasksft.screens.editor
 import android.view.View
 import androidx.lifecycle.SavedStateHandle
 import com.rustamft.tasksft.app.App
-import com.rustamft.tasksft.database.entity.AppTask
+import com.rustamft.tasksft.database.entity.Task
 import com.rustamft.tasksft.database.repository.TasksRoomRepo
-import com.rustamft.tasksft.utils.Constants.TASK_ID
+import com.rustamft.tasksft.ui.screens.editor.EditorViewModel
+import com.rustamft.tasksft.utils.TASK_ID
 import com.rustamft.tasksft.utils.TaskWorkManagerMock
 import com.rustamft.tasksft.utils.datetime.DateTimeString
-import com.rustamft.tasksft.utils.datetime.DateTimeUtil
+import com.rustamft.tasksft.utils.datetime.DateTimeProvider
 import io.mockk.mockk
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +65,7 @@ internal class EditorViewModelTest {
     @BeforeEach
     fun init() {
 
-        _state = SavedStateHandle(mapOf(Pair<String, AppTask?>(TASK_ID, null)))
+        _state = SavedStateHandle(mapOf(Pair<String, Task?>(TASK_ID, null)))
         _repo = mockk()
         _workManager = TaskWorkManagerMock()
 
@@ -73,7 +74,6 @@ internal class EditorViewModelTest {
         state!!.set(TASK_ID, id)
 
         _viewModel = EditorViewModel(
-            app,
             state!!,
             repo!!,
             workManager!!
@@ -102,7 +102,7 @@ internal class EditorViewModelTest {
                     val deferred1 = coroutineScope {
                         async {
                             millisToSchedule =
-                                DateTimeUtil.stringToMillis(dateTime)
+                                DateTimeProvider.stringToMillis(dateTime)
 
                             viewModel.observableTask.hasReminder.set(true)
                             viewModel.observableTask.date.set(dateTime.date)

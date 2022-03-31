@@ -5,25 +5,25 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.rustamft.tasksft.database.entity.AppTask
+import com.rustamft.tasksft.database.entity.Task
 import com.rustamft.tasksft.utils.TASK_DESCRIPTION
 import com.rustamft.tasksft.utils.TASK_ID
 import com.rustamft.tasksft.utils.TASK_TITLE
+import com.rustamft.tasksft.utils.datetime.DateTimeProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class TaskWorkManager @Inject constructor(
+class TasksWorkManagerImpl @Inject constructor(
     @ApplicationContext private val context: Context
-) : AppWorkManager {
+) : TasksWorkManager {
 
     private val workManager = WorkManager.getInstance(context)
 
-    override fun scheduleOneTime(task: AppTask) {
-        val now = Calendar.getInstance().timeInMillis
+    override fun scheduleOneTime(task: Task) {
+        val now = DateTimeProvider.getNowInMillis()
         val delay: Long = task.reminder.minus(now)
         val data = workDataOf(
             Pair(TASK_ID, task.id),
@@ -38,12 +38,12 @@ class TaskWorkManager @Inject constructor(
         workManager.enqueue(work)
     }
 
-    override fun cancel(task: AppTask) {
+    override fun cancel(task: Task) {
         NotificationManagerCompat.from(context).cancel(task.id)
         workManager.cancelAllWorkByTag(task.id.toString())
     }
 
-    override suspend fun cancel(list: List<AppTask>) {
+    override suspend fun cancel(list: List<Task>) {
         coroutineScope {
             for (task in list) {
                 launch {

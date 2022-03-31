@@ -6,30 +6,30 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.rustamft.tasksft.database.entity.AppTask
+import com.rustamft.tasksft.database.entity.Task
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TasksRoomDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(task: AppTask)
+    suspend fun insert(task: Task)
 
     @Update
-    suspend fun update(task: AppTask)
+    suspend fun update(task: Task)
 
     @Delete
-    suspend fun delete(task: AppTask)
+    suspend fun delete(task: Task)
 
     @Delete
-    suspend fun delete(list: List<AppTask>)
+    suspend fun delete(list: List<Task>)
 
-    @Query("SELECT * FROM apptask ORDER BY is_finished DESC, reminder, created ASC")
-    fun getAll(): Flow<List<AppTask>>
+    @Query("SELECT * FROM task ORDER BY is_finished DESC, reminder, created ASC")
+    fun getTasksList(): Flow<List<Task>>
 
-    @Query("SELECT * FROM apptask WHERE is_finished = 1")
-    suspend fun getFinished(): List<AppTask>
+    @Query("SELECT * FROM task WHERE is_finished = 1")
+    suspend fun getFinishedTasks(): List<Task>
 
-    @Query("SELECT * FROM apptask WHERE id = :id")
-    suspend fun getEntity(id: Int): AppTask
+    @Query("SELECT * FROM task WHERE id = :id")
+    suspend fun getTask(id: Int): Task
 }

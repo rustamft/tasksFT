@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import java.util.Calendar
 
 @Entity
-data class AppTask(
+data class Task(
     @PrimaryKey val id: Int,
     var title: String,
     var description: String,

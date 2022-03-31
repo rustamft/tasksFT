@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.screens.editor
+package com.rustamft.tasksft.ui.screens.editor
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,10 +11,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.activities.MainActivity
 import com.rustamft.tasksft.databinding.FragmentEditorBinding
-import com.rustamft.tasksft.screens.editor.picker.DatePickerFragment
-import com.rustamft.tasksft.screens.editor.picker.TimePickerFragment
+import com.rustamft.tasksft.ui.MainActivity
+import com.rustamft.tasksft.ui.screens.editor.picker.DatePickerFragment
+import com.rustamft.tasksft.ui.screens.editor.picker.TimePickerFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

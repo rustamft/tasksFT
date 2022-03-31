@@ -14,7 +14,7 @@ android {
         minSdk 21
         targetSdk 30
         versionCode 1
-        versionName "0.8.4"
+        versionName "0.8.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -66,6 +66,8 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
+    // Retrofit json converter.
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     // WorkManager.
     def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
@@ -77,7 +79,7 @@ dependencies {
     def coroutine_version = "1.6.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
     // MockK.
-    testImplementation "io.mockk:mockk:1.12.2"
+    testImplementation "io.mockk:mockk:1.12.3"
     // LeakCanary.
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 }

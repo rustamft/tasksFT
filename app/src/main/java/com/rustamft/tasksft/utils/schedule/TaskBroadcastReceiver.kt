@@ -6,15 +6,15 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.database.entity.AppTask
-import com.rustamft.tasksft.database.repository.AppRepo
+import com.rustamft.tasksft.database.entity.Task
+import com.rustamft.tasksft.database.repository.TasksRepo
 import com.rustamft.tasksft.utils.FINISH
 import com.rustamft.tasksft.utils.SNOOZE
 import com.rustamft.tasksft.utils.TASK_ID
+import com.rustamft.tasksft.utils.datetime.DateTimeProvider
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
-import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,19 +25,19 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
     lateinit var context: Context
 
     @Inject
-    lateinit var repo: AppRepo
+    lateinit var repo: TasksRepo
 
     @Inject
-    lateinit var workManager: AppWorkManager
+    lateinit var workManager: TasksWorkManager
 
-    lateinit var task: AppTask
+    lateinit var task: Task
 
     override fun onReceive(contextNullable: Context?, intent: Intent?) {
         val pendingResult = goAsync()
         runBlocking {
             val id = intent?.extras?.getInt(TASK_ID)
             if (id != null) {
-                task = repo.getEntity(id)
+                task = repo.getTask(id)
                 when (intent.action) {
                     FINISH -> {
                         finishTask()
@@ -63,8 +63,8 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
     }
 
     private suspend fun snoozeTask() {
-        val now = Calendar.getInstance().timeInMillis
-        val delay: Long = 60 * 60 * 1000 // One hour.
+        val now = DateTimeProvider.getNowInMillis()
+        val delay: Long = DateTimeProvider.ONE_HOUR // One hour.
         task.reminder = now + delay
         workManager.scheduleOneTime(task)
         repo.update(task)

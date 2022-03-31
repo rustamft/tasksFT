@@ -8,21 +8,21 @@
 
         <variable
             name="viewModel"
-            type="com.rustamft.tasksft.screens.editor.EditorViewModel" />
+            type="com.rustamft.tasksft.ui.screens.editor.EditorViewModel" />
 
         <variable
             name="datePicker"
-            type="com.rustamft.tasksft.screens.editor.picker.DatePickerFragment" />
+            type="com.rustamft.tasksft.ui.screens.editor.picker.DatePickerFragment" />
 
         <variable
             name="timePicker"
-            type="com.rustamft.tasksft.screens.editor.picker.TimePickerFragment" />
+            type="com.rustamft.tasksft.ui.screens.editor.picker.TimePickerFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".screens.editor.EditorFragment">
+        tools:context=".ui.screens.editor.EditorFragment">
 
         <LinearLayout
             android:layout_width="match_parent"

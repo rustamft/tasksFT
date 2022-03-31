@@ -17,7 +17,7 @@ class DateTimeUtilTest {
         calendar.set(2020, 12, 31, 23, 30)
         mockkStatic(Calendar::class)
         every { Calendar.getInstance() } returns calendar
-        val receivedDateTime = DateTimeUtil.nextFullHourString()
+        val receivedDateTime = DateTimeProvider.nextFullHourAsDateTimeString()
         unmockkStatic(Calendar::class)
         calendar.set(2021, 1, 1, 0, 0)
         val expectedString =
@@ -33,7 +33,7 @@ class DateTimeUtilTest {
         calendar.set(2022, 1, 1, 0, 0)
         mockkStatic(Calendar::class)
         every { Calendar.getInstance() } returns calendar
-        val receivedDateTime = DateTimeUtil.dateTimeUntil(millis)
+        val receivedDateTime = DateTimeProvider.dateTimeUntil(millis)
         unmockkStatic(Calendar::class)
         val expectedDateTime = DateTimeInt(5, 19, 15, 23)
         assertTrue(

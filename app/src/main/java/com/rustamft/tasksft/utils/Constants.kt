@@ -4,8 +4,9 @@ package com.rustamft.tasksft.utils
  * Constants used throughout the application.
  */
 const val SHARED_PREFS = "com.rustamft.tasksft.shared_prefs"
-
 const val NIGHT_MODE = "com.rustamft.tasksft.NIGHT_MODE"
+const val BACKUP_DIR = "com.rustamft.tasksft.BACKUP_DIR"
+const val BACKUP_FILE_NAME = "tasksFT backup "
 
 const val TASK_ID = "com.rustamft.tasksft.TASK_ID"
 const val TASK_TITLE = "com.rustamft.tasksft.TASK_TITLE"
@@ -23,3 +24,5 @@ const val TIME_PATTERN = "HH:mm"
 const val DATE_TIME_PATTERN = "$DATE_PATTERN $TIME_PATTERN"
 
 const val GITHUB_LINK = "https://github.com/rustamft/tasksFT"
+
+const val TAG_BACKUP_FILE = "BACKUP_FILE"

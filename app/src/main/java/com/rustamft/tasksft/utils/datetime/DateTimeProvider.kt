@@ -8,7 +8,17 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-object DateTimeUtil {
+object DateTimeProvider {
+
+    const val ONE_HOUR = 60L * 60L * 1000L
+
+    fun getNowInMillis(): Long {
+        return Calendar.getInstance().timeInMillis
+    }
+
+    fun getNowAsString(): String {
+        return millisToDateTimeString(getNowInMillis()).string
+    }
 
     fun isInFuture(millis: Long): Boolean {
         return if (millis == 0L) {
@@ -36,7 +46,7 @@ object DateTimeUtil {
     /**
      * Returns next full hour as DateTimeString.
      */
-    fun nextFullHourString(): DateTimeString {
+    fun nextFullHourAsDateTimeString(): DateTimeString {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.MINUTE, 0)
         calendar.roll(Calendar.HOUR_OF_DAY, true)
@@ -59,7 +69,7 @@ object DateTimeUtil {
      * Converts milliseconds to DateTimeString.
      * @param millis input milliseconds.
      */
-    fun millisToString(millis: Long): DateTimeString {
+    fun millisToDateTimeString(millis: Long): DateTimeString {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = millis
         return DateTimeString(

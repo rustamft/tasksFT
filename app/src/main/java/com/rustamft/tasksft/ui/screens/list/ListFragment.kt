@@ -1,5 +1,7 @@
-package com.rustamft.tasksft.screens.list
+package com.rustamft.tasksft.ui.screens.list
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -7,13 +9,15 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.activities.MainActivity
 import com.rustamft.tasksft.databinding.FragmentListBinding
-import com.rustamft.tasksft.screens.list.adapter.TasksListAdapter
+import com.rustamft.tasksft.ui.MainActivity
+import com.rustamft.tasksft.ui.screens.list.adapter.TasksListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,6 +26,16 @@ class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ListViewModel by viewModels()
+    private val activityResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val chosenDirUri = result.data?.data
+            if (chosenDirUri != null) {
+                viewModel.exportTasks(requireContext(), chosenDirUri)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,11 +73,19 @@ class ListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.list_menu_delete_finished -> {
-                viewModel.deleteFinished()
+                viewModel.deleteFinishedTasks()
             }
             R.id.list_menu_switch_night -> {
                 viewModel.switchNightMode()
                 viewModel.updateNightModeMenuIcon(requireContext(), item)
+            }
+            R.id.list_menu_export -> {
+                viewModel.exportTasks(requireContext()) {
+                    activityResultLauncher.launch(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE))
+                }
+            }
+            R.id.list_menu_import -> {
+                // TODO: implement import
             }
             R.id.list_menu_about_app -> {
                 viewModel.displayAboutApp(requireContext())

@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.screens.editor.picker
+package com.rustamft.tasksft.ui.screens.editor.picker
 
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentManager
 import com.rustamft.tasksft.utils.DATE_PICKER_DIALOG_TAG
 import com.rustamft.tasksft.utils.datetime.DateTimeInt
 import com.rustamft.tasksft.utils.datetime.DateTimeString
-import com.rustamft.tasksft.utils.datetime.DateTimeUtil
+import com.rustamft.tasksft.utils.datetime.DateTimeProvider
 import java.util.Calendar
 
 open class DatePickerFragment(
@@ -21,7 +21,7 @@ open class DatePickerFragment(
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val string = button.text.toString()
         val date = DateTimeString(string, "")
-        val millis = DateTimeUtil.stringToMillis(date)
+        val millis = DateTimeProvider.stringToMillis(date)
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = millis
         val year = calendar.get(Calendar.YEAR)
@@ -32,7 +32,7 @@ open class DatePickerFragment(
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
         val date = DateTimeInt(p1, p2, p3) // year, month, day.
-        button.text = DateTimeUtil.intToDateString(date)
+        button.text = DateTimeProvider.intToDateString(date)
     }
 
     fun show() = show(manager, DATE_PICKER_DIALOG_TAG)

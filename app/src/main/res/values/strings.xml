@@ -13,8 +13,14 @@
     <string name="action_delete">Delete</string>
     <string name="action_delete_finished">Delete finished</string>
     <string name="action_discard">Discard</string>
+    <string name="action_export">Export to a file</string>
+    <string name="action_import">Import from a file</string>
     <string name="action_save">Save</string>
     <string name="app_name">tasksFT</string>
+    <string name="backup_file_created">Backup file created</string>
+    <string name="backup_will_be_saved_to">The tasks backup will be saved to:\n</string>
+    <string name="choose_dir">Choose folder</string>
+    <string name="could_not_do">Could not do that</string>
     <string name="description">Description</string>
     <string name="night_mode_auto">Night mode is auto</string>
     <string name="night_mode_off">Night mode is off</string>

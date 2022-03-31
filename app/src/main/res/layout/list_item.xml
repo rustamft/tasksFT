@@ -8,11 +8,11 @@
 
         <variable
             name="viewModel"
-            type="com.rustamft.tasksft.screens.list.ListViewModel" />
+            type="com.rustamft.tasksft.ui.screens.list.ListViewModel" />
 
         <variable
             name="task"
-            type="com.rustamft.tasksft.database.entity.AppTask" />
+            type="com.rustamft.tasksft.database.entity.Task" />
 
         <variable
             name="checked"

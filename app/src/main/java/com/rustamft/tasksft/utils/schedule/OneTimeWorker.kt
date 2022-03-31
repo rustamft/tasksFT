@@ -11,7 +11,7 @@ import androidx.navigation.NavDeepLinkBuilder
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.activities.MainActivity
+import com.rustamft.tasksft.ui.MainActivity
 import com.rustamft.tasksft.utils.CHANNEL_ID
 import com.rustamft.tasksft.utils.FINISH
 import com.rustamft.tasksft.utils.SNOOZE

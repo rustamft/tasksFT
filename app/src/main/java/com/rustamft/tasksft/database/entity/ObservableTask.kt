@@ -2,7 +2,7 @@ package com.rustamft.tasksft.database.entity
 
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
-import com.rustamft.tasksft.utils.datetime.DateTimeUtil
+import com.rustamft.tasksft.utils.datetime.DateTimeProvider
 
 class ObservableTask {
 
@@ -13,16 +13,16 @@ class ObservableTask {
     val time = ObservableField("")
     var isChanged = false
 
-    fun fillFrom(task: AppTask) {
+    fun fillFrom(task: Task) {
         if (!task.isNew) {
             title.set(task.title)
             description.set(task.description)
-            hasReminder.set(DateTimeUtil.isInFuture(task.reminder))
+            hasReminder.set(DateTimeProvider.isInFuture(task.reminder))
         }
         val dateTime = if (hasReminder.get()!!) {
-            DateTimeUtil.millisToString(task.reminder)
+            DateTimeProvider.millisToDateTimeString(task.reminder)
         } else {
-            DateTimeUtil.nextFullHourString()
+            DateTimeProvider.nextFullHourAsDateTimeString()
         }
         date.set(dateTime.date)
         time.set(dateTime.time)

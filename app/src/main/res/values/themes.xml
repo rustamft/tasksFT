@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.TasksFT" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/pure_crimson</item>
-        <item name="colorPrimaryVariant">@color/pure_crimson</item>
+        <item name="colorPrimary">@color/sappanwood</item>
+        <item name="colorPrimaryVariant">@color/sappanwood</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/pure_crimson</item>
-        <item name="colorSecondaryVariant">@color/pure_crimson</item>
+        <item name="colorSecondary">@color/sappanwood</item>
+        <item name="colorSecondaryVariant">@color/sappanwood</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
