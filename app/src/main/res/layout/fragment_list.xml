@@ -30,7 +30,7 @@
             android:id="@+id/fab_add"
             style="@style/FAB"
             android:contentDescription="@string/action_add"
-            android:onClick="@{(view) -> viewModel.navigateNext(view)}"
+            android:onClick="@{(view) -> viewModel.navigateToEditor(view)}"
             android:src="@drawable/ic_add"
             android:theme="@style/FAB"
             app:layout_constraintBottom_toBottomOf="parent"

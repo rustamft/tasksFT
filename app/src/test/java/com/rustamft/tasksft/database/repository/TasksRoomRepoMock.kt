@@ -11,7 +11,7 @@ class TasksRoomRepoMock : TasksRepo {
 
     override suspend fun getTask(id: Int) = listTasks[id]
 
-    override suspend fun save(task: Task) {
+    override suspend fun insert(task: Task) {
         delay(1000)
         listTasks.add(task.id, task)
     }

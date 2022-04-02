@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.rustamft.tasksft.R
@@ -15,6 +14,7 @@ import com.rustamft.tasksft.databinding.FragmentEditorBinding
 import com.rustamft.tasksft.ui.MainActivity
 import com.rustamft.tasksft.ui.screens.editor.picker.DatePickerFragment
 import com.rustamft.tasksft.ui.screens.editor.picker.TimePickerFragment
+import com.rustamft.tasksft.utils.enableBackCallback
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,7 +26,9 @@ class EditorFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableBackCallback() // Override system back behaviour.
+        requireActivity().enableBackCallback(this) { // Override system back behaviour.
+            viewModel.onBackClicked(requireView())
+        }
         setHasOptionsMenu(true) // Make onCreateOptionsMenu work.
     }
 
@@ -69,14 +71,5 @@ class EditorFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun enableBackCallback() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                viewModel.onBackClicked(requireView())
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 }

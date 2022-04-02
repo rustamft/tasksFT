@@ -13,10 +13,18 @@
         <action
             android:id="@+id/action_listFragment_to_editorFragment"
             app:destination="@id/editorFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_backupFragment"
+            app:destination="@id/backupFragment" />
     </fragment>
     <fragment
         android:id="@+id/editorFragment"
         android:name="com.rustamft.tasksft.ui.screens.editor.EditorFragment"
         android:label="editor_fragment"
         tools:layout="@layout/fragment_editor" />
+    <fragment
+        android:id="@+id/backupFragment"
+        android:name="com.rustamft.tasksft.ui.screens.backup.BackupFragment"
+        android:label="fragment_backup"
+        tools:layout="@layout/fragment_backup" />
 </navigation>

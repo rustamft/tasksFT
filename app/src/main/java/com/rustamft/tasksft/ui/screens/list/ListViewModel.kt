@@ -14,19 +14,15 @@ import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
-import com.google.gson.Gson
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.database.entity.BackupFile
 import com.rustamft.tasksft.database.entity.Task
 import com.rustamft.tasksft.database.prefs.SharedPrefs
 import com.rustamft.tasksft.database.repository.TasksRepo
-import com.rustamft.tasksft.ui.displayToast
 import com.rustamft.tasksft.utils.GITHUB_LINK
 import com.rustamft.tasksft.utils.TASK_ID
 import com.rustamft.tasksft.utils.datetime.DateTimeProvider
 import com.rustamft.tasksft.utils.schedule.TasksWorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,17 +35,22 @@ class ListViewModel @Inject constructor(
 
     val listOfTasks = repo.getTasksList()
 
-    fun navigateNext(view: View) {
+    fun navigateToEditor(view: View) {
         val navController = view.findNavController()
         navController.navigate(R.id.action_listFragment_to_editorFragment)
     }
 
-    fun navigateNext(view: View, id: Int): Boolean {
+    fun navigateToEditor(view: View, id: Int): Boolean {
         val bundle = Bundle()
         bundle.putInt(TASK_ID, id)
         val navController = view.findNavController()
         navController.navigate(R.id.action_listFragment_to_editorFragment, bundle)
         return true
+    }
+
+    fun navigateToBackup(view: View) {
+        val navController = view.findNavController()
+        navController.navigate(R.id.action_listFragment_to_backupFragment)
     }
 
     fun getNightMode(): Int = prefs.getNightMode()
@@ -114,19 +115,6 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    fun exportTasks(context: Context, onChooseDir: () -> Unit) {
-        if (prefs.hasBackupDirPermission()) {
-            displayBackupConfirmation(context, prefs.getBackupDir()!!, onChooseDir)
-        } else {
-            onChooseDir()
-        }
-    }
-
-    fun exportTasks(context: Context, backupDirUri: Uri) {
-        prefs.setBackupDir(backupDirUri)
-        writeBackupToDisk(context, backupDirUri.toString())
-    }
-
     fun displayAboutApp(context: Context) {
         val message = context.getString(R.string.about_app_content) + getAppVersion(context)
         val builder = AlertDialog.Builder(context)
@@ -141,26 +129,6 @@ class ListViewModel @Inject constructor(
         builder.show()
     }
 
-    private fun displayBackupConfirmation(
-        context: Context,
-        backupDir: String,
-        onChooseDir: () -> Unit
-    ) {
-        val builder = AlertDialog.Builder(context)
-            .setTitle(R.string.action_export)
-            .setMessage(context.getString(R.string.backup_will_be_saved_to) + backupDir)
-            .setPositiveButton(R.string.action_save) { _, _ ->
-                writeBackupToDisk(context, backupDir)
-            }
-            .setNegativeButton(R.string.action_cancel) { _, _ ->
-                // Close.
-            }
-            .setNeutralButton(R.string.choose_dir) { _, _ ->
-                onChooseDir()
-            }
-        builder.show()
-    }
-
     private fun updateTask(task: Task) {
         viewModelScope.launch {
             launch {
@@ -169,20 +137,6 @@ class ListViewModel @Inject constructor(
             workManager.cancel(task)
             if (!task.isFinished && DateTimeProvider.isInFuture(task.reminder)) {
                 workManager.scheduleOneTime(task)
-            }
-        }
-    }
-
-    private fun writeBackupToDisk(context: Context, backupDir: String) {
-        viewModelScope.launch {
-            with(context) {
-                val listOfTasks = listOfTasks.firstOrNull() ?: {
-                    displayToast(getString(R.string.could_not_do))
-                }
-                val json = Gson().toJson(listOfTasks)
-                if (BackupFile(this, backupDir, json).writeToDisk()) {
-                    displayToast(getString(R.string.backup_file_created))
-                }
             }
         }
     }

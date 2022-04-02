@@ -15,17 +15,12 @@ class TasksRoomRepo @Inject constructor(
     // TODO: move to constructor
     private val dao: TasksRoomDao = TasksRoomDatabase.getDatabase(context).tasksDao()
 
-    override suspend fun save(task: Task) = dao.insert(task)
-
+    override suspend fun insert(task: Task) = dao.insert(task)
+    override suspend fun insert(list: List<Task>) = dao.insert(list)
     override suspend fun update(task: Task) = dao.update(task)
-
     override suspend fun delete(task: Task) = dao.delete(task)
-
     override suspend fun delete(list: List<Task>) = dao.delete(list)
-
-    override fun getTasksList(): Flow<List<Task>> = dao.getTasksList()
-
-    override suspend fun getFinishedTasks(): List<Task> = dao.getFinishedTasks()
-
     override suspend fun getTask(id: Int): Task = dao.getTask(id)
+    override fun getTasksList(): Flow<List<Task>> = dao.getTasksList()
+    override suspend fun getFinishedTasks(): List<Task> = dao.getFinishedTasks()
 }

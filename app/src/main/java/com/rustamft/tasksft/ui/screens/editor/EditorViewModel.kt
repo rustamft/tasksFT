@@ -11,10 +11,10 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.database.entity.ObservableTask
 import com.rustamft.tasksft.database.entity.Task
 import com.rustamft.tasksft.database.repository.TasksRepo
-import com.rustamft.tasksft.ui.displayToast
 import com.rustamft.tasksft.utils.TASK_ID
 import com.rustamft.tasksft.utils.datetime.DateTimeProvider
 import com.rustamft.tasksft.utils.datetime.DateTimeString
+import com.rustamft.tasksft.utils.displayToast
 import com.rustamft.tasksft.utils.schedule.TasksWorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -66,7 +66,7 @@ class EditorViewModel @Inject constructor(
                     launch {
                         if (task.isNew) {
                             task.isNew = false
-                            repo.save(task)
+                            repo.insert(task)
                         } else { // If it's an existing task.
                             repo.update(task)
                         }

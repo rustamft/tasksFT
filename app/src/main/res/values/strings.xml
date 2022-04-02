@@ -8,6 +8,7 @@
     </string>
     <string name="action_add">Add</string>
     <string name="action_apply">Apply</string>
+    <string name="action_backup">Backup</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_close">Close</string>
     <string name="action_delete">Delete</string>
@@ -17,7 +18,8 @@
     <string name="action_import">Import from a file</string>
     <string name="action_save">Save</string>
     <string name="app_name">tasksFT</string>
-    <string name="backup_file_created">Backup file created</string>
+    <string name="backup_file_exported">Backup file exported</string>
+    <string name="backup_file_imported">Backup file imported</string>
     <string name="backup_will_be_saved_to">The tasks backup will be saved to:\n</string>
     <string name="choose_dir">Choose folder</string>
     <string name="could_not_do">Could not do that</string>

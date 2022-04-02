@@ -18,11 +18,12 @@ interface TasksRepo {
         abstract fun bindRepo(roomRepo: TasksRoomRepo): TasksRepo
     }
 
-    suspend fun save(task: Task)
+    suspend fun insert(task: Task)
+    suspend fun insert(list: List<Task>)
     suspend fun update(task: Task)
     suspend fun delete(task: Task)
     suspend fun delete(list: List<Task>)
+    suspend fun getTask(id: Int): Task
     fun getTasksList(): Flow<List<Task>>
     suspend fun getFinishedTasks(): List<Task>
-    suspend fun getTask(id: Int): Task
 }
