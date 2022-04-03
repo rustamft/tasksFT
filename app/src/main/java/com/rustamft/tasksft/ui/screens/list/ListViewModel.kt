@@ -131,13 +131,7 @@ class ListViewModel @Inject constructor(
 
     private fun updateTask(task: Task) {
         viewModelScope.launch {
-            launch {
-                repo.update(task)
-            }
-            workManager.cancel(task)
-            if (!task.isFinished && DateTimeProvider.isInFuture(task.reminder)) {
-                workManager.scheduleOneTime(task)
-            }
+            repo.update(task)
         }
     }
 

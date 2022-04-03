@@ -20,6 +20,7 @@ class TasksWorkManagerImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : TasksWorkManager {
 
+    // TODO: move to constructor
     private val workManager = WorkManager.getInstance(context)
 
     override fun scheduleOneTime(task: Task) {

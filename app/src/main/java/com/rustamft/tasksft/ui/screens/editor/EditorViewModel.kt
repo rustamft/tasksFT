@@ -1,6 +1,5 @@
 package com.rustamft.tasksft.ui.screens.editor
 
-import android.content.Context
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.SavedStateHandle
@@ -15,7 +14,6 @@ import com.rustamft.tasksft.utils.TASK_ID
 import com.rustamft.tasksft.utils.datetime.DateTimeProvider
 import com.rustamft.tasksft.utils.datetime.DateTimeString
 import com.rustamft.tasksft.utils.displayToast
-import com.rustamft.tasksft.utils.schedule.TasksWorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,8 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditorViewModel @Inject constructor(
     private val state: SavedStateHandle,
-    private val repo: TasksRepo,
-    private val workManager: TasksWorkManager
+    private val repo: TasksRepo
 ) : ViewModel() {
 
     private var _task: Task? = null
@@ -57,16 +54,9 @@ class EditorViewModel @Inject constructor(
                 viewModelScope.launch {
                     updateTaskFromObservableTask()
                     launch {
-                        workManager.cancel(task)
-                        if (task.reminder != 0L) {
-                            workManager.scheduleOneTime(task)
-                            displayToast(buildUntilReminderString(this@with))
-                        }
-                    }
-                    launch {
                         if (task.isNew) {
-                            task.isNew = false
                             repo.insert(task)
+                            task.isNew = false
                         } else { // If it's an existing task.
                             repo.update(task)
                         }
@@ -80,10 +70,7 @@ class EditorViewModel @Inject constructor(
     fun delete() {
         if (!task.isNew) {
             viewModelScope.launch {
-                launch {
-                    repo.delete(task)
-                }
-                workManager.cancel(task)
+                repo.delete(task)
             }
         }
     }
@@ -93,26 +80,6 @@ class EditorViewModel @Inject constructor(
             displaySaveDialog(view)
         } else {
             navigateBack(view)
-        }
-    }
-
-    private fun buildUntilReminderString(context: Context): String {
-        with(context) {
-            val dateTime = DateTimeProvider.dateTimeUntil(task.reminder)
-            var string = getString(R.string.reminder_in)
-            if (dateTime.month > 0) {
-                string += dateTime.month.toString() + getString(R.string.reminder_months)
-            }
-            if (dateTime.day > 0) {
-                string += dateTime.day.toString() + getString(R.string.reminder_days)
-            }
-            if (dateTime.hour > 0) {
-                string += dateTime.hour.toString() + getString(R.string.reminder_hours)
-            }
-            if (dateTime.minute > 0) {
-                string += dateTime.minute.toString() + getString(R.string.reminder_minutes)
-            }
-            return string
         }
     }
 

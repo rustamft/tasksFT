@@ -27,9 +27,6 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
     @Inject
     lateinit var repo: TasksRepo
 
-    @Inject
-    lateinit var workManager: TasksWorkManager
-
     lateinit var task: Task
 
     override fun onReceive(contextNullable: Context?, intent: Intent?) {
@@ -66,7 +63,6 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
         val now = DateTimeProvider.getNowInMillis()
         val delay: Long = DateTimeProvider.ONE_HOUR // One hour.
         task.reminder = now + delay
-        workManager.scheduleOneTime(task)
         repo.update(task)
     }
 }

@@ -1,5 +1,8 @@
 package com.rustamft.tasksft.utils.datetime
 
+import android.content.Context
+import com.rustamft.tasksft.R
+import com.rustamft.tasksft.database.entity.Task
 import com.rustamft.tasksft.utils.DATE_PATTERN
 import com.rustamft.tasksft.utils.TIME_PATTERN
 import java.text.ParseException
@@ -96,10 +99,30 @@ object DateTimeProvider {
         return formatTime(calendar.time)
     }
 
+    fun buildUntilReminderString(context: Context, task: Task): String {
+        with(context) {
+            val dateTime = dateTimeUntil(task.reminder)
+            var string = getString(R.string.reminder_in)
+            if (dateTime.month > 0) {
+                string += dateTime.month.toString() + getString(R.string.reminder_months)
+            }
+            if (dateTime.day > 0) {
+                string += dateTime.day.toString() + getString(R.string.reminder_days)
+            }
+            if (dateTime.hour > 0) {
+                string += dateTime.hour.toString() + getString(R.string.reminder_hours)
+            }
+            if (dateTime.minute > 0) {
+                string += dateTime.minute.toString() + getString(R.string.reminder_minutes)
+            }
+            return string
+        }
+    }
+
     /**
      * Returns DateTimeInt left until reminder is shown.
      */
-    fun dateTimeUntil(millis: Long): DateTimeInt {
+    private fun dateTimeUntil(millis: Long): DateTimeInt {
         val currentCalendar = Calendar.getInstance()
         val difference = millis - currentCalendar.timeInMillis
         if (difference <= 0L) {
