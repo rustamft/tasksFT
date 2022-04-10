@@ -5,7 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import com.rustamft.tasksft.database.entity.Task
 import com.rustamft.tasksft.database.room.TasksRoomDao
-import com.rustamft.tasksft.database.room.TasksRoomDatabase
 import com.rustamft.tasksft.utils.datetime.DateTimeProvider
 import com.rustamft.tasksft.utils.displayToast
 import com.rustamft.tasksft.utils.schedule.TasksWorkManager
@@ -18,11 +17,9 @@ import javax.inject.Inject
 
 class TasksRoomRepo @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val workManager: TasksWorkManager
+    private val workManager: TasksWorkManager,
+    private val dao: TasksRoomDao
 ) : TasksRepo {
-
-    // TODO: move to constructor
-    private val dao: TasksRoomDao = TasksRoomDatabase.getDatabase(context).tasksDao()
 
     override suspend fun insert(task: Task) {
         withContext(Dispatchers.IO) {

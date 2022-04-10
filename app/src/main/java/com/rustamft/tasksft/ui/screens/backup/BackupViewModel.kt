@@ -144,7 +144,6 @@ class BackupViewModel @Inject constructor(
                     repo.insert(listOfTasks!!)
                     displayToast(getString(R.string.backup_file_imported))
                     navigateBack(view)
-                    // TODO: rearm notification alarms
                 }
             }
         }

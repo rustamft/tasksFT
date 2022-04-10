@@ -1,6 +1,5 @@
 package com.rustamft.tasksft.utils.schedule
 
-import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -10,18 +9,14 @@ import com.rustamft.tasksft.utils.TASK_DESCRIPTION
 import com.rustamft.tasksft.utils.TASK_ID
 import com.rustamft.tasksft.utils.TASK_TITLE
 import com.rustamft.tasksft.utils.datetime.DateTimeProvider
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class TasksWorkManagerImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+class TasksWorkManagerImpl(
+    private val workManager: WorkManager,
+    private val notificationManager: NotificationManagerCompat
 ) : TasksWorkManager {
-
-    // TODO: move to constructor
-    private val workManager = WorkManager.getInstance(context)
 
     override fun scheduleOneTime(task: Task) {
         val now = DateTimeProvider.getNowInMillis()
@@ -40,16 +35,14 @@ class TasksWorkManagerImpl @Inject constructor(
     }
 
     override fun cancel(task: Task) {
-        NotificationManagerCompat.from(context).cancel(task.id)
+        notificationManager.cancel(task.id)
         workManager.cancelAllWorkByTag(task.id.toString())
     }
 
     override suspend fun cancel(list: List<Task>) {
         coroutineScope {
             for (task in list) {
-                launch {
-                    cancel(task)
-                }
+                launch { cancel(task) }
             }
         }
     }
