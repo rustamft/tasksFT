@@ -26,15 +26,6 @@ interface TasksWorkManager {
             )
         }
     }
-    /*
-    @Module
-    @InstallIn(SingletonComponent::class)
-    abstract class TasksWorkManagerModule {
-        @Binds
-        @Singleton
-        abstract fun bindTasksWorkManager(workManager: TasksWorkManagerImpl): TasksWorkManager
-    }
-     */
 
     fun scheduleOneTime(task: Task)
     fun cancel(task: Task)

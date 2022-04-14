@@ -9,8 +9,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.rustamft.tasksft.utils.TIME_PICKER_DIALOG_TAG
 import com.rustamft.tasksft.utils.datetime.DateTimeInt
-import com.rustamft.tasksft.utils.datetime.DateTimeString
 import com.rustamft.tasksft.utils.datetime.DateTimeProvider
+import com.rustamft.tasksft.utils.datetime.DateTimeString
 import java.util.Calendar
 
 class TimePickerFragment(

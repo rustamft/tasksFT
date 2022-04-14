@@ -9,7 +9,7 @@ import androidx.navigation.findNavController
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.database.entity.ObservableTask
 import com.rustamft.tasksft.database.entity.Task
-import com.rustamft.tasksft.database.repository.TasksRepo
+import com.rustamft.tasksft.database.repository.Repo
 import com.rustamft.tasksft.utils.TASK_ID
 import com.rustamft.tasksft.utils.datetime.DateTimeProvider
 import com.rustamft.tasksft.utils.datetime.DateTimeString
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditorViewModel @Inject constructor(
     private val state: SavedStateHandle,
-    private val repo: TasksRepo
+    private val repo: Repo<Task>
 ) : ViewModel() {
 
     private var _task: Task? = null
@@ -34,7 +34,7 @@ class EditorViewModel @Inject constructor(
             _task = if (id == null) {
                 Task() // New empty task.
             } else {
-                repo.getTask(id)
+                repo.getById(id)
             }
             observableTask.fillFrom(task)
             observableTask.observeChanges()

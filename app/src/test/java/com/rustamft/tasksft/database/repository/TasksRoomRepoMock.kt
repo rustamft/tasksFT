@@ -5,11 +5,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
-class TasksRoomRepoMock : TasksRepo {
+class TasksRoomRepoMock : Repo {
 
     private val listTasks = mutableListOf<Task>()
 
-    override suspend fun getTask(id: Int) = listTasks[id]
+    override suspend fun getById(id: Int) = listTasks[id]
 
     override suspend fun insert(task: Task) {
         delay(1000)

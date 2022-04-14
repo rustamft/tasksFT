@@ -15,7 +15,7 @@ import com.google.gson.reflect.TypeToken
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.database.entity.Task
 import com.rustamft.tasksft.database.prefs.SharedPrefs
-import com.rustamft.tasksft.database.repository.TasksRepo
+import com.rustamft.tasksft.database.repository.Repo
 import com.rustamft.tasksft.utils.TasksBackupManager
 import com.rustamft.tasksft.utils.displayToast
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,10 +26,10 @@ import javax.inject.Inject
 @HiltViewModel
 class BackupViewModel @Inject constructor(
     private val prefs: SharedPrefs,
-    private val repo: TasksRepo
+    private val repo: Repo<Task>
 ) : ViewModel() {
 
-    private val listOfTasks = repo.getTasksList()
+    private val listOfTasks = repo.getAll()
     lateinit var exportBackupLauncher: ActivityResultLauncher<Intent>
     lateinit var importBackupLauncher: ActivityResultLauncher<Intent>
 

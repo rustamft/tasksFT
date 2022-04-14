@@ -17,7 +17,7 @@ import androidx.navigation.findNavController
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.database.entity.Task
 import com.rustamft.tasksft.database.prefs.SharedPrefs
-import com.rustamft.tasksft.database.repository.TasksRepo
+import com.rustamft.tasksft.database.repository.Repo
 import com.rustamft.tasksft.utils.GITHUB_LINK
 import com.rustamft.tasksft.utils.TASK_ID
 import com.rustamft.tasksft.utils.datetime.DateTimeProvider
@@ -29,11 +29,11 @@ import javax.inject.Inject
 @HiltViewModel
 class ListViewModel @Inject constructor(
     private val prefs: SharedPrefs,
-    private val repo: TasksRepo,
+    private val repo: Repo<Task>,
     private val workManager: TasksWorkManager
 ) : ViewModel() {
 
-    val listOfTasks = repo.getTasksList()
+    val listOfTasks = repo.getAll()
 
     fun navigateToEditor(view: View) {
         val navController = view.findNavController()
@@ -105,7 +105,7 @@ class ListViewModel @Inject constructor(
 
     fun deleteFinishedTasks() {
         viewModelScope.launch {
-            val list = repo.getFinishedTasks()
+            val list = repo.getFinished()
             launch {
                 repo.delete(list)
             }

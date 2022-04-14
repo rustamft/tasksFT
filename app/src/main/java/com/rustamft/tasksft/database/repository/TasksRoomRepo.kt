@@ -19,12 +19,12 @@ class TasksRoomRepo @Inject constructor(
     @ApplicationContext private val context: Context,
     private val workManager: TasksWorkManager,
     private val dao: TasksRoomDao
-) : TasksRepo {
+) : Repo<Task> {
 
-    override suspend fun insert(task: Task) {
+    override suspend fun insert(entity: Task) {
         withContext(Dispatchers.IO) {
-            launch { handleReminderWithToast(task) }
-            launch { dao.insert(task.copy(isNew = false)) }
+            launch { handleReminderWithToast(entity) }
+            launch { dao.insert(entity.copy(isNew = false)) }
         }
     }
 
@@ -37,17 +37,17 @@ class TasksRoomRepo @Inject constructor(
         }
     }
 
-    override suspend fun update(task: Task) {
+    override suspend fun update(entity: Task) {
         withContext(Dispatchers.IO) {
-            launch { handleReminderWithToast(task) }
-            launch { dao.update(task) }
+            launch { handleReminderWithToast(entity) }
+            launch { dao.update(entity) }
         }
     }
 
-    override suspend fun delete(task: Task) {
+    override suspend fun delete(entity: Task) {
         withContext(Dispatchers.IO) {
-            launch { workManager.cancel(task) }
-            launch { dao.delete(task) }
+            launch { workManager.cancel(entity) }
+            launch { dao.delete(entity) }
         }
     }
 
@@ -60,11 +60,11 @@ class TasksRoomRepo @Inject constructor(
         }
     }
 
-    override suspend fun getTask(id: Int): Task = dao.getTask(id)
+    override suspend fun getById(id: Int): Task = dao.get(id)
 
-    override fun getTasksList(): Flow<List<Task>> = dao.getTasksList()
+    override fun getAll(): Flow<List<Task>> = dao.getAll()
 
-    override suspend fun getFinishedTasks(): List<Task> = dao.getFinishedTasks()
+    override suspend fun getFinished(): List<Task> = dao.getFinished()
 
     private fun handleReminder(task: Task): Boolean {
         if (!task.isNew) {

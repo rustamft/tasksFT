@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.database.entity.Task
-import com.rustamft.tasksft.database.repository.TasksRepo
+import com.rustamft.tasksft.database.repository.Repo
 import com.rustamft.tasksft.utils.FINISH
 import com.rustamft.tasksft.utils.SNOOZE
 import com.rustamft.tasksft.utils.TASK_ID
@@ -25,7 +25,7 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
     lateinit var context: Context
 
     @Inject
-    lateinit var repo: TasksRepo
+    lateinit var repo: Repo<Task>
 
     lateinit var task: Task
 
@@ -34,7 +34,7 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
         runBlocking {
             val id = intent?.extras?.getInt(TASK_ID)
             if (id != null) {
-                task = repo.getTask(id)
+                task = repo.getById(id)
                 when (intent.action) {
                     FINISH -> {
                         finishTask()
