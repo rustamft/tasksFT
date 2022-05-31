@@ -1,13 +1,15 @@
-package com.rustamft.tasksft.data.model
+package com.rustamft.tasksft.data.model.container
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.rustamft.tasksft.data.model.AppPreferencesData
+import com.rustamft.tasksft.data.model.TaskData
 import java.io.InputStream
 import java.io.OutputStream
 
 internal data class DataContainer(
     val appPreferencesData: AppPreferencesData = AppPreferencesData(),
-    val taskData: TaskData = TaskData()
+    val mapOfTaskData: Map<Int, TaskData> = emptyMap()
 ) {
 
     companion object Serializer : androidx.datastore.core.Serializer<DataContainer> {

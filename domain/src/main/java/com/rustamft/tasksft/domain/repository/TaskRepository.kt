@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TaskRepository {
 
-    suspend fun saveTask(task: Task)
-    fun getTask(): Flow<Task>
+    suspend fun saveTask(id: Int, task: Task)
+    fun getTaskById(id: Int): Flow<Task>
+    fun getAllTasks(): Flow<Map<Int, Task>>
 }

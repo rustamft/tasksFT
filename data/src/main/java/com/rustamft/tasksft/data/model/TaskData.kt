@@ -3,7 +3,7 @@ package com.rustamft.tasksft.data.model
 import java.util.Calendar
 
 internal data class TaskData(
-    val id: Int = (Calendar.getInstance().timeInMillis % Integer.MAX_VALUE).toInt(),
+    val id: Int = (Calendar.getInstance().timeInMillis % Integer.MAX_VALUE).toInt(), // TODO: remove
     var title: String = "",
     var description: String = "",
     val created: Long = Calendar.getInstance().timeInMillis,

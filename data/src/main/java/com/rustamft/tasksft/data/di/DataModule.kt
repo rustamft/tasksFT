@@ -4,10 +4,14 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
-import com.rustamft.tasksft.data.model.DataContainer
+import com.rustamft.tasksft.data.model.container.DataContainer
+import com.rustamft.tasksft.data.repository.AppPreferencesRepositoryImpl
 import com.rustamft.tasksft.data.repository.TaskRepositoryImpl
+import com.rustamft.tasksft.data.storage.AppPreferencesStorage
 import com.rustamft.tasksft.data.storage.TaskStorage
+import com.rustamft.tasksft.data.storage.datastore.DataStoreAppPreferencesStorage
 import com.rustamft.tasksft.data.storage.datastore.DataStoreTaskStorage
+import com.rustamft.tasksft.domain.repository.AppPreferencesRepository
 import com.rustamft.tasksft.domain.repository.TaskRepository
 import com.rustamft.tasksft.domain.util.STORED_PREFERENCES
 import dagger.Module
@@ -45,5 +49,19 @@ internal class DataModule {
     @Singleton
     fun provideTaskRepository(taskStorage: TaskStorage): TaskRepository {
         return TaskRepositoryImpl(taskStorage = taskStorage)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppPreferencesStorage(dataStore: DataStore<DataContainer>): AppPreferencesStorage {
+        return DataStoreAppPreferencesStorage(dataStore = dataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppPreferencesRepository(
+        appPreferencesStorage: AppPreferencesStorage
+    ): AppPreferencesRepository {
+        return AppPreferencesRepositoryImpl(appPreferencesStorage = appPreferencesStorage)
     }
 }

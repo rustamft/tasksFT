@@ -11,6 +11,7 @@ internal fun AppPreferences.convert(): AppPreferencesData = typeConvert()
 internal fun AppPreferencesData.convert(): AppPreferences = typeConvert()
 internal fun Task.convert(): TaskData = typeConvert()
 internal fun TaskData.convert(): Task = typeConvert()
+internal fun <I, O> Map<Int, I>.convert(): Map<Int, O> = typeConvert() // TODO: test this
 
 private fun <I, O> I.typeConvert(): O {
     val gson = Gson()
