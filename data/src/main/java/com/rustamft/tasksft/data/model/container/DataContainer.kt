@@ -9,7 +9,7 @@ import java.io.OutputStream
 
 internal data class DataContainer(
     val appPreferencesData: AppPreferencesData = AppPreferencesData(),
-    val mapOfTaskData: Map<Int, TaskData> = emptyMap()
+    val listOfTaskData: List<TaskData> = emptyList()
 ) {
 
     companion object Serializer : androidx.datastore.core.Serializer<DataContainer> {

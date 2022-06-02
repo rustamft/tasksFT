@@ -3,7 +3,8 @@ package com.rustamft.tasksft.di
 import com.rustamft.tasksft.domain.repository.AppPreferencesRepository
 import com.rustamft.tasksft.domain.repository.TaskRepository
 import com.rustamft.tasksft.domain.usecase.GetAppPreferencesUseCase
-import com.rustamft.tasksft.domain.usecase.GetMapOfTasksUseCase
+import com.rustamft.tasksft.domain.usecase.GetListOfTasksUseCase
+import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +22,12 @@ class DomainModule {
     }
 
     @Provides
-    fun provideGetMapOfTasksUseCase(taskRepository: TaskRepository): GetMapOfTasksUseCase {
-        return GetMapOfTasksUseCase(taskRepository = taskRepository)
+    fun provideGetListOfTasksUseCase(taskRepository: TaskRepository): GetListOfTasksUseCase {
+        return GetListOfTasksUseCase(taskRepository = taskRepository)
+    }
+
+    @Provides
+    fun provideSaveTaskUseCase(taskRepository: TaskRepository): SaveTaskUseCase {
+        return SaveTaskUseCase(taskRepository = taskRepository)
     }
 }

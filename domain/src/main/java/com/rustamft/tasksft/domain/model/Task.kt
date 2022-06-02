@@ -8,6 +8,6 @@ data class Task(
     var description: String = "",
     val created: Long = Calendar.getInstance().timeInMillis,
     var reminder: Long = 0L,
-    var isNew: Boolean = true,
+    var isNew: Boolean = true, // TODO: remove?
     var isFinished: Boolean = false
 )

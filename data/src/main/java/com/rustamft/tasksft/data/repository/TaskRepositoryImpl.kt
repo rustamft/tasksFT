@@ -13,20 +13,22 @@ internal class TaskRepositoryImpl(
     private val taskStorage: TaskStorage
 ) : TaskRepository {
 
-    override suspend fun saveTask(id: Int, task: Task) {
+    override suspend fun saveTask(task: Task) {
         withContext(Dispatchers.IO) {
-            taskStorage.save(id = id, taskData = task.convert())
+            taskStorage.save(taskData = task.convert())
         }
     }
 
-    override fun getTaskById(id: Int): Flow<Task> {
-        return taskStorage.getById(id = id).map { it.convert() }
+    override suspend fun deleteTasks(set: Set<Task>) {
+        withContext(Dispatchers.IO) {
+            taskStorage.delete(set = set.convert())
+        }
     }
 
-    override fun getAllTasks(): Flow<Map<Int, Task>> {
+    override fun getAllTasks(): Flow<List<Task>> {
         return taskStorage.getAll().map {
-            val map: Map<Int, Task> = it.convert()
-            map
+            val list: List<Task> = it.convert()
+            list
         }
     }
 }

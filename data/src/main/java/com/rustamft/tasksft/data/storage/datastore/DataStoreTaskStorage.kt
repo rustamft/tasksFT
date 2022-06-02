@@ -11,17 +11,21 @@ internal class DataStoreTaskStorage(
     private val dataStore: DataStore<DataContainer>
 ) : TaskStorage {
 
-    override suspend fun save(id: Int, taskData: TaskData) {
-        dataStore.updateData {
-            val mapOfTaskData = it.mapOfTaskData.toMutableMap()
-            mapOfTaskData[id] = taskData
-            it.copy(mapOfTaskData = mapOfTaskData)
+    override suspend fun save(taskData: TaskData) {
+        dataStore.updateData { dataContainer ->
+            val list = dataContainer.listOfTaskData.toMutableList()
+            list.add(taskData)
+            dataContainer.copy(listOfTaskData = list)
         }
     }
 
-    override fun getById(id: Int): Flow<TaskData> {
-        return dataStore.data.map { it.mapOfTaskData[id] ?: TaskData() }
+    override suspend fun delete(set: Set<TaskData>) {
+        dataStore.updateData { dataContainer ->
+            val list = dataContainer.listOfTaskData.toMutableList()
+            list.removeAll(set)
+            dataContainer.copy(listOfTaskData = list)
+        }
     }
 
-    override fun getAll(): Flow<Map<Int, TaskData>> = dataStore.data.map { it.mapOfTaskData }
+    override fun getAll(): Flow<List<TaskData>> = dataStore.data.map { it.listOfTaskData }
 }

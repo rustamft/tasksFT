@@ -4,9 +4,9 @@ import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
 
-class GetMapOfTasksUseCase(
+class GetListOfTasksUseCase(
     private val taskRepository: TaskRepository
 ) {
 
-    fun execute(): Flow<Map<Int, Task>> = taskRepository.getAllTasks()
+    fun execute(): Flow<List<Task>> = taskRepository.getAllTasks()
 }

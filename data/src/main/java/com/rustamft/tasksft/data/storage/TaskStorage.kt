@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 internal interface TaskStorage {
 
-    suspend fun save(id: Int, taskData: TaskData)
-    fun getById(id: Int): Flow<TaskData>
-    fun getAll(): Flow<Map<Int, TaskData>>
+    suspend fun save(taskData: TaskData)
+    suspend fun delete(set: Set<TaskData>)
+    fun getAll(): Flow<List<TaskData>>
 }
