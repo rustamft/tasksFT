@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kotlin_version = '1.6.21'
-        compose_version = '1.2.0-beta02'
+        compose_version = '1.2.0-beta03'
         hilt_version = '2.42'
         coroutine_version = '1.6.2'
     }
