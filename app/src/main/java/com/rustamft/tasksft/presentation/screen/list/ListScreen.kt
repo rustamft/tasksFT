@@ -65,7 +65,7 @@ fun ListScreen(
             itemsIndexed(listOfTasks) { index: Int, task: Task ->
 
                 val onClick = {
-                    viewModel.saveTask(task = task.apply { isFinished = !isFinished })
+                    viewModel.saveTask(task = task.copy(isFinished = !task.isFinished))
                 }
 
                 Card(
