@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.rustamft.tasksft">
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+    </queries>
+
     <application
         android:name=".app.App"
         android:allowBackup="true"

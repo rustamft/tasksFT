@@ -19,9 +19,9 @@ internal class TaskRepositoryImpl(
         }
     }
 
-    override suspend fun deleteTasks(set: Set<Task>) {
+    override suspend fun deleteTasks(list: List<Task>) {
         withContext(Dispatchers.IO) {
-            taskStorage.delete(set = set.convert())
+            taskStorage.delete(list = list.convert())
         }
     }
 

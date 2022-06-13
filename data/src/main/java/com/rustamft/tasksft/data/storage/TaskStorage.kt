@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 internal interface TaskStorage {
 
     suspend fun save(taskData: TaskData)
-    suspend fun delete(set: Set<TaskData>)
+    suspend fun delete(list: List<TaskData>)
     fun getAll(): Flow<List<TaskData>>
 }

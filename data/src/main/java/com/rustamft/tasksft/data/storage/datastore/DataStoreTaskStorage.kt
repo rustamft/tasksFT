@@ -19,11 +19,11 @@ internal class DataStoreTaskStorage(
         }
     }
 
-    override suspend fun delete(set: Set<TaskData>) {
+    override suspend fun delete(list: List<TaskData>) {
         dataStore.updateData { dataContainer ->
-            val list = dataContainer.listOfTaskData.toMutableList()
-            list.removeAll(set)
-            dataContainer.copy(listOfTaskData = list)
+            val mutableList = dataContainer.listOfTaskData.toMutableList()
+            mutableList.removeAll(list)
+            dataContainer.copy(listOfTaskData = mutableList)
         }
     }
 

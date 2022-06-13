@@ -1,5 +1,7 @@
 package com.rustamft.tasksft.domain.util
 
+const val GITHUB_LINK = "https://github.com/rustamft/tasksFT"
+
 const val STORED_PREFERENCES = "tasksft_preferences.json"
 
 const val ROUTE_LIST = "list_screen"

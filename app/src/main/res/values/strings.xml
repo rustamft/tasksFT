@@ -1,6 +1,14 @@
 <resources>
+    <string name="action_close">Close</string>
+    <string name="app_info">App info</string>
+    <string name="app_info_content">\n
+    This app is FOSS.\n
+    Source code is available at GitHub.\n
+    \n
+    App version:\u0020</string>
     <string name="app_name">tasksFT</string>
     <string name="action_add">Add</string>
+    <string name="action_delete_finished">Delete finished</string>
     <string name="action_save">Save</string>
     <string name="description">Description</string>
     <string name="reminder">Reminder</string>
