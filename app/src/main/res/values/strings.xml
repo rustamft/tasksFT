@@ -8,9 +8,11 @@
     App version:\u0020</string>
     <string name="app_name">tasksFT</string>
     <string name="action_add">Add</string>
+    <string name="action_back">Back</string>
     <string name="action_delete_finished">Delete finished</string>
     <string name="action_save">Save</string>
     <string name="description">Description</string>
     <string name="reminder">Reminder</string>
+    <string name="task_info">Task info</string>
     <string name="title">Title</string>
 </resources>
