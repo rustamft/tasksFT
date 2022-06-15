@@ -4,12 +4,13 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
+import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
@@ -30,10 +31,10 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
 import com.rustamft.tasksft.domain.util.format
+import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
+import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -47,45 +48,22 @@ fun EditorScreen(
     context: Context = LocalContext.current,
     viewModel: EditorViewModel = hiltViewModel(),
     navigator: DestinationsNavigator,
-    scaffoldState: ScaffoldState, // From DependenciesContainer.
-    paddingValues: PaddingValues,
-    topBarItems: MutableStateFlow<List<NavItem>>,
-    fabItem: MutableStateFlow<NavItem?>
+    scaffoldState: ScaffoldState // From DependenciesContainer.
 ) {
 
+    var fabVisible by remember { mutableStateOf(false) }
     val onValueChange = {
-        if (fabItem.value == null) {
-            fabItem.value = NavItem(
-                painterResId = R.drawable.ic_save,
-                descriptionResId = R.string.action_save,
-                onClick = {
-                    // TODO: implement saving
-                    navigator.popBackStack()
-                }
-            )
+        if (!fabVisible) {
+            fabVisible = true
         }
     }
 
-    LaunchedEffect(key1 = scaffoldState) {
-        launch {
-            viewModel.errorFlow.collect { error ->
-                scaffoldState.snackbarHostState.showSnackbar(
-                    message = error
-                )
-            }
-        }
-        launch {
-            topBarItems.value = listOf(
-                NavItem(
-                    painterResId = R.drawable.ic_info,
-                    descriptionResId = R.string.task_info,
-                    onClick = {
-                        // TODO: implement task info
-                    }
-                )
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.errorFlow.collect { error ->
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = error
             )
         }
-        launch { fabItem.value = null }
     }
 
     @Composable
@@ -151,69 +129,81 @@ fun EditorScreen(
         }
     }
 
-    /*
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         scaffoldState = scaffoldState,
+        topBar = {
+            TopBar(
+                navigator = navigator,
+                hasBackButton = true,
+                items = listOf(
+                    NavItem(
+                        painterResId = R.drawable.ic_info,
+                        descriptionResId = R.string.task_info,
+                        onClick = { /* TODO: implement task info */ }
+                    )
+                )
+            )
+        },
         floatingActionButton = {
             if (fabVisible) {
-                FloatingActionButton(
-                    onClick = {
-                        // TODO: implement saving
-                        navigator.popBackStack()
-                    }
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_save),
-                        contentDescription = stringResource(id = R.string.action_save)
+                Fab(
+                    item = NavItem(
+                        painterResId = R.drawable.ic_save,
+                        descriptionResId = R.string.action_save,
+                        onClick = {
+                            // TODO: implement saving
+                            navigator.popBackStack()
+                        }
                     )
-                }
+                )
             }
         }
     ) { paddingValues ->
-        */
-    Column(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
 
-        val modifier = Modifier
-            .padding(DIMEN_SMALL)
+        Column(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
 
-        TextField(
-            modifier = modifier,
-            value = viewModel.taskTitle,
-            onValueChange = {
-                viewModel.taskTitle = it
-                onValueChange()
-            },
-            placeholder = { Text(text = stringResource(id = R.string.title)) }
-        )
-        TextField(
-            modifier = modifier,
-            value = viewModel.taskDescription,
-            onValueChange = {
-                viewModel.taskDescription = it
-                onValueChange()
-            },
-            placeholder = { Text(text = stringResource(id = R.string.description)) }
-        )
-        Row(
-            modifier = modifier,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = stringResource(id = R.string.reminder))
-            Spacer(modifier = Modifier.width(DIMEN_SMALL))
-            Switch(
-                checked = viewModel.taskReminderIsSet,
-                onCheckedChange = {
-                    viewModel.taskReminderIsSet = it
+            val modifier = Modifier
+                .padding(DIMEN_SMALL)
+
+            TextField(
+                modifier = modifier,
+                value = viewModel.taskTitle,
+                onValueChange = {
+                    viewModel.taskTitle = it
                     onValueChange()
-                }
+                },
+                placeholder = { Text(text = stringResource(id = R.string.title)) }
             )
-        }
-        if (viewModel.taskReminderIsSet) {
-            Row(modifier = modifier) {
-                DatePickerElement()
+            TextField(
+                modifier = modifier,
+                value = viewModel.taskDescription,
+                onValueChange = {
+                    viewModel.taskDescription = it
+                    onValueChange()
+                },
+                placeholder = { Text(text = stringResource(id = R.string.description)) }
+            )
+            Row(
+                modifier = modifier,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = stringResource(id = R.string.reminder))
                 Spacer(modifier = Modifier.width(DIMEN_SMALL))
-                TimePickerElement()
+                Switch(
+                    checked = viewModel.taskReminderIsSet,
+                    onCheckedChange = {
+                        viewModel.taskReminderIsSet = it
+                        onValueChange()
+                    }
+                )
+            }
+            if (viewModel.taskReminderIsSet) {
+                Row(modifier = modifier) {
+                    DatePickerElement()
+                    Spacer(modifier = Modifier.width(DIMEN_SMALL))
+                    TimePickerElement()
+                }
             }
         }
     }

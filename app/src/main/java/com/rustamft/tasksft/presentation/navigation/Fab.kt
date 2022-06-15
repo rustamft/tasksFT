@@ -7,7 +7,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 
 @Composable
-fun FAB(item: NavItem) {
+fun Fab(item: NavItem) {
     FloatingActionButton(
         onClick = item.onClick,
         content = {
