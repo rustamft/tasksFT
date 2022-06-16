@@ -8,7 +8,7 @@ import java.util.Locale
 
 fun Int.format(digits: Int) = String.format("%0${digits}d", this)
 
-fun Long.toDateTime(): DateTime {
+fun Long.toDateTime(): DateTime { // TODO: remove
 
     val calendar = Calendar.getInstance()
     if (this != 0L) {
@@ -34,7 +34,7 @@ fun Long.toDateTime(): DateTime {
     )
 }
 
-fun DateTime.toMillis(): Long {
+fun DateTime.toMillis(): Long { // TODO: remove
     val formatter = SimpleDateFormat(PATTERN_DATE_TIME, Locale.getDefault())
     val millis: Long = try {
         formatter.parse("$this.date $this.time")!!.time

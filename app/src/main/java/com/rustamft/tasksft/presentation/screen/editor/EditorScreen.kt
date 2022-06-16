@@ -53,13 +53,11 @@ fun EditorScreen(
 
     var fabVisible by remember { mutableStateOf(false) }
     val onValueChange = {
-        if (!fabVisible) {
-            fabVisible = true
-        }
+        if (!fabVisible) { fabVisible = true }
     }
 
     LaunchedEffect(key1 = viewModel) {
-        viewModel.errorFlow.collect { error ->
+        viewModel.failureFlow.collect { error ->
             scaffoldState.snackbarHostState.showSnackbar(
                 message = error
             )
@@ -68,7 +66,7 @@ fun EditorScreen(
 
     @Composable
     fun DatePickerElement() {
-        with(viewModel.taskReminderCalendar) {
+        with(viewModel.mutableTask.reminderCalendar) {
             val formatter = SimpleDateFormat("MMM", Locale.getDefault())
             var text by remember {
                 mutableStateOf(
@@ -98,7 +96,7 @@ fun EditorScreen(
 
     @Composable
     fun TimePickerElement() {
-        with(viewModel.taskReminderCalendar) {
+        with(viewModel.mutableTask.reminderCalendar) {
             var text by remember {
                 mutableStateOf(
                     "${
@@ -152,7 +150,7 @@ fun EditorScreen(
                         painterResId = R.drawable.ic_save,
                         descriptionResId = R.string.action_save,
                         onClick = {
-                            // TODO: implement saving
+                            viewModel.saveTask()
                             navigator.popBackStack()
                         }
                     )
@@ -168,18 +166,18 @@ fun EditorScreen(
 
             TextField(
                 modifier = modifier,
-                value = viewModel.taskTitle,
+                value = viewModel.mutableTask.title,
                 onValueChange = {
-                    viewModel.taskTitle = it
+                    viewModel.mutableTask.title = it
                     onValueChange()
                 },
                 placeholder = { Text(text = stringResource(id = R.string.title)) }
             )
             TextField(
                 modifier = modifier,
-                value = viewModel.taskDescription,
+                value = viewModel.mutableTask.description,
                 onValueChange = {
-                    viewModel.taskDescription = it
+                    viewModel.mutableTask.description = it
                     onValueChange()
                 },
                 placeholder = { Text(text = stringResource(id = R.string.description)) }
@@ -191,14 +189,14 @@ fun EditorScreen(
                 Text(text = stringResource(id = R.string.reminder))
                 Spacer(modifier = Modifier.width(DIMEN_SMALL))
                 Switch(
-                    checked = viewModel.taskReminderIsSet,
+                    checked = viewModel.mutableTask.reminderIsSet,
                     onCheckedChange = {
-                        viewModel.taskReminderIsSet = it
+                        viewModel.mutableTask.reminderIsSet = it
                         onValueChange()
                     }
                 )
             }
-            if (viewModel.taskReminderIsSet) {
+            if (viewModel.mutableTask.reminderIsSet) {
                 Row(modifier = modifier) {
                     DatePickerElement()
                     Spacer(modifier = Modifier.width(DIMEN_SMALL))
