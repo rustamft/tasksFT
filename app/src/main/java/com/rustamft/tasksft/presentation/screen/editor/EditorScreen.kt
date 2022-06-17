@@ -57,7 +57,7 @@ fun EditorScreen(
     }
 
     LaunchedEffect(key1 = viewModel) {
-        viewModel.failureFlow.collect { error ->
+        viewModel.errorFlow.collect { error ->
             scaffoldState.snackbarHostState.showSnackbar(
                 message = error
             )
@@ -150,7 +150,7 @@ fun EditorScreen(
                         painterResId = R.drawable.ic_save,
                         descriptionResId = R.string.action_save,
                         onClick = {
-                            viewModel.saveTask()
+                            viewModel.saveTask() // TODO: check if reminder is needed
                             navigator.popBackStack()
                         }
                     )

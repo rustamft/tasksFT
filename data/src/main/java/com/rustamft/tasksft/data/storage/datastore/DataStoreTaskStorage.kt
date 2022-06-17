@@ -27,7 +27,8 @@ internal class DataStoreTaskStorage(
         }
     }
 
-    override suspend fun delete(list: List<TaskData>) { // TODO: add exception handling
+    @Throws(IOException::class, Exception::class)
+    override suspend fun delete(list: List<TaskData>) {
         dataStore.updateData { dataContainer ->
             val mutableList = dataContainer.listOfTaskData.toMutableList()
             mutableList.removeAll(list)

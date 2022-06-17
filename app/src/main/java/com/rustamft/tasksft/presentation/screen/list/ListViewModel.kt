@@ -7,7 +7,9 @@ import com.rustamft.tasksft.domain.usecase.DeleteTasksUseCase
 import com.rustamft.tasksft.domain.usecase.GetListOfTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,10 +20,13 @@ class ListViewModel @Inject constructor(
     private val deleteTasksUseCase: DeleteTasksUseCase
 ) : ViewModel() {
 
+    private val errorChannel = Channel<String>()
+    val errorFlow = errorChannel.receiveAsFlow()
+
     val listOfTasksFlow = getListOfTasksUseCase.execute().map { list ->
         list.sortedWith(
             compareBy(
-                { it.isFinished },
+                { !it.isFinished },
                 { it.reminder },
                 { it.created }
             )
@@ -30,13 +35,21 @@ class ListViewModel @Inject constructor(
 
     fun saveTask(task: Task) {
         viewModelScope.launch {
-            saveTaskUseCase.execute(task = task)
+            kotlin.runCatching {
+                saveTaskUseCase.execute(task = task)
+            }.onFailure {
+                errorChannel.send(it.message.toString())
+            }
         }
     }
 
     fun deleteTasks(list: List<Task>) {
         viewModelScope.launch {
-            deleteTasksUseCase.execute(list = list)
+            kotlin.runCatching {
+                deleteTasksUseCase.execute(list = list)
+            }.onFailure {
+                errorChannel.send(it.message.toString())
+            }
         }
     }
 }

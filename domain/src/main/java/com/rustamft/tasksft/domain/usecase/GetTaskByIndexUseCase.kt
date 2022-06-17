@@ -2,12 +2,12 @@ package com.rustamft.tasksft.domain.usecase
 
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.repository.TaskRepository
-import java.io.IOException
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-class DeleteTasksUseCase(
+class GetTaskByIndexUseCase(
     private val taskRepository: TaskRepository
 ) {
 
-    @Throws(IOException::class, Exception::class)
-    suspend fun execute(list: List<Task>) = taskRepository.deleteTasks(list = list)
+    fun execute(taskIndex: Int): Flow<Task> = taskRepository.getAllTasks().map { it[taskIndex] }
 }

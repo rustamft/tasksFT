@@ -8,7 +8,7 @@ import java.util.Locale
 
 fun Int.format(digits: Int) = String.format("%0${digits}d", this)
 
-fun Long.toDateTime(): DateTime { // TODO: remove
+fun Long.toDateTime(): DateTime {
 
     val calendar = Calendar.getInstance()
     if (this != 0L) {

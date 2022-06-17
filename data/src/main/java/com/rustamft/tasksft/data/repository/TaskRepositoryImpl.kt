@@ -24,6 +24,7 @@ internal class TaskRepositoryImpl(
         }
     }
 
+    @Throws(IOException::class, Exception::class)
     override suspend fun deleteTasks(list: List<Task>) {
         withContext(Dispatchers.IO) {
             val listData = list.map { task ->
