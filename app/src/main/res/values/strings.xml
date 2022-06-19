@@ -13,6 +13,7 @@
     <string name="action_save">Save</string>
     <string name="description">Description</string>
     <string name="reminder">Reminder</string>
+    <string name="task_finished_state">Task finished state</string>
     <string name="task_info">Task info</string>
     <string name="title">Title</string>
 </resources>

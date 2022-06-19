@@ -45,6 +45,14 @@ internal class TaskRepositoryImpl(
                 }.awaitAll()
             }
         }
-        return listFlow
+        return listFlow.map { list ->
+            list.sortedWith(
+                compareBy(
+                    { !it.isFinished },
+                    { it.reminder },
+                    { it.created }
+                )
+            )
+        }
     }
 }
