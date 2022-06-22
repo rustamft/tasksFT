@@ -4,6 +4,7 @@ import com.rustamft.tasksft.data.storage.TaskStorage
 import com.rustamft.tasksft.data.util.convert
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.repository.TaskRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -14,19 +15,20 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 
 internal class TaskRepositoryImpl(
-    private val taskStorage: TaskStorage
+    private val taskStorage: TaskStorage,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : TaskRepository {
 
     @Throws(IOException::class, Exception::class)
     override suspend fun saveTask(task: Task) {
-        withContext(Dispatchers.IO) {
+        withContext(dispatcher) {
             taskStorage.save(taskData = task.convert())
         }
     }
 
     @Throws(IOException::class, Exception::class)
     override suspend fun deleteTasks(list: List<Task>) {
-        withContext(Dispatchers.IO) {
+        withContext(dispatcher) {
             val listData = list.map { task ->
                 async { task.convert() }
             }.awaitAll()
