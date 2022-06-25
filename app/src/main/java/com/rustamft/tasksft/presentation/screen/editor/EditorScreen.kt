@@ -150,7 +150,7 @@ fun EditorScreen(
                         painterResId = R.drawable.ic_save,
                         descriptionResId = R.string.action_save,
                         onClick = {
-                            viewModel.saveTask() // TODO: check if reminder is needed
+                            viewModel.saveTask()
                             navigator.popBackStack()
                         }
                     )

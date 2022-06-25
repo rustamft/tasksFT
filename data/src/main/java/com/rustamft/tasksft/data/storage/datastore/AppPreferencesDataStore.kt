@@ -7,7 +7,7 @@ import com.rustamft.tasksft.data.storage.AppPreferencesStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-internal class DataStoreAppPreferencesStorage(
+internal class AppPreferencesDataStore(
     private val dataStore: DataStore<DataContainer>
 ) : AppPreferencesStorage {
 

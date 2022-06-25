@@ -4,13 +4,14 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
+import androidx.room.Room
 import com.rustamft.tasksft.data.model.container.DataContainer
 import com.rustamft.tasksft.data.repository.AppPreferencesRepositoryImpl
 import com.rustamft.tasksft.data.repository.TaskRepositoryImpl
 import com.rustamft.tasksft.data.storage.AppPreferencesStorage
+import com.rustamft.tasksft.data.storage.datastore.AppPreferencesDataStore
 import com.rustamft.tasksft.data.storage.TaskStorage
-import com.rustamft.tasksft.data.storage.datastore.DataStoreAppPreferencesStorage
-import com.rustamft.tasksft.data.storage.datastore.DataStoreTaskStorage
+import com.rustamft.tasksft.data.storage.room.TaskRoomDatabase
 import com.rustamft.tasksft.domain.repository.AppPreferencesRepository
 import com.rustamft.tasksft.domain.repository.TaskRepository
 import com.rustamft.tasksft.domain.util.STORED_PREFERENCES
@@ -41,8 +42,18 @@ internal class DataModule {
 
     @Provides
     @Singleton
-    fun provideTaskStorage(dataStore: DataStore<DataContainer>): TaskStorage {
-        return DataStoreTaskStorage(dataStore = dataStore)
+    fun provideTaskRoomDatabase(@ApplicationContext context: Context): TaskRoomDatabase {
+        return Room.databaseBuilder(
+            context,
+            TaskRoomDatabase::class.java,
+            "app_database"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTaskStorage(taskRoomDatabase: TaskRoomDatabase): TaskStorage {
+        return taskRoomDatabase.tasksDao()
     }
 
     @Provides
@@ -54,8 +65,8 @@ internal class DataModule {
     @Provides
     @Singleton
     fun provideAppPreferencesStorage(dataStore: DataStore<DataContainer>): AppPreferencesStorage {
-        return DataStoreAppPreferencesStorage(dataStore = dataStore)
-    }
+        return AppPreferencesDataStore(dataStore = dataStore)
+    }Storage
 
     @Provides
     @Singleton

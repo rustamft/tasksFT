@@ -40,7 +40,11 @@ class MutableTask { // TODO: clean up here
             Task(
                 title = title,
                 description = description,
-                reminder = reminderCalendar.timeInMillis,
+                reminder = if (reminderIsSet) {
+                    reminderCalendar.timeInMillis
+                } else {
+                    0L
+                },
                 isFinished = isFinished
             )
         } else { // Updating existing task
@@ -49,7 +53,11 @@ class MutableTask { // TODO: clean up here
                 created = created,
                 title = title,
                 description = description,
-                reminder = reminderCalendar.timeInMillis,
+                reminder = if (reminderIsSet) {
+                    reminderCalendar.timeInMillis
+                } else {
+                    0L
+                },
                 isFinished = isFinished
             )
         }

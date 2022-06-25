@@ -52,6 +52,7 @@ import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.screen.destinations.EditorScreenDestination
 import com.rustamft.tasksft.presentation.screen.editor.EditorScreenNavArgs
+import com.rustamft.tasksft.presentation.theme.AppTheme
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
 import com.rustamft.tasksft.presentation.theme.Shapes
 import com.rustamft.tasksft.presentation.theme.TEXT_SMALL
@@ -121,10 +122,14 @@ fun ListScreen(
             itemsIndexed(listOfTasks) { index: Int, task: Task ->
 
                 val onTap = {
-                    //viewModel.saveTask(task = task.copy(isFinished = !task.isFinished))
                     viewModel.saveTask(
                         task = task.copy(isFinished = !task.isFinished)
                     )
+                }
+                val textColor = if (task.isFinished) {
+                    Color.Gray
+                } else {
+                    AppTheme.colors.onBackground
                 }
 
                 Card(
@@ -172,13 +177,14 @@ fun ListScreen(
                                 }
                             }
                             Column(modifier = Modifier.padding(horizontal = DIMEN_SMALL)) {
-                                Text(text = task.title, maxLines = 2)
+                                Text(text = task.title, maxLines = 2, color = textColor)
                                 if (task.description.isNotEmpty()) {
                                     Spacer(modifier = Modifier.height(DIMEN_SMALL))
                                     Text(
                                         text = task.description,
                                         maxLines = 3,
-                                        fontSize = TEXT_SMALL
+                                        fontSize = TEXT_SMALL,
+                                        color = textColor
                                     )
                                 }
                             }
@@ -192,8 +198,12 @@ fun ListScreen(
                             ) {
                                 Column(horizontalAlignment = Alignment.End) {
                                     val dateTime = task.reminder.toDateTime()
-                                    Text(text = dateTime.date)
-                                    Text(text = dateTime.time, fontWeight = FontWeight.Bold)
+                                    Text(text = dateTime.date, color = textColor)
+                                    Text(
+                                        text = dateTime.time,
+                                        fontWeight = FontWeight.Bold,
+                                        color = textColor
+                                    )
                                 }
                             }
                         }
