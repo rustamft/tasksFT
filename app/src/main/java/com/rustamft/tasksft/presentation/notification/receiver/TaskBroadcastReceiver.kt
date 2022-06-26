@@ -7,34 +7,37 @@ import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.model.Task
+import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
+import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
+import com.rustamft.tasksft.domain.util.ACTION_FINISH
+import com.rustamft.tasksft.domain.util.ONE_HOUR
+import com.rustamft.tasksft.domain.util.ACTION_SNOOZE
+import com.rustamft.tasksft.domain.util.TASK_ID
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class TaskBroadcastReceiver : BroadcastReceiver() {
 
-    @Inject
-    @ApplicationContext
-    lateinit var context: Context
-
-    @Inject
-    lateinit var repo: Repo<Task>
-
-    lateinit var task: Task
+    @Inject @ApplicationContext private lateinit var context: Context
+    @Inject private lateinit var getTaskByIdUseCase: GetTaskByIdUseCase
+    @Inject private lateinit var saveTaskUseCase: SaveTaskUseCase
+    private lateinit var task: Task
 
     override fun onReceive(contextNullable: Context?, intent: Intent?) {
         val pendingResult = goAsync()
         runBlocking {
             val id = intent?.extras?.getInt(TASK_ID)
             if (id != null) {
-                task = repo.getById(id)
+                task = getTaskByIdUseCase.execute(taskId = id).first()
                 when (intent.action) {
-                    FINISH -> {
+                    ACTION_FINISH -> {
                         finishTask()
                     }
-                    SNOOZE -> {
+                    ACTION_SNOOZE -> {
                         snoozeTask()
                         displayToast(context.getString(R.string.notification_snoozed))
                     }
@@ -50,14 +53,20 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
     }
 
     private suspend fun finishTask() {
-        task.isFinished = true
-        repo.update(task)
+        runCatching {
+            saveTaskUseCase.execute(task = task.copy(isFinished = true))
+        }.onFailure {
+            // TODO: show error
+        }
     }
 
     private suspend fun snoozeTask() {
-        val now = DateTimeProvider.getNowInMillis()
-        val delay: Long = DateTimeProvider.ONE_HOUR // One hour.
-        task.reminder = now + delay
-        repo.update(task)
+        runCatching {
+            val now = System.currentTimeMillis()
+            val delay: Long = ONE_HOUR
+            saveTaskUseCase.execute(task = task.copy(reminder = now + delay))
+        }.onFailure {
+            // TODO: show error
+        }
     }
 }

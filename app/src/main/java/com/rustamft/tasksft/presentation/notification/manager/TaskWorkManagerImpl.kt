@@ -4,7 +4,11 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.notification.TaskWorkManager
+import com.rustamft.tasksft.domain.util.TASK_DESCRIPTION
+import com.rustamft.tasksft.domain.util.TASK_ID
+import com.rustamft.tasksft.domain.util.TASK_TITLE
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -15,7 +19,7 @@ class TaskWorkManagerImpl(
 ) : TaskWorkManager {
 
     override fun scheduleOneTime(task: Task) {
-        val now = DateTimeProvider.getNowInMillis()
+        val now = System.currentTimeMillis()
         val delay: Long = task.reminder.minus(now)
         val data = workDataOf(
             Pair(TASK_ID, task.id),

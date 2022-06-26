@@ -5,12 +5,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import androidx.room.Room
-import com.rustamft.tasksft.data.model.container.DataContainer
+import com.rustamft.tasksft.data.model.AppPreferencesData
 import com.rustamft.tasksft.data.repository.AppPreferencesRepositoryImpl
 import com.rustamft.tasksft.data.repository.TaskRepositoryImpl
 import com.rustamft.tasksft.data.storage.AppPreferencesStorage
-import com.rustamft.tasksft.data.storage.datastore.AppPreferencesDataStore
 import com.rustamft.tasksft.data.storage.TaskStorage
+import com.rustamft.tasksft.data.storage.datastore.AppPreferencesDataStore
 import com.rustamft.tasksft.data.storage.room.TaskRoomDatabase
 import com.rustamft.tasksft.domain.repository.AppPreferencesRepository
 import com.rustamft.tasksft.domain.repository.TaskRepository
@@ -31,9 +31,9 @@ internal class DataModule {
 
     @Provides
     @Singleton
-    fun provideDataStore(@ApplicationContext context: Context): DataStore<DataContainer> {
+    fun provideDataStore(@ApplicationContext context: Context): DataStore<AppPreferencesData> {
         return DataStoreFactory.create(
-            serializer = DataContainer.Serializer,
+            serializer = AppPreferencesData.Serializer,
             produceFile = { context.dataStoreFile(STORED_PREFERENCES) },
             corruptionHandler = null,
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -64,9 +64,9 @@ internal class DataModule {
 
     @Provides
     @Singleton
-    fun provideAppPreferencesStorage(dataStore: DataStore<DataContainer>): AppPreferencesStorage {
+    fun provideAppPreferencesStorage(dataStore: DataStore<AppPreferencesData>): AppPreferencesStorage {
         return AppPreferencesDataStore(dataStore = dataStore)
-    }Storage
+    }
 
     @Provides
     @Singleton

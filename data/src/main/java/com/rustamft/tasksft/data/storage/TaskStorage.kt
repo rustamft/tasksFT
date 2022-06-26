@@ -26,9 +26,9 @@ internal interface TaskStorage { // TaskRoomDao
     @Query("SELECT * FROM taskData ORDER BY is_finished DESC, reminder, created ASC")
     fun getAll(): Flow<List<TaskData>>
 
+    @Query("SELECT * FROM taskData WHERE id = :id")
+    fun getById(id: Int): Flow<TaskData>
+
     @Query("SELECT * FROM taskData WHERE is_finished = 1")
     suspend fun getFinished(): List<TaskData>
-
-    @Query("SELECT * FROM taskData WHERE id = :id")
-    suspend fun getById(id: Int): TaskData
 }

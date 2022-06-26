@@ -29,8 +29,21 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" android:host="tasksft.rustamft.com" />
             </intent-filter>
         </activity>
+        <receiver android:name=".presentation.notification.receiver.TaskBroadcastReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="com.rustamft.tasksft.FINISH"/>
+                <action android:name="com.rustamft.tasksft.SNOOZE"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

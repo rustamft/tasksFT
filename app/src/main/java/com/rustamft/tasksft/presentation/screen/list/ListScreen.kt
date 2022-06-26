@@ -110,7 +110,7 @@ fun ListScreen(
                     painterResId = R.drawable.ic_add,
                     descriptionResId = R.string.action_add,
                     onClick = {
-                        val navArgs = EditorScreenNavArgs(indexOfTaskInList = -1)
+                        val navArgs = EditorScreenNavArgs(taskId = -1)
                         navigator.navigate(EditorScreenDestination(navArgs))
                     }
                 )
@@ -119,12 +119,16 @@ fun ListScreen(
     ) { paddingValues ->
 
         LazyColumn(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
-            itemsIndexed(listOfTasks) { index: Int, task: Task ->
+            itemsIndexed(listOfTasks) { _: Int, task: Task ->
 
                 val onTap = {
                     viewModel.saveTask(
                         task = task.copy(isFinished = !task.isFinished)
                     )
+                }
+                val onLongPress = {
+                    val navArgs = EditorScreenNavArgs(taskId = task.id)
+                    navigator.navigate(direction = EditorScreenDestination(navArgs = navArgs))
                 }
                 val textColor = if (task.isFinished) {
                     Color.Gray
@@ -139,12 +143,7 @@ fun ListScreen(
                         .pointerInput(Unit) {
                             detectTapGestures(
                                 onTap = { onTap() }, // TODO: after quick taps stops reacting
-                                onLongPress = {
-                                    val navArgs = EditorScreenNavArgs(
-                                        indexOfTaskInList = index
-                                    )
-                                    navigator.navigate(EditorScreenDestination(navArgs))
-                                }
+                                onLongPress = { onLongPress() }
                             )
                         },
                     shape = Shapes.large

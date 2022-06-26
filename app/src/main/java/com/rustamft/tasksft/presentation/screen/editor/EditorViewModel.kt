@@ -3,7 +3,7 @@ package com.rustamft.tasksft.presentation.screen.editor
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rustamft.tasksft.domain.usecase.GetTaskByIndexUseCase
+import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.presentation.model.MutableTask
 import com.rustamft.tasksft.presentation.screen.navArgs
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditorViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    getTaskByIndexUseCase: GetTaskByIndexUseCase,
+    getTaskByIdUseCase: GetTaskByIdUseCase,
     private val saveTaskUseCase: SaveTaskUseCase
 ) : ViewModel() {
 
@@ -26,10 +26,10 @@ class EditorViewModel @Inject constructor(
     val errorFlow = errorChannel.receiveAsFlow()
 
     private val navArgs = savedStateHandle.navArgs<EditorScreenNavArgs>()
-    private val taskFlow = if (navArgs.indexOfTaskInList == -1) {
+    private val taskFlow = if (navArgs.taskId == -1) {
         emptyFlow()
     } else {
-        getTaskByIndexUseCase.execute(taskIndex = navArgs.indexOfTaskInList)
+        getTaskByIdUseCase.execute(taskId = navArgs.taskId)
     }
 
     val mutableTask = MutableTask()

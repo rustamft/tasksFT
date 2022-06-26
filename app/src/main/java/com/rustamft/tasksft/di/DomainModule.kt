@@ -5,7 +5,7 @@ import com.rustamft.tasksft.domain.repository.TaskRepository
 import com.rustamft.tasksft.domain.usecase.DeleteTasksUseCase
 import com.rustamft.tasksft.domain.usecase.GetAppPreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.GetListOfTasksUseCase
-import com.rustamft.tasksft.domain.usecase.GetTaskByIndexUseCase
+import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import dagger.Module
 import dagger.Provides
@@ -29,8 +29,8 @@ class DomainModule {
     }
 
     @Provides
-    fun provideGetTaskByIndexUseCase(taskRepository: TaskRepository): GetTaskByIndexUseCase {
-        return GetTaskByIndexUseCase(taskRepository = taskRepository)
+    fun provideGetTaskByIdUseCase(taskRepository: TaskRepository): GetTaskByIdUseCase {
+        return GetTaskByIdUseCase(taskRepository = taskRepository)
     }
 
     @Provides

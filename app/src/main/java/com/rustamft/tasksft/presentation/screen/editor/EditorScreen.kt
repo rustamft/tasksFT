@@ -26,9 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
+import com.rustamft.tasksft.domain.util.DEEP_LINK_URI
 import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
 import com.rustamft.tasksft.domain.util.format
 import com.rustamft.tasksft.presentation.navigation.Fab
@@ -41,7 +44,8 @@ import java.util.Locale
 
 @Destination(
     route = ROUTE_EDITOR,
-    navArgsDelegate = EditorScreenNavArgs::class
+    navArgsDelegate = EditorScreenNavArgs::class,
+    deepLinks = [ DeepLink(uriPattern = "${DEEP_LINK_URI}${FULL_ROUTE_PLACEHOLDER}") ]
 )
 @Composable
 fun EditorScreen(
