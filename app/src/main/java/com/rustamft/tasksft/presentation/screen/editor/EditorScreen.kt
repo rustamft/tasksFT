@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
@@ -38,6 +37,7 @@ import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
+import org.koin.androidx.compose.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -45,19 +45,21 @@ import java.util.Locale
 @Destination(
     route = ROUTE_EDITOR,
     navArgsDelegate = EditorScreenNavArgs::class,
-    deepLinks = [ DeepLink(uriPattern = "${DEEP_LINK_URI}${FULL_ROUTE_PLACEHOLDER}") ]
+    deepLinks = [DeepLink(uriPattern = "${DEEP_LINK_URI}${FULL_ROUTE_PLACEHOLDER}")]
 )
 @Composable
 fun EditorScreen(
     context: Context = LocalContext.current,
-    viewModel: EditorViewModel = hiltViewModel(),
+    viewModel: EditorViewModel = koinViewModel(),
     navigator: DestinationsNavigator,
     scaffoldState: ScaffoldState // From DependenciesContainer.
 ) {
 
     var fabVisible by remember { mutableStateOf(false) }
     val onValueChange = {
-        if (!fabVisible) { fabVisible = true }
+        if (!fabVisible) {
+            fabVisible = true
+        }
     }
 
     LaunchedEffect(key1 = viewModel) {

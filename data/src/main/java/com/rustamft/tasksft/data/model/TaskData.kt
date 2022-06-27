@@ -16,7 +16,7 @@ internal data class TaskData(
     val created: Long = Calendar.getInstance().timeInMillis,
     @NonNull @ColumnInfo(name = "reminder")
     val reminder: Long = 0L,
-    val isNew: Boolean = true, // TODO: remove?
+    //val isNew: Boolean = true, // TODO: remove?
     @NonNull @ColumnInfo(name = "is_finished")
     val isFinished: Boolean = false
 )

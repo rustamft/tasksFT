@@ -6,15 +6,12 @@ import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.usecase.DeleteTasksUseCase
 import com.rustamft.tasksft.domain.usecase.GetListOfTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class ListViewModel @Inject constructor(
+class ListViewModel(
     getListOfTasksUseCase: GetListOfTasksUseCase,
     private val saveTaskUseCase: SaveTaskUseCase,
     private val deleteTasksUseCase: DeleteTasksUseCase

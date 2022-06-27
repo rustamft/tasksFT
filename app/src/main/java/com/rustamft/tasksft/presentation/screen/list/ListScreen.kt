@@ -37,7 +37,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
@@ -56,11 +55,12 @@ import com.rustamft.tasksft.presentation.theme.AppTheme
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
 import com.rustamft.tasksft.presentation.theme.Shapes
 import com.rustamft.tasksft.presentation.theme.TEXT_SMALL
+import org.koin.androidx.compose.koinViewModel
 
 @Destination(start = true, route = ROUTE_LIST)
 @Composable
 fun ListScreen(
-    viewModel: ListViewModel = hiltViewModel(),
+    viewModel: ListViewModel = koinViewModel(),
     navigator: DestinationsNavigator,
     scaffoldState: ScaffoldState, // From DependenciesContainer.
     listOfTasksState: State<List<Task>> =

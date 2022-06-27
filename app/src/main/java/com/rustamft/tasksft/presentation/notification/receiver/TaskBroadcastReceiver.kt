@@ -1,5 +1,6 @@
 package com.rustamft.tasksft.presentation.notification.receiver
 
+import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -10,21 +11,17 @@ import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.domain.util.ACTION_FINISH
-import com.rustamft.tasksft.domain.util.ONE_HOUR
 import com.rustamft.tasksft.domain.util.ACTION_SNOOZE
+import com.rustamft.tasksft.domain.util.ONE_HOUR
 import com.rustamft.tasksft.domain.util.TASK_ID
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class TaskBroadcastReceiver : BroadcastReceiver() {
 
-    @Inject @ApplicationContext private lateinit var context: Context
-    @Inject private lateinit var getTaskByIdUseCase: GetTaskByIdUseCase
-    @Inject private lateinit var saveTaskUseCase: SaveTaskUseCase
+    private val context: Application = // TODO: inject with Koin
+    private lateinit var getTaskByIdUseCase: GetTaskByIdUseCase // TODO: inject with Koin
+    private lateinit var saveTaskUseCase: SaveTaskUseCase // TODO: inject with Koin
     private lateinit var task: Task
 
     override fun onReceive(contextNullable: Context?, intent: Intent?) {

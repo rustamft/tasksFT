@@ -83,7 +83,7 @@ class OneTimeWorker(
         */
     }
 
-    private fun buildFinishAction(): NotificationCompat.Action { // TODO: adapt for Compose
+    private fun buildFinishAction(): NotificationCompat.Action {
         val intent = Intent(context, TaskBroadcastReceiver::class.java).apply {
             action = ACTION_FINISH
             putExtra(TASK_ID, taskId)
@@ -101,7 +101,7 @@ class OneTimeWorker(
         )
     }
 
-    private fun buildSnoozeAction(): NotificationCompat.Action { // TODO: adapt for Compose
+    private fun buildSnoozeAction(): NotificationCompat.Action {
         val intent = Intent(context, TaskBroadcastReceiver::class.java).apply {
             action = ACTION_SNOOZE
             putExtra(TASK_ID, taskId)

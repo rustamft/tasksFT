@@ -1,6 +1,6 @@
 package com.rustamft.tasksft.data.di
 
-import android.content.Context
+import android.app.Application
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
@@ -15,16 +15,50 @@ import com.rustamft.tasksft.data.storage.room.TaskRoomDatabase
 import com.rustamft.tasksft.domain.repository.AppPreferencesRepository
 import com.rustamft.tasksft.domain.repository.TaskRepository
 import com.rustamft.tasksft.domain.util.STORED_PREFERENCES
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import javax.inject.Singleton
+import org.koin.dsl.module
 
+val dataModule = module {
+
+    single<DataStore<AppPreferencesData>> {
+        val context: Application = get()
+        DataStoreFactory.create(
+            serializer = AppPreferencesData.Serializer,
+            produceFile = { context.dataStoreFile(STORED_PREFERENCES) },
+            corruptionHandler = null,
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+        )
+    }
+
+    single<TaskRoomDatabase> {
+        val context: Application = get()
+        Room.databaseBuilder(
+            context,
+            TaskRoomDatabase::class.java,
+            "app_database"
+        ).build()
+    }
+
+    single<TaskStorage> {
+        val taskRoomDatabase: TaskRoomDatabase = get()
+        taskRoomDatabase.tasksDao()
+    }
+
+    single<TaskRepository> {
+        TaskRepositoryImpl(taskStorage = get())
+    }
+
+    single<AppPreferencesStorage> {
+        AppPreferencesDataStore(dataStore = get())
+    }
+
+    single<AppPreferencesRepository> {
+        AppPreferencesRepositoryImpl(appPreferencesStorage = get())
+    }
+}
+/* TODO: remove
 @Module
 @InstallIn(SingletonComponent::class)
 internal class DataModule {
@@ -76,3 +110,4 @@ internal class DataModule {
         return AppPreferencesRepositoryImpl(appPreferencesStorage = appPreferencesStorage)
     }
 }
+*/

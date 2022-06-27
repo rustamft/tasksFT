@@ -2,14 +2,28 @@ package com.rustamft.tasksft.app
 
 import android.app.Application
 import com.rustamft.tasksft.BuildConfig
-import dagger.hilt.android.HiltAndroidApp
-import java.util.Locale
+import com.rustamft.tasksft.data.di.dataModule
+import com.rustamft.tasksft.di.appModule
+import com.rustamft.tasksft.di.domainModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 
-@HiltAndroidApp
 class App : Application() {
 
     companion object App {
-        val language: String get() = Locale.getDefault().language // TODO: delete if not needed
+        //val language: String get() = Locale.getDefault().language // TODO: delete if not needed
         const val version = BuildConfig.VERSION_NAME
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        startKoin {
+            androidLogger(Level.DEBUG)
+            androidContext(this@App)
+            modules(listOf(appModule, domainModule, dataModule))
+        }
     }
 }
