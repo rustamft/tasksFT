@@ -37,7 +37,7 @@ import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
-import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.compose.getStateViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -50,7 +50,7 @@ import java.util.Locale
 @Composable
 fun EditorScreen(
     context: Context = LocalContext.current,
-    viewModel: EditorViewModel = koinViewModel(),
+    viewModel: EditorViewModel = getStateViewModel(), // TODO: change deprecated
     navigator: DestinationsNavigator,
     scaffoldState: ScaffoldState // From DependenciesContainer.
 ) {

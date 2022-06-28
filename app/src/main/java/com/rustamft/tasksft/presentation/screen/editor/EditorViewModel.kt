@@ -23,7 +23,7 @@ class EditorViewModel(
     val errorFlow = errorChannel.receiveAsFlow()
 
     private val navArgs = savedStateHandle.navArgs<EditorScreenNavArgs>()
-    private val taskFlow = if (navArgs.taskId == -1) {
+    private val taskFlow = if (navArgs.taskId == null) { // TODO: not taking id from ListScreen
         emptyFlow()
     } else {
         getTaskByIdUseCase.execute(taskId = navArgs.taskId)

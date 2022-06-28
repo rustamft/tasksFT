@@ -43,6 +43,7 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.app.App
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.util.GITHUB_LINK
+import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
 import com.rustamft.tasksft.domain.util.ROUTE_LIST
 import com.rustamft.tasksft.domain.util.toDateTime
 import com.rustamft.tasksft.presentation.element.TextButtonElement
@@ -110,8 +111,7 @@ fun ListScreen(
                     painterResId = R.drawable.ic_add,
                     descriptionResId = R.string.action_add,
                     onClick = {
-                        val navArgs = EditorScreenNavArgs(taskId = -1)
-                        navigator.navigate(EditorScreenDestination(navArgs))
+                        navigator.navigate(ROUTE_EDITOR)
                     }
                 )
             )

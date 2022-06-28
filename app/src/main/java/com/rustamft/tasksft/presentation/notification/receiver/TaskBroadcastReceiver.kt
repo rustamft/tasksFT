@@ -1,6 +1,5 @@
 package com.rustamft.tasksft.presentation.notification.receiver
 
-import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -16,12 +15,13 @@ import com.rustamft.tasksft.domain.util.ONE_HOUR
 import com.rustamft.tasksft.domain.util.TASK_ID
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import org.koin.java.KoinJavaComponent.inject
 
 class TaskBroadcastReceiver : BroadcastReceiver() {
 
-    private val context: Application = // TODO: inject with Koin
-    private lateinit var getTaskByIdUseCase: GetTaskByIdUseCase // TODO: inject with Koin
-    private lateinit var saveTaskUseCase: SaveTaskUseCase // TODO: inject with Koin
+    private val context: Context by inject(Context::class.java)
+    private val getTaskByIdUseCase: GetTaskByIdUseCase by inject(GetTaskByIdUseCase::class.java)
+    private val saveTaskUseCase: SaveTaskUseCase by inject(SaveTaskUseCase::class.java)
     private lateinit var task: Task
 
     override fun onReceive(contextNullable: Context?, intent: Intent?) {
@@ -53,7 +53,7 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
         runCatching {
             saveTaskUseCase.execute(task = task.copy(isFinished = true))
         }.onFailure {
-            // TODO: show error
+            displayToast(it.message.toString())
         }
     }
 
@@ -63,7 +63,7 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
             val delay: Long = ONE_HOUR
             saveTaskUseCase.execute(task = task.copy(reminder = now + delay))
         }.onFailure {
-            // TODO: show error
+            displayToast(it.message.toString())
         }
     }
 }
