@@ -18,5 +18,7 @@
     <string name="reminder">Reminder</string>
     <string name="task_finished_state">Task finished state</string>
     <string name="task_info">Task info</string>
+    <string name="task_notification_channel_description">Sends a scheduled notification</string>
+    <string name="task_notification_channel_name">Task notification</string>
     <string name="title">Title</string>
 </resources>

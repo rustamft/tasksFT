@@ -1,12 +1,12 @@
 package com.rustamft.tasksft.presentation.screen.editor
 
-import androidx.lifecycle.SavedStateHandle
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
+import com.rustamft.tasksft.domain.util.TASK_ID
 import com.rustamft.tasksft.presentation.model.MutableTask
-import com.rustamft.tasksft.presentation.screen.navArgs
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -14,19 +14,19 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
 class EditorViewModel(
-    savedStateHandle: SavedStateHandle,
+    arguments: Bundle,
     getTaskByIdUseCase: GetTaskByIdUseCase,
     private val saveTaskUseCase: SaveTaskUseCase
 ) : ViewModel() {
 
-    private val errorChannel = Channel<String>()
-    val errorFlow = errorChannel.receiveAsFlow()
+    private val messageChannel = Channel<String>()
+    val messageFlow = messageChannel.receiveAsFlow()
 
-    private val navArgs = savedStateHandle.navArgs<EditorScreenNavArgs>()
-    private val taskFlow = if (navArgs.taskId == null) { // TODO: not taking id from ListScreen
+    private val taskId = arguments.getInt(TASK_ID)
+    private val taskFlow = if (taskId == 0) {
         emptyFlow()
     } else {
-        getTaskByIdUseCase.execute(taskId = navArgs.taskId)
+        getTaskByIdUseCase.execute(taskId = taskId)
     }
 
     val mutableTask = MutableTask()
@@ -45,9 +45,15 @@ class EditorViewModel(
         viewModelScope.launch {
             kotlin.runCatching {
                 saveTaskUseCase.execute(task = mutableTask.toTask())
+            }.onSuccess {
+                messageChannel.send("Reminder set") // TODO: show actual time
             }.onFailure {
-                errorChannel.send(it.message.toString())
+                sendMessage(it.message.toString())
             }
         }
+    }
+
+    private suspend fun sendMessage(message: String) {
+        messageChannel.send(message)
     }
 }

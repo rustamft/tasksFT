@@ -7,7 +7,6 @@ import com.rustamft.tasksft.domain.usecase.DeleteTasksUseCase
 import com.rustamft.tasksft.domain.usecase.GetListOfTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -17,25 +16,17 @@ class ListViewModel(
     private val deleteTasksUseCase: DeleteTasksUseCase
 ) : ViewModel() {
 
-    private val errorChannel = Channel<String>()
-    val errorFlow = errorChannel.receiveAsFlow()
+    private val messageChannel = Channel<String>()
+    val messageFlow = messageChannel.receiveAsFlow()
 
-    val listOfTasksFlow = getListOfTasksUseCase.execute().map { list ->
-        list.sortedWith(
-            compareBy(
-                { !it.isFinished },
-                { it.reminder },
-                { it.created }
-            )
-        )
-    }
+    val listOfTasksFlow = getListOfTasksUseCase.execute()
 
     fun saveTask(task: Task) {
         viewModelScope.launch {
             kotlin.runCatching {
                 saveTaskUseCase.execute(task = task)
             }.onFailure {
-                errorChannel.send(it.message.toString())
+                sendMessage(it.message.toString())
             }
         }
     }
@@ -45,8 +36,12 @@ class ListViewModel(
             kotlin.runCatching {
                 deleteTasksUseCase.execute(list = list)
             }.onFailure {
-                errorChannel.send(it.message.toString())
+                sendMessage(it.message.toString())
             }
         }
+    }
+
+    private suspend fun sendMessage(message: String) {
+        messageChannel.send(message)
     }
 }

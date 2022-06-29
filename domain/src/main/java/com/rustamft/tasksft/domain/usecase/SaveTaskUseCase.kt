@@ -20,7 +20,9 @@ class SaveTaskUseCase(
             }
             launch {
                 taskWorkManager.cancel(task = task)
-                taskWorkManager.scheduleOneTime(task = task)
+                if (!task.isFinished && task.reminder != 0L) {
+                    taskWorkManager.scheduleOneTime(task = task)
+                }
             }
         }
     }

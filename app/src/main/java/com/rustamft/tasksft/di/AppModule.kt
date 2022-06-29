@@ -1,5 +1,6 @@
 package com.rustamft.tasksft.di
 
+import android.os.Bundle
 import com.rustamft.tasksft.presentation.screen.editor.EditorViewModel
 import com.rustamft.tasksft.presentation.screen.list.ListViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -15,9 +16,9 @@ val appModule = module {
         )
     }
 
-    viewModel<EditorViewModel> {
+    viewModel<EditorViewModel> { (bundle: Bundle) ->
         EditorViewModel(
-            savedStateHandle = get(),
+            arguments = bundle,
             getTaskByIdUseCase = get(),
             saveTaskUseCase = get()
         )

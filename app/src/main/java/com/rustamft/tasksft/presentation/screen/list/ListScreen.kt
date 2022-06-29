@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -51,7 +51,6 @@ import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.screen.destinations.EditorScreenDestination
-import com.rustamft.tasksft.presentation.screen.editor.EditorScreenNavArgs
 import com.rustamft.tasksft.presentation.theme.AppTheme
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
 import com.rustamft.tasksft.presentation.theme.Shapes
@@ -61,9 +60,9 @@ import org.koin.androidx.compose.koinViewModel
 @Destination(start = true, route = ROUTE_LIST)
 @Composable
 fun ListScreen(
-    viewModel: ListViewModel = koinViewModel(),
-    navigator: DestinationsNavigator,
+    navigator: DestinationsNavigator, // From ComposeDestinations
     scaffoldState: ScaffoldState, // From DependenciesContainer.
+    viewModel: ListViewModel = koinViewModel(),
     listOfTasksState: State<List<Task>> =
         viewModel.listOfTasksFlow.collectAsState(initial = emptyList())
 ) {
@@ -73,9 +72,9 @@ fun ListScreen(
     var openGitHub by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = viewModel) {
-        viewModel.errorFlow.collect { error ->
+        viewModel.messageFlow.collect { message ->
             scaffoldState.snackbarHostState.showSnackbar(
-                message = error
+                message = message
             )
         }
     }
@@ -119,6 +118,98 @@ fun ListScreen(
     ) { paddingValues ->
 
         LazyColumn(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
+
+            items(items = listOfTasks) { task ->
+
+                val textColor = if (task.isFinished) {
+                    Color.Gray
+                } else {
+                    AppTheme.colors.onBackground
+                }
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(DIMEN_SMALL)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = {
+                                    viewModel.saveTask(
+                                        task = task.copy(isFinished = !task.isFinished)
+                                    )
+                                }, // TODO: after tap stops reacting
+                                onLongPress = {
+                                    navigator.navigate(
+                                        direction = EditorScreenDestination(taskId = task.id)
+                                    )
+                                } // TODO: wrong task after reorder
+                            )
+                        },
+                    shape = Shapes.large
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(DIMEN_SMALL),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(
+                            modifier = Modifier.weight(1f, false),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.Top
+                        ) {
+                            Column {
+                                if (task.isFinished) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_checked),
+                                        contentDescription = stringResource(id = R.string.task_finished_state),
+                                        colorFilter = ColorFilter.tint(Color.Cyan)
+                                    )
+                                } else {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_unchecked),
+                                        contentDescription = stringResource(id = R.string.task_finished_state),
+                                        colorFilter = ColorFilter.tint(Color.Gray)
+                                    )
+                                }
+                            }
+                            Column(modifier = Modifier.padding(horizontal = DIMEN_SMALL)) {
+                                Text(text = task.title, maxLines = 2, color = textColor)
+                                if (task.description.isNotEmpty()) {
+                                    Spacer(modifier = Modifier.height(DIMEN_SMALL))
+                                    Text(
+                                        text = task.description,
+                                        maxLines = 3,
+                                        fontSize = TEXT_SMALL,
+                                        color = textColor
+                                    )
+                                }
+                            }
+                        }
+                        if (task.reminder != 0L) {
+                            Row(
+                                modifier = Modifier
+                                    .wrapContentWidth()
+                                    .weight(0.5f, false),
+                                verticalAlignment = Alignment.Top
+                            ) {
+                                Column(horizontalAlignment = Alignment.End) {
+                                    val dateTime = task.reminder.toDateTime()
+                                    Text(text = dateTime.date, color = textColor)
+                                    Text(
+                                        text = dateTime.time,
+                                        fontWeight = FontWeight.Bold,
+                                        color = textColor
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            /*
             itemsIndexed(listOfTasks) { _: Int, task: Task ->
 
                 val onTap = {
@@ -127,8 +218,7 @@ fun ListScreen(
                     )
                 }
                 val onLongPress = {
-                    val navArgs = EditorScreenNavArgs(taskId = task.id)
-                    navigator.navigate(direction = EditorScreenDestination(navArgs = navArgs))
+                    navigator.navigate(direction = EditorScreenDestination(taskId = task.id))
                 }
                 val textColor = if (task.isFinished) {
                     Color.Gray
@@ -209,6 +299,7 @@ fun ListScreen(
                     }
                 }
             }
+            */
         }
 
         if (openDialog) {

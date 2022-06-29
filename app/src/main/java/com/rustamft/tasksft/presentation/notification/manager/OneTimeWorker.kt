@@ -21,7 +21,6 @@ import com.rustamft.tasksft.domain.util.TASK_TITLE
 import com.rustamft.tasksft.presentation.activity.MainActivity
 import com.rustamft.tasksft.presentation.notification.receiver.TaskBroadcastReceiver
 import com.rustamft.tasksft.presentation.screen.destinations.EditorScreenDestination
-import com.rustamft.tasksft.presentation.screen.editor.EditorScreenNavArgs
 
 class OneTimeWorker(
     private val context: Context,
@@ -59,8 +58,7 @@ class OneTimeWorker(
     }
 
     private fun buildMainPendingIntent(): PendingIntent {
-        val navArgs = EditorScreenNavArgs(taskId = taskId)
-        val route = EditorScreenDestination(navArgs = navArgs).route
+        val route = EditorScreenDestination(taskId = taskId).route
         val deepLinkIntent = Intent(
             Intent.ACTION_VIEW,
             "${DEEP_LINK_URI}${route}".toUri(),
@@ -69,7 +67,7 @@ class OneTimeWorker(
         )
         val deepLinkPendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(deepLinkIntent)
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+            getPendingIntent(taskId, flags) // Java.lang.IllegalArgumentException by flags
         }
         return deepLinkPendingIntent
 

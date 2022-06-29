@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.os.bundleOf
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
@@ -32,27 +33,31 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.util.DEEP_LINK_URI
 import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
+import com.rustamft.tasksft.domain.util.TASK_ID
 import com.rustamft.tasksft.domain.util.format
 import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
-import org.koin.androidx.compose.getStateViewModel
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 @Destination(
     route = ROUTE_EDITOR,
-    navArgsDelegate = EditorScreenNavArgs::class,
     deepLinks = [DeepLink(uriPattern = "${DEEP_LINK_URI}${FULL_ROUTE_PLACEHOLDER}")]
 )
 @Composable
 fun EditorScreen(
+    navigator: DestinationsNavigator, // From ComposeDestinations
+    scaffoldState: ScaffoldState, // From DependenciesContainer
     context: Context = LocalContext.current,
-    viewModel: EditorViewModel = getStateViewModel(), // TODO: change deprecated
-    navigator: DestinationsNavigator,
-    scaffoldState: ScaffoldState // From DependenciesContainer.
+    taskId: Int?,
+    viewModel: EditorViewModel = koinViewModel(
+        parameters = { parametersOf(bundleOf(Pair(TASK_ID, taskId))) }
+    )
 ) {
 
     var fabVisible by remember { mutableStateOf(false) }
@@ -63,9 +68,9 @@ fun EditorScreen(
     }
 
     LaunchedEffect(key1 = viewModel) {
-        viewModel.errorFlow.collect { error ->
+        viewModel.messageFlow.collect { message ->
             scaffoldState.snackbarHostState.showSnackbar(
-                message = error
+                message = message
             )
         }
     }
@@ -157,7 +162,7 @@ fun EditorScreen(
                         descriptionResId = R.string.action_save,
                         onClick = {
                             viewModel.saveTask()
-                            navigator.popBackStack()
+                            fabVisible = false
                         }
                     )
                 )
