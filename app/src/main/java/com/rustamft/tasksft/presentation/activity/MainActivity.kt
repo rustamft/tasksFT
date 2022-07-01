@@ -10,6 +10,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.dependency
@@ -17,6 +19,9 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.util.CHANNEL_ID
 import com.rustamft.tasksft.presentation.screen.NavGraphs
 import com.rustamft.tasksft.presentation.theme.AppTheme
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import org.koin.androidx.compose.inject
 
 class MainActivity : ComponentActivity() {
 
@@ -29,8 +34,27 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
+            val context = LocalContext.current
+
+            val snackbarChannel: Channel<String> by inject()
+            val snackbarFlow = snackbarChannel.receiveAsFlow()
+
             val scaffoldState = rememberScaffoldState()
             val navController = rememberNavController()
+
+            LaunchedEffect(Unit) {
+                snackbarFlow.collect { value ->
+                    val stringResId = value.toIntOrNull()
+                    val message = if (stringResId == null) {
+                        value
+                    } else {
+                        context.getString(stringResId)
+                    }
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = message
+                    )
+                }
+            }
 
             AppTheme {
                 DestinationsNavHost(

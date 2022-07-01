@@ -3,16 +3,22 @@ package com.rustamft.tasksft.di
 import android.os.Bundle
 import com.rustamft.tasksft.presentation.screen.editor.EditorViewModel
 import com.rustamft.tasksft.presentation.screen.list.ListViewModel
+import kotlinx.coroutines.channels.Channel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
 
+    single<Channel<String>> {
+        Channel()
+    }
+
     viewModel<ListViewModel> {
         ListViewModel(
             getListOfTasksUseCase = get(),
             saveTaskUseCase = get(),
-            deleteTasksUseCase = get()
+            deleteTasksUseCase = get(),
+            snackbarChannel = get()
         )
     }
 
@@ -20,7 +26,9 @@ val appModule = module {
         EditorViewModel(
             arguments = bundle,
             getTaskByIdUseCase = get(),
-            saveTaskUseCase = get()
+            saveTaskUseCase = get(),
+            deleteTasksUseCase = get(),
+            snackbarChannel = get()
         )
     }
 }

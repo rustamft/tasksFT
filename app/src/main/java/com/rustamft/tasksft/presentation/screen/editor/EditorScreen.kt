@@ -41,7 +41,6 @@ import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
@@ -62,39 +61,42 @@ fun EditorScreen(
 
     var fabVisible by remember { mutableStateOf(false) }
     val onValueChange = {
-        if (!fabVisible) {
+        if (viewModel.mutableTask.title.isBlank()) {
+            fabVisible = false
+        } else if (!fabVisible) {
             fabVisible = true
         }
     }
 
     LaunchedEffect(key1 = viewModel) {
-        viewModel.messageFlow.collect { message ->
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = message
-            )
+        viewModel.successFlow.collect { success ->
+            if (success) {
+                navigator.popBackStack()
+            }
         }
     }
 
     @Composable
     fun DatePickerElement() {
         with(viewModel.mutableTask.reminderCalendar) {
-            val formatter = SimpleDateFormat("MMM", Locale.getDefault())
-            var text by remember {
-                mutableStateOf(
-                    "${
-                        get(Calendar.DAY_OF_MONTH)
-                    } ${
-                        formatter.format(get(Calendar.MONTH))
-                    } ${
-                        get(Calendar.YEAR)
-                    }"
-                )
+
+            fun getStringFromCalendar(): String {
+                return "${
+                    get(Calendar.DAY_OF_MONTH)
+                } ${
+                    getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+                } ${
+                    get(Calendar.YEAR)
+                }"
             }
+
+            var text by remember { mutableStateOf(getStringFromCalendar()) }
             val datePickerDialog = DatePickerDialog(
                 context,
                 { _, year: Int, month: Int, day: Int ->
-                    text = "$day ${formatter.format(month)} $year"
                     set(year, month, day)
+                    text = getStringFromCalendar()
+                    onValueChange()
                 }, get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_MONTH)
             )
             Button(onClick = {
@@ -108,23 +110,25 @@ fun EditorScreen(
     @Composable
     fun TimePickerElement() {
         with(viewModel.mutableTask.reminderCalendar) {
-            var text by remember {
-                mutableStateOf(
-                    "${
-                        get(Calendar.HOUR_OF_DAY).format(2)
-                    }:${
-                        get(Calendar.MINUTE).format(2)
-                    }"
-                )
+
+            fun getStringFromCalendar(): String {
+                return "${
+                    get(Calendar.HOUR_OF_DAY).format(2)
+                }:${
+                    get(Calendar.MINUTE).format(2)
+                }"
             }
+
+            var text by remember { mutableStateOf(getStringFromCalendar()) }
             val timePickerDialog = TimePickerDialog(
                 context,
                 { _, hour: Int, minute: Int ->
-                    text = "${hour.format(2)}:${minute.format(2)}"
                     apply {
                         set(Calendar.HOUR_OF_DAY, hour)
                         set(Calendar.MINUTE, minute)
                     }
+                    text = getStringFromCalendar()
+                    onValueChange()
                 },
                 get(Calendar.HOUR_OF_DAY),
                 get(Calendar.MINUTE),
@@ -144,11 +148,16 @@ fun EditorScreen(
         topBar = {
             TopBar(
                 navigator = navigator,
-                hasBackButton = true,
+                hasBackButton = true, // TODO: check if saving is needed
                 items = listOf(
                     NavItem(
+                        painterResId = R.drawable.ic_delete,
+                        descriptionResId = R.string.action_delete,
+                        onClick = { viewModel.deleteTask() }
+                    ),
+                    NavItem(
                         painterResId = R.drawable.ic_info,
-                        descriptionResId = R.string.task_info,
+                        descriptionResId = R.string.action_info,
                         onClick = { /* TODO: implement task info */ }
                     )
                 )
@@ -160,10 +169,7 @@ fun EditorScreen(
                     item = NavItem(
                         painterResId = R.drawable.ic_save,
                         descriptionResId = R.string.action_save,
-                        onClick = {
-                            viewModel.saveTask()
-                            fabVisible = false
-                        }
+                        onClick = { viewModel.saveTask() }
                     )
                 )
             }

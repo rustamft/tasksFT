@@ -16,10 +16,10 @@ fun Long.toDateTime(): DateTime {
     }
 
     val date = "${
-        String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH))
-    }.${
-        String.format("%02d", calendar.get(Calendar.MONTH))
-    }.${
+        calendar.get(Calendar.DAY_OF_MONTH)
+    } ${
+        calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault())
+    } ${
         calendar.get(Calendar.YEAR)
     }"
     val time = "${

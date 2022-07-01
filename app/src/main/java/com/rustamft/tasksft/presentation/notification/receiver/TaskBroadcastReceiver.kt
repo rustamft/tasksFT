@@ -29,7 +29,7 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
         runBlocking {
             val id = intent?.extras?.getInt(TASK_ID)
             if (id != null) {
-                task = getTaskByIdUseCase.execute(taskId = id).first()
+                task = getTaskByIdUseCase.execute(taskId = id).first()!!
                 when (intent.action) {
                     ACTION_FINISH -> {
                         finishTask()

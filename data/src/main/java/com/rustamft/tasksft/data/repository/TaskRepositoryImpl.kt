@@ -37,7 +37,7 @@ internal class TaskRepositoryImpl(
         return taskStorage.getAll().convertToFlowOfListOf(Task::class.java)
     }
 
-    override fun getTaskById(taskId: Int): Flow<Task> {
+    override fun getTaskById(taskId: Int): Flow<Task?> {
         return taskStorage.getById(id = taskId).convertToFlowOf(Task::class.java)
     }
 }

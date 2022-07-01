@@ -21,7 +21,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -70,14 +69,6 @@ fun ListScreen(
     val listOfTasks by listOfTasksState
     var openDialog by remember { mutableStateOf(false) }
     var openGitHub by remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.messageFlow.collect { message ->
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = message
-            )
-        }
-    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -196,7 +187,10 @@ fun ListScreen(
                             ) {
                                 Column(horizontalAlignment = Alignment.End) {
                                     val dateTime = task.reminder.toDateTime()
-                                    Text(text = dateTime.date, color = textColor)
+                                    Text(
+                                        text = dateTime.date,
+                                        color = textColor
+                                    )
                                     Text(
                                         text = dateTime.time,
                                         fontWeight = FontWeight.Bold,
@@ -209,7 +203,7 @@ fun ListScreen(
                 }
             }
 
-            /*
+            /* TODO: remove
             itemsIndexed(listOfTasks) { _: Int, task: Task ->
 
                 val onTap = {
@@ -232,7 +226,7 @@ fun ListScreen(
                         .padding(DIMEN_SMALL)
                         .pointerInput(Unit) {
                             detectTapGestures(
-                                onTap = { onTap() }, // TODO: after quick taps stops reacting
+                                onTap = { onTap() },
                                 onLongPress = { onLongPress() }
                             )
                         },

@@ -32,7 +32,7 @@ class OneTimeWorker(
     private val taskTitle = data.getString(TASK_TITLE)
     private val taskDescription = data.getString(TASK_DESCRIPTION)
     private val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        PendingIntent.FLAG_UPDATE_CURRENT and PendingIntent.FLAG_IMMUTABLE
+        PendingIntent.FLAG_IMMUTABLE
     } else {
         PendingIntent.FLAG_UPDATE_CURRENT
     }
@@ -67,18 +67,9 @@ class OneTimeWorker(
         )
         val deepLinkPendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(deepLinkIntent)
-            getPendingIntent(taskId, flags) // Java.lang.IllegalArgumentException by flags
+            getPendingIntent(taskId, flags)
         }
         return deepLinkPendingIntent
-
-        /* TODO: remove
-        return NavDeepLinkBuilder(context)
-            .setComponentName(MainActivity::class.java)
-            .setGraph(R.navigation.nav_graph)
-            .setDestination(R.id.editorFragment)
-            .setArguments(bundleOf(Pair(TASK_ID, id)))
-            .createPendingIntent()
-        */
     }
 
     private fun buildFinishAction(): NotificationCompat.Action {

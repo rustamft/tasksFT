@@ -9,7 +9,9 @@
     <string name="app_name">tasksFT</string>
     <string name="action_add">Add</string>
     <string name="action_back">Back</string>
+    <string name="action_delete">Delete</string>
     <string name="action_delete_finished">Delete finished</string>
+    <string name="action_info">Info</string>
     <string name="action_save">Save</string>
     <string name="description">Description</string>
     <string name="notification_finish">Finish</string>
@@ -17,8 +19,8 @@
     <string name="notification_snoozed">Reminder snoozed for 1 hour</string>
     <string name="reminder">Reminder</string>
     <string name="task_finished_state">Task finished state</string>
-    <string name="task_info">Task info</string>
     <string name="task_notification_channel_description">Sends a scheduled notification</string>
     <string name="task_notification_channel_name">Task notification</string>
+    <string name="task_title_empty">Task title is empty!</string>
     <string name="title">Title</string>
 </resources>

@@ -3,6 +3,7 @@ package com.rustamft.tasksft.presentation.screen.editor
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rustamft.tasksft.domain.usecase.DeleteTasksUseCase
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.domain.util.TASK_ID
@@ -16,11 +17,13 @@ import kotlinx.coroutines.withTimeout
 class EditorViewModel(
     arguments: Bundle,
     getTaskByIdUseCase: GetTaskByIdUseCase,
-    private val saveTaskUseCase: SaveTaskUseCase
+    private val saveTaskUseCase: SaveTaskUseCase,
+    private val deleteTasksUseCase: DeleteTasksUseCase,
+    private val snackbarChannel: Channel<String>
 ) : ViewModel() {
 
-    private val messageChannel = Channel<String>()
-    val messageFlow = messageChannel.receiveAsFlow()
+    private val successChannel = Channel<Boolean>()
+    val successFlow = successChannel.receiveAsFlow()
 
     private val taskId = arguments.getInt(TASK_ID)
     private val taskFlow = if (taskId == 0) {
@@ -33,9 +36,11 @@ class EditorViewModel(
 
     init {
         viewModelScope.launch {
-            withTimeout(5000) {
+            withTimeout(2000) {
                 taskFlow.collect { task ->
-                    mutableTask.setFieldsFromTask(task = task)
+                    if (task != null) {
+                        mutableTask.setFieldsFromTask(task = task)
+                    }
                 }
             }
         }
@@ -46,14 +51,23 @@ class EditorViewModel(
             kotlin.runCatching {
                 saveTaskUseCase.execute(task = mutableTask.toTask())
             }.onSuccess {
-                messageChannel.send("Reminder set") // TODO: show actual time
+                snackbarChannel.send("Reminder set") // TODO: show actual time
+                successChannel.send(true)
             }.onFailure {
-                sendMessage(it.message.toString())
+                snackbarChannel.send(it.message.toString())
             }
         }
     }
 
-    private suspend fun sendMessage(message: String) {
-        messageChannel.send(message)
+    fun deleteTask() {
+        viewModelScope.launch {
+            kotlin.runCatching {
+                deleteTasksUseCase.execute(list = listOf(mutableTask.toTask()))
+            }.onSuccess {
+                successChannel.send(true)
+            }.onFailure {
+                snackbarChannel.send(it.message.toString())
+            }
+        }
     }
 }

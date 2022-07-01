@@ -8,10 +8,10 @@ import java.util.Calendar
 
 class MutableTask { // TODO: clean up here
 
-    var id by mutableStateOf(-1)
+    private var id by mutableStateOf(-1)
     var title by mutableStateOf("")
     var description by mutableStateOf("")
-    var created by mutableStateOf(0L)
+    private var created by mutableStateOf(0L)
     var reminderIsSet by mutableStateOf(false)
     var reminderCalendar: Calendar by mutableStateOf(
         Calendar.getInstance().apply {
@@ -19,7 +19,6 @@ class MutableTask { // TODO: clean up here
             add(Calendar.HOUR_OF_DAY, 1)
         }
     )
-    var isFinished by mutableStateOf(false)
 
     fun setFieldsFromTask(task: Task) {
         id = task.id
@@ -32,7 +31,6 @@ class MutableTask { // TODO: clean up here
                 timeInMillis = task.reminder
             }
         }
-        isFinished = task.isFinished
     }
 
     fun toTask(): Task {
@@ -44,8 +42,7 @@ class MutableTask { // TODO: clean up here
                     reminderCalendar.timeInMillis
                 } else {
                     0L
-                },
-                isFinished = isFinished
+                }
             )
         } else { // Updating existing task
             Task(
@@ -57,8 +54,7 @@ class MutableTask { // TODO: clean up here
                     reminderCalendar.timeInMillis
                 } else {
                     0L
-                },
-                isFinished = isFinished
+                }
             )
         }
     }

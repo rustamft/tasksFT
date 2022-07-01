@@ -39,54 +39,6 @@ val domainModule = module {
     }
 
     factory<DeleteTasksUseCase> {
-        DeleteTasksUseCase(taskRepository = get())
+        DeleteTasksUseCase(taskRepository = get(), taskWorkManager = get())
     }
 }
-/* TODO: remove
-@Module
-@InstallIn(ViewModelComponent::class)
-class DomainModule {
-
-    @Provides
-    @Singleton
-    fun provideTasksWorkManager(@ApplicationContext context: Context): TaskWorkManager {
-        return TaskWorkManagerImpl(
-            WorkManager.getInstance(context),
-            NotificationManagerCompat.from(context)
-        )
-    }
-
-    @Provides
-    fun provideGetAppPreferencesUseCase(
-        appPreferencesRepository: AppPreferencesRepository
-    ): GetAppPreferencesUseCase {
-        return GetAppPreferencesUseCase(appPreferencesRepository = appPreferencesRepository)
-    }
-
-    @Provides
-    fun provideGetListOfTasksUseCase(taskRepository: TaskRepository): GetListOfTasksUseCase {
-        return GetListOfTasksUseCase(taskRepository = taskRepository)
-    }
-
-    @Provides
-    fun provideGetTaskByIdUseCase(taskRepository: TaskRepository): GetTaskByIdUseCase {
-        return GetTaskByIdUseCase(taskRepository = taskRepository)
-    }
-
-    @Provides
-    fun provideSaveTaskUseCase(
-        taskRepository: TaskRepository,
-        taskWorkManager: TaskWorkManager
-    ): SaveTaskUseCase {
-        return SaveTaskUseCase(
-            taskRepository = taskRepository,
-            taskWorkManager = taskWorkManager
-        )
-    }
-
-    @Provides
-    fun provideDeleteTasksUseCase(taskRepository: TaskRepository): DeleteTasksUseCase {
-        return DeleteTasksUseCase(taskRepository = taskRepository)
-    }
-}
-*/
