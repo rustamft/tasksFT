@@ -3,7 +3,7 @@ package com.rustamft.tasksft.presentation.screen.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rustamft.tasksft.domain.model.Task
-import com.rustamft.tasksft.domain.usecase.DeleteTasksUseCase
+import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.GetListOfTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import kotlinx.coroutines.channels.Channel
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class ListViewModel(
     getListOfTasksUseCase: GetListOfTasksUseCase,
     private val saveTaskUseCase: SaveTaskUseCase,
-    private val deleteTasksUseCase: DeleteTasksUseCase,
+    private val deleteTasksUseCase: DeleteTaskUseCase,
     private val snackbarChannel: Channel<String>
 ) : ViewModel() {
 

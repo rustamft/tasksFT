@@ -8,15 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.presentation.element.IconButtonElement
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
 
 @Composable
 fun TopBar(
-    navigator: DestinationsNavigator,
-    hasBackButton: Boolean,
+    backButton: (@Composable () -> Unit)? = null,
     items: List<NavItem>
 ) {
 
@@ -24,15 +22,7 @@ fun TopBar(
         modifier = Modifier.fillMaxWidth(),
         elevation = DIMEN_SMALL,
         title = { Text(text = stringResource(R.string.app_name)) },
-        navigationIcon = {
-            if (hasBackButton) {
-                IconButtonElement(
-                    painter = painterResource(id = R.drawable.ic_arrow_back),
-                    contentDescription = stringResource(id = R.string.action_back),
-                    onClick = { navigator.popBackStack() }
-                )
-            }
-        },
+        navigationIcon = backButton,
         actions = {
             items.forEach { item ->
                 IconButtonElement(

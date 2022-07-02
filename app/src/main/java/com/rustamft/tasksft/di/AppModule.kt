@@ -1,6 +1,7 @@
 package com.rustamft.tasksft.di
 
 import android.os.Bundle
+import com.rustamft.tasksft.presentation.screen.backup.BackupViewModel
 import com.rustamft.tasksft.presentation.screen.editor.EditorViewModel
 import com.rustamft.tasksft.presentation.screen.list.ListViewModel
 import kotlinx.coroutines.channels.Channel
@@ -27,7 +28,17 @@ val appModule = module {
             arguments = bundle,
             getTaskByIdUseCase = get(),
             saveTaskUseCase = get(),
-            deleteTasksUseCase = get(),
+            deleteTaskUseCase = get(),
+            snackbarChannel = get()
+        )
+    }
+
+    viewModel<BackupViewModel> {
+        BackupViewModel(
+            getAppPreferencesUseCase = get(),
+            saveAppPreferencesUseCase = get(),
+            exportTasksUseCase = get(),
+            importTasksUseCase = get(),
             snackbarChannel = get()
         )
     }

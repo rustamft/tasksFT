@@ -34,6 +34,15 @@ class TaskWorkManagerImpl(
         workManager.enqueue(work)
     }
 
+    override suspend fun scheduleOneTime(list: List<Task>) {
+        coroutineScope {
+            for (task in list) {
+                launch { scheduleOneTime(task) }
+            }
+        }
+    }
+
+
     override fun cancel(task: Task) {
         notificationManager.cancel(task.id)
         workManager.cancelAllWorkByTag(task.id.toString())

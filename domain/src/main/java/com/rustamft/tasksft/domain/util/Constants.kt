@@ -6,6 +6,7 @@ const val STORED_PREFERENCES = "tasksft_preferences.json"
 
 const val ROUTE_LIST = "list_screen"
 const val ROUTE_EDITOR = "editor_screen"
+const val ROUTE_BACKUP = "backup_screen"
 
 const val PATTERN_DATE = "dd LLL yyyy"
 const val PATTERN_TIME = "HH:mm"
@@ -21,3 +22,6 @@ const val ACTION_SNOOZE = "com.rustamft.tasksft.SNOOZE"
 const val ONE_HOUR = 60L * 60L * 1000L
 
 const val DEEP_LINK_URI = "https://tasksft.rustamft.com/"
+
+const val BACKUP_FILE_NAME = "tasksFT backup "
+const val BACKUP_FILE_EXTENSION = ".json"

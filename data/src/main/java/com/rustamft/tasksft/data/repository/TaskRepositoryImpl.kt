@@ -27,6 +27,21 @@ internal class TaskRepositoryImpl(
     }
 
     @Throws(IOException::class, Exception::class)
+    override suspend fun saveTasks(list: List<Task>) {
+        withContext(dispatcher) {
+            taskStorage.save(list = list.convertToListOf(TaskData::class.java))
+        }
+    }
+
+    @Throws(IOException::class, Exception::class)
+    override suspend fun deleteTask(task: Task) {
+        withContext(dispatcher) {
+            taskStorage.delete(task = task.convertTo(TaskData::class.java))
+        }
+    }
+
+
+    @Throws(IOException::class, Exception::class)
     override suspend fun deleteTasks(list: List<Task>) {
         withContext(dispatcher) {
             taskStorage.delete(list = list.convertToListOf(TaskData::class.java))

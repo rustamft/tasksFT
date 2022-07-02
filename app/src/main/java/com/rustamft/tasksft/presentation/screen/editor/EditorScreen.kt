@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Switch
@@ -24,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import com.ramcosta.composedestinations.annotation.DeepLink
@@ -35,6 +38,8 @@ import com.rustamft.tasksft.domain.util.DEEP_LINK_URI
 import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
 import com.rustamft.tasksft.domain.util.TASK_ID
 import com.rustamft.tasksft.domain.util.format
+import com.rustamft.tasksft.presentation.element.IconButtonElement
+import com.rustamft.tasksft.presentation.element.TextButtonElement
 import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
@@ -59,12 +64,14 @@ fun EditorScreen(
     )
 ) {
 
-    var fabVisible by remember { mutableStateOf(false) }
+    var openTaskInfoDialog by remember { mutableStateOf(false) }
+    var openUnsavedTaskDialog by remember { mutableStateOf(false) }
+    var valueChanged by remember { mutableStateOf(false) }
     val onValueChange = {
         if (viewModel.mutableTask.title.isBlank()) {
-            fabVisible = false
-        } else if (!fabVisible) {
-            fabVisible = true
+            valueChanged = false
+        } else if (!valueChanged) {
+            valueChanged = true
         }
     }
 
@@ -99,11 +106,14 @@ fun EditorScreen(
                     onValueChange()
                 }, get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_MONTH)
             )
-            Button(onClick = {
-                datePickerDialog.show()
-            }) {
-                Text(text = text)
-            }
+            Button(
+                onClick = {
+                    datePickerDialog.show()
+                },
+                content = {
+                    Text(text = text)
+                }
+            )
         }
     }
 
@@ -134,11 +144,14 @@ fun EditorScreen(
                 get(Calendar.MINUTE),
                 true
             )
-            Button(onClick = {
-                timePickerDialog.show()
-            }) {
-                Text(text = text)
-            }
+            Button(
+                onClick = {
+                    timePickerDialog.show()
+                },
+                content = {
+                    Text(text = text)
+                }
+            )
         }
     }
 
@@ -147,8 +160,19 @@ fun EditorScreen(
         scaffoldState = scaffoldState,
         topBar = {
             TopBar(
-                navigator = navigator,
-                hasBackButton = true, // TODO: check if saving is needed
+                backButton = {
+                    IconButtonElement(
+                        painter = painterResource(id = R.drawable.ic_arrow_back),
+                        contentDescription = stringResource(id = R.string.action_back),
+                        onClick = {
+                            if (valueChanged) {
+                                openUnsavedTaskDialog = true
+                            } else {
+                                navigator.popBackStack()
+                            }
+                        }
+                    )
+                },
                 items = listOf(
                     NavItem(
                         painterResId = R.drawable.ic_delete,
@@ -157,14 +181,14 @@ fun EditorScreen(
                     ),
                     NavItem(
                         painterResId = R.drawable.ic_info,
-                        descriptionResId = R.string.action_info,
-                        onClick = { /* TODO: implement task info */ }
+                        descriptionResId = R.string.task_info,
+                        onClick = { openTaskInfoDialog = true }
                     )
                 )
             )
         },
         floatingActionButton = {
-            if (fabVisible) {
+            if (valueChanged) {
                 Fab(
                     item = NavItem(
                         painterResId = R.drawable.ic_save,
@@ -220,6 +244,47 @@ fun EditorScreen(
                     TimePickerElement()
                 }
             }
+        }
+
+        if (openTaskInfoDialog) {
+            AlertDialog(
+                onDismissRequest = { openTaskInfoDialog = false },
+                title = { Text(text = stringResource(id = R.string.task_info)) },
+                text = {
+                    // TODO: implement task info
+                },
+                confirmButton = {
+                    TextButtonElement(
+                        onClick = { openTaskInfoDialog = false },
+                        text = stringResource(R.string.action_close)
+                    )
+                },
+                backgroundColor = MaterialTheme.colors.background
+            )
+        }
+
+        if (openUnsavedTaskDialog) {
+            AlertDialog(
+                onDismissRequest = { openUnsavedTaskDialog = false },
+                title = { Text(text = stringResource(id = R.string.task_unsaved)) },
+                text = { Text(text = stringResource(id = R.string.task_unsaved_content)) },
+                confirmButton = {
+                    TextButtonElement(
+                        onClick = {
+                            openUnsavedTaskDialog = false
+                            navigator.popBackStack()
+                        },
+                        text = stringResource(R.string.action_yes)
+                    )
+                },
+                dismissButton = {
+                    TextButtonElement(
+                        onClick = { openUnsavedTaskDialog = false },
+                        text = stringResource(R.string.action_no)
+                    )
+                },
+                backgroundColor = MaterialTheme.colors.background
+            )
         }
     }
 }

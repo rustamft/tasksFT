@@ -7,7 +7,7 @@ import java.io.OutputStream
 
 internal data class AppPreferencesData(
     val darkTheme: Boolean = true,
-    val backupDir: String = ""
+    val backupDirectory: String = ""
 ) {
 
     companion object Serializer : androidx.datastore.core.Serializer<AppPreferencesData> {

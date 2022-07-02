@@ -42,6 +42,7 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.app.App
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.util.GITHUB_LINK
+import com.rustamft.tasksft.domain.util.ROUTE_BACKUP
 import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
 import com.rustamft.tasksft.domain.util.ROUTE_LIST
 import com.rustamft.tasksft.domain.util.toDateTime
@@ -60,14 +61,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ListScreen(
     navigator: DestinationsNavigator, // From ComposeDestinations
-    scaffoldState: ScaffoldState, // From DependenciesContainer.
+    scaffoldState: ScaffoldState, // From DependenciesContainer
     viewModel: ListViewModel = koinViewModel(),
     listOfTasksState: State<List<Task>> =
         viewModel.listOfTasksFlow.collectAsState(initial = emptyList())
 ) {
 
     val listOfTasks by listOfTasksState
-    var openDialog by remember { mutableStateOf(false) }
+    var openAppInfoDialog by remember { mutableStateOf(false) }
     var openGitHub by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -75,8 +76,6 @@ fun ListScreen(
         scaffoldState = scaffoldState,
         topBar = {
             TopBar(
-                navigator = navigator,
-                hasBackButton = false,
                 items = listOf(
                     NavItem(
                         painterResId = R.drawable.ic_clean,
@@ -88,9 +87,14 @@ fun ListScreen(
                         }
                     ),
                     NavItem(
+                        painterResId = R.drawable.ic_backup,
+                        descriptionResId = R.string.action_backup,
+                        onClick = { navigator.navigate(ROUTE_BACKUP) }
+                    ),
+                    NavItem(
                         painterResId = R.drawable.ic_info,
                         descriptionResId = R.string.app_info,
-                        onClick = { openDialog = true }
+                        onClick = { openAppInfoDialog = true }
                     )
                 )
             )
@@ -202,110 +206,18 @@ fun ListScreen(
                     }
                 }
             }
-
-            /* TODO: remove
-            itemsIndexed(listOfTasks) { _: Int, task: Task ->
-
-                val onTap = {
-                    viewModel.saveTask(
-                        task = task.copy(isFinished = !task.isFinished)
-                    )
-                }
-                val onLongPress = {
-                    navigator.navigate(direction = EditorScreenDestination(taskId = task.id))
-                }
-                val textColor = if (task.isFinished) {
-                    Color.Gray
-                } else {
-                    AppTheme.colors.onBackground
-                }
-
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(DIMEN_SMALL)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onTap = { onTap() },
-                                onLongPress = { onLongPress() }
-                            )
-                        },
-                    shape = Shapes.large
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(DIMEN_SMALL),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(
-                            modifier = Modifier.weight(1f, false),
-                            horizontalArrangement = Arrangement.Start,
-                            verticalAlignment = Alignment.Top
-                        ) {
-                            Column {
-                                if (task.isFinished) {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_checked),
-                                        contentDescription = stringResource(id = R.string.task_finished_state),
-                                        colorFilter = ColorFilter.tint(Color.Cyan)
-                                    )
-                                } else {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_unchecked),
-                                        contentDescription = stringResource(id = R.string.task_finished_state),
-                                        colorFilter = ColorFilter.tint(Color.Gray)
-                                    )
-                                }
-                            }
-                            Column(modifier = Modifier.padding(horizontal = DIMEN_SMALL)) {
-                                Text(text = task.title, maxLines = 2, color = textColor)
-                                if (task.description.isNotEmpty()) {
-                                    Spacer(modifier = Modifier.height(DIMEN_SMALL))
-                                    Text(
-                                        text = task.description,
-                                        maxLines = 3,
-                                        fontSize = TEXT_SMALL,
-                                        color = textColor
-                                    )
-                                }
-                            }
-                        }
-                        if (task.reminder != 0L) {
-                            Row(
-                                modifier = Modifier
-                                    .wrapContentWidth()
-                                    .weight(0.5f, false),
-                                verticalAlignment = Alignment.Top
-                            ) {
-                                Column(horizontalAlignment = Alignment.End) {
-                                    val dateTime = task.reminder.toDateTime()
-                                    Text(text = dateTime.date, color = textColor)
-                                    Text(
-                                        text = dateTime.time,
-                                        fontWeight = FontWeight.Bold,
-                                        color = textColor
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            */
         }
 
-        if (openDialog) {
+        if (openAppInfoDialog) {
             AlertDialog(
-                onDismissRequest = { openDialog = false },
+                onDismissRequest = { openAppInfoDialog = false },
                 title = { Text(text = stringResource(id = R.string.app_info)) },
                 text = {
                     Text(text = "${stringResource(id = R.string.app_info_content)} ${App.version}")
                 },
                 confirmButton = {
                     TextButtonElement(
-                        onClick = { openDialog = false },
+                        onClick = { openAppInfoDialog = false },
                         text = stringResource(R.string.action_close)
                     )
                 },

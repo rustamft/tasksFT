@@ -1,13 +1,15 @@
 package com.rustamft.tasksft.di
 
-import android.app.Application
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
 import com.rustamft.tasksft.domain.notification.TaskWorkManager
-import com.rustamft.tasksft.domain.usecase.DeleteTasksUseCase
+import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
+import com.rustamft.tasksft.domain.usecase.ExportTasksUseCase
 import com.rustamft.tasksft.domain.usecase.GetAppPreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.GetListOfTasksUseCase
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
+import com.rustamft.tasksft.domain.usecase.ImportTasksUseCase
+import com.rustamft.tasksft.domain.usecase.SaveAppPreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.presentation.notification.manager.TaskWorkManagerImpl
 import org.koin.dsl.module
@@ -15,10 +17,9 @@ import org.koin.dsl.module
 val domainModule = module {
 
     single<TaskWorkManager> {
-        val context: Application = get()
         TaskWorkManagerImpl(
-            WorkManager.getInstance(context),
-            NotificationManagerCompat.from(context)
+            WorkManager.getInstance(get()),
+            NotificationManagerCompat.from(get())
         )
     }
 
@@ -34,11 +35,27 @@ val domainModule = module {
         GetTaskByIdUseCase(taskRepository = get())
     }
 
+    factory<SaveAppPreferencesUseCase> {
+        SaveAppPreferencesUseCase(appPreferencesRepository = get())
+    }
+
     factory<SaveTaskUseCase> {
         SaveTaskUseCase(taskRepository = get(), taskWorkManager = get())
     }
 
-    factory<DeleteTasksUseCase> {
-        DeleteTasksUseCase(taskRepository = get(), taskWorkManager = get())
+    factory<DeleteTaskUseCase> {
+        DeleteTaskUseCase(taskRepository = get(), taskWorkManager = get())
+    }
+
+    factory<ExportTasksUseCase> {
+        ExportTasksUseCase(backupRepository = get(), tasksRepository = get())
+    }
+
+    factory<ImportTasksUseCase> {
+        ImportTasksUseCase(
+            backupRepository = get(),
+            tasksRepository = get(),
+            taskWorkManager = get()
+        )
     }
 }

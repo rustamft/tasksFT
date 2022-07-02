@@ -3,7 +3,7 @@ package com.rustamft.tasksft.presentation.screen.editor
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rustamft.tasksft.domain.usecase.DeleteTasksUseCase
+import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.domain.util.TASK_ID
@@ -18,7 +18,7 @@ class EditorViewModel(
     arguments: Bundle,
     getTaskByIdUseCase: GetTaskByIdUseCase,
     private val saveTaskUseCase: SaveTaskUseCase,
-    private val deleteTasksUseCase: DeleteTasksUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
     private val snackbarChannel: Channel<String>
 ) : ViewModel() {
 
@@ -62,7 +62,7 @@ class EditorViewModel(
     fun deleteTask() {
         viewModelScope.launch {
             kotlin.runCatching {
-                deleteTasksUseCase.execute(list = listOf(mutableTask.toTask()))
+                deleteTaskUseCase.execute(task = mutableTask.toTask())
             }.onSuccess {
                 successChannel.send(true)
             }.onFailure {

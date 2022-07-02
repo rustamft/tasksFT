@@ -38,6 +38,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation project(path: ':domain')
+    // DocumentFile
+    implementation 'androidx.documentfile:documentfile:1.0.1'
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
     // DataStore
