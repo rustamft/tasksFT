@@ -7,6 +7,7 @@ import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.domain.util.TASK_ID
+import com.rustamft.tasksft.domain.util.toTimeUntil
 import com.rustamft.tasksft.presentation.model.MutableTask
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.emptyFlow
@@ -51,7 +52,8 @@ class EditorViewModel(
             kotlin.runCatching {
                 saveTaskUseCase.execute(task = mutableTask.toTask())
             }.onSuccess {
-                snackbarChannel.send("Reminder set") // TODO: show actual time
+                val timeUntil = mutableTask.reminderCalendar.timeInMillis.toTimeUntil()
+                snackbarChannel.send() // TODO: show actual time, maybe use UIText
                 successChannel.send(true)
             }.onFailure {
                 snackbarChannel.send(it.message.toString())

@@ -17,12 +17,15 @@
     </string>
     <string name="app_name">tasksFT</string>
     <string name="backup_export">Export tasks to a file</string>
+    <string name="backup_file_exported">Backup file exported</string>
+    <string name="backup_file_imported">Backup file imported</string>
     <string name="backup_import">Import tasks from a file</string>
     <string name="description">Description</string>
     <string name="notification_finish">Finish</string>
     <string name="notification_snooze">Snooze for 1 hour</string>
     <string name="notification_snoozed">Reminder snoozed for 1 hour</string>
     <string name="reminder">Reminder</string>
+    <string name="reminder_in">Reminder in %1$d\mth %2$d\d %3$d\h %4$d\m</string>
     <string name="task_finished_state">Task finished state</string>
     <string name="task_info">Task info</string>
     <string name="task_notification_channel_description">Sends a scheduled notification</string>

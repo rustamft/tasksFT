@@ -20,7 +20,9 @@ class ImportTasksUseCase(
                 tasksRepository.saveTasks(list = list)
             }
             launch {
-                taskWorkManager.scheduleOneTime(list = list)
+                taskWorkManager.scheduleOneTime(
+                    list = list.filter { !it.isFinished && it.reminder != 0L }
+                )
             }
         }
     }

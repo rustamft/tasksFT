@@ -12,6 +12,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -55,6 +56,14 @@ fun BackupScreen(
         }
     }
 
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.successFlow.collect { success ->
+            if (success) {
+                navigator.popBackStack()
+            }
+        }
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         scaffoldState = scaffoldState,
@@ -91,15 +100,11 @@ fun BackupScreen(
             )
             Button(
                 onClick = {
-                    if (appPreferences.backupDirectory == "") {
-                        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                            addCategory(Intent.CATEGORY_OPENABLE)
-                            type = "application/json"
-                        }
-                        importLauncher.launch(intent)
-                    } else {
-                        // TODO: show dialog
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "application/json"
                     }
+                    importLauncher.launch(intent)
                 },
                 content = {
                     Text(text = stringResource(id = R.string.backup_import))

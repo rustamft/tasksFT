@@ -1,8 +1,7 @@
 package com.rustamft.tasksft.domain.util
 
 import com.rustamft.tasksft.domain.model.DateTime
-import java.text.ParseException
-import java.text.SimpleDateFormat
+import com.rustamft.tasksft.domain.model.TimeUntil
 import java.util.Calendar
 import java.util.Locale
 
@@ -34,13 +33,17 @@ fun Long.toDateTime(): DateTime {
     )
 }
 
-fun DateTime.toMillis(): Long { // TODO: remove
-    val formatter = SimpleDateFormat(PATTERN_DATE_TIME, Locale.getDefault())
-    val millis: Long = try {
-        formatter.parse("$this.date $this.time")!!.time
-    } catch (e: ParseException) {
-        e.printStackTrace()
-        0L
+fun Long.toTimeUntil(): TimeUntil {
+    with(
+        Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis() - this@toTimeUntil
+        }
+    ) {
+        return TimeUntil(
+            months = get(Calendar.MONTH),
+            days = get(Calendar.DAY_OF_MONTH) - 1,
+            hours = get(Calendar.HOUR_OF_DAY),
+            minutes = get(Calendar.MINUTE)
+        )
     }
-    return millis
 }
