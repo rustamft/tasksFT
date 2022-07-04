@@ -34,16 +34,36 @@ fun Long.toDateTime(): DateTime {
 }
 
 fun Long.toTimeUntil(): TimeUntil {
-    with(
-        Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis() - this@toTimeUntil
+    val currentCalendar = Calendar.getInstance()
+    val difference = this - currentCalendar.timeInMillis
+    if (difference <= 0L) {
+        return TimeUntil(0, 0, 0, 0)
+    } else {
+        val futureCalendar = Calendar.getInstance()
+        futureCalendar.timeInMillis = this
+        var diffMonth =
+            futureCalendar.get(Calendar.MONTH) - currentCalendar.get(Calendar.MONTH)
+        if (diffMonth < 0) {
+            diffMonth += 12
         }
-    ) {
-        return TimeUntil(
-            months = get(Calendar.MONTH),
-            days = get(Calendar.DAY_OF_MONTH) - 1,
-            hours = get(Calendar.HOUR_OF_DAY),
-            minutes = get(Calendar.MINUTE)
-        )
+        var diffDay =
+            futureCalendar.get(Calendar.DAY_OF_MONTH) - currentCalendar.get(Calendar.DAY_OF_MONTH)
+        if (diffDay < 0) {
+            diffMonth--
+            diffDay += futureCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        }
+        var diffHour =
+            futureCalendar.get(Calendar.HOUR_OF_DAY) - currentCalendar.get(Calendar.HOUR_OF_DAY)
+        if (diffHour < 0) {
+            diffDay--
+            diffHour += 24
+        }
+        var diffMin =
+            futureCalendar.get(Calendar.MINUTE) - currentCalendar.get(Calendar.MINUTE)
+        if (diffMin < 0) {
+            diffHour--
+            diffMin += 60
+        }
+        return TimeUntil(diffMonth, diffDay, diffHour, diffMin)
     }
 }

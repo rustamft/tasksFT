@@ -3,12 +3,14 @@ package com.rustamft.tasksft.presentation.screen.editor
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.domain.util.TASK_ID
 import com.rustamft.tasksft.domain.util.toTimeUntil
 import com.rustamft.tasksft.presentation.model.MutableTask
+import com.rustamft.tasksft.presentation.util.UIText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -20,7 +22,7 @@ class EditorViewModel(
     getTaskByIdUseCase: GetTaskByIdUseCase,
     private val saveTaskUseCase: SaveTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
-    private val snackbarChannel: Channel<String>
+    private val snackbarChannel: Channel<UIText>
 ) : ViewModel() {
 
     private val successChannel = Channel<Boolean>()
@@ -53,10 +55,18 @@ class EditorViewModel(
                 saveTaskUseCase.execute(task = mutableTask.toTask())
             }.onSuccess {
                 val timeUntil = mutableTask.reminderCalendar.timeInMillis.toTimeUntil()
-                snackbarChannel.send() // TODO: show actual time, maybe use UIText
+                snackbarChannel.send(
+                    UIText.StringResource(
+                        R.string.reminder_in,
+                        timeUntil.months,
+                        timeUntil.days,
+                        timeUntil.hours,
+                        timeUntil.minutes
+                    )
+                ) // TODO: show actual time, maybe use UIText
                 successChannel.send(true)
             }.onFailure {
-                snackbarChannel.send(it.message.toString())
+                snackbarChannel.send(UIText.DynamicString(it.message.toString()))
             }
         }
     }
@@ -68,7 +78,7 @@ class EditorViewModel(
             }.onSuccess {
                 successChannel.send(true)
             }.onFailure {
-                snackbarChannel.send(it.message.toString())
+                snackbarChannel.send(UIText.DynamicString(it.message.toString()))
             }
         }
     }

@@ -19,6 +19,7 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.util.CHANNEL_ID
 import com.rustamft.tasksft.presentation.screen.NavGraphs
 import com.rustamft.tasksft.presentation.theme.AppTheme
+import com.rustamft.tasksft.presentation.util.UIText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.androidx.compose.inject
@@ -36,22 +37,17 @@ class MainActivity : ComponentActivity() {
 
             val context = LocalContext.current
 
-            val snackbarChannel: Channel<String> by inject()
+            val snackbarChannel: Channel<UIText> by inject()
             val snackbarFlow = snackbarChannel.receiveAsFlow()
 
             val scaffoldState = rememberScaffoldState()
             val navController = rememberNavController()
 
             LaunchedEffect(Unit) {
-                snackbarFlow.collect { value ->
-                    val stringResId = value.toIntOrNull()
-                    val message = if (stringResId == null) {
-                        value
-                    } else {
-                        context.getString(stringResId)
-                    }
+                snackbarFlow.collect { uiText ->
+                    uiText.asString(context)
                     scaffoldState.snackbarHostState.showSnackbar(
-                        message = message
+                        message = uiText.asString(context)
                     )
                 }
             }

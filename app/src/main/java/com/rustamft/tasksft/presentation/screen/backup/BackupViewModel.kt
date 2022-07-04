@@ -8,6 +8,7 @@ import com.rustamft.tasksft.domain.usecase.ExportTasksUseCase
 import com.rustamft.tasksft.domain.usecase.GetAppPreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.ImportTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SaveAppPreferencesUseCase
+import com.rustamft.tasksft.presentation.util.UIText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -18,7 +19,7 @@ class BackupViewModel(
     private val saveAppPreferencesUseCase: SaveAppPreferencesUseCase,
     private val exportTasksUseCase: ExportTasksUseCase,
     private val importTasksUseCase: ImportTasksUseCase,
-    private val snackbarChannel: Channel<String>
+    private val snackbarChannel: Channel<UIText>
 ) : ViewModel() {
 
     private val successChannel = Channel<Boolean>()
@@ -36,10 +37,10 @@ class BackupViewModel(
                     )
                 )
             }.onSuccess {
-                snackbarChannel.send(R.string.backup_file_exported.toString())
+                snackbarChannel.send(UIText.StringResource(R.string.backup_file_exported))
                 successChannel.send(true)
             }.onFailure {
-                snackbarChannel.send(it.message.toString())
+                snackbarChannel.send(UIText.DynamicString(it.message.toString()))
             }
         }
     }
@@ -49,10 +50,10 @@ class BackupViewModel(
             kotlin.runCatching {
                 importTasksUseCase.execute(fileUriString = fileUri.toString())
             }.onSuccess {
-                snackbarChannel.send(R.string.backup_file_imported.toString())
+                snackbarChannel.send(UIText.StringResource(R.string.backup_file_imported))
                 successChannel.send(true)
             }.onFailure {
-                snackbarChannel.send(it.message.toString())
+                snackbarChannel.send(UIText.DynamicString(it.message.toString()))
             }
         }
     }

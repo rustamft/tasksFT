@@ -6,6 +6,7 @@ import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.GetListOfTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
+import com.rustamft.tasksft.presentation.util.UIText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
@@ -13,7 +14,7 @@ class ListViewModel(
     getListOfTasksUseCase: GetListOfTasksUseCase,
     private val saveTaskUseCase: SaveTaskUseCase,
     private val deleteTasksUseCase: DeleteTaskUseCase,
-    private val snackbarChannel: Channel<String>
+    private val snackbarChannel: Channel<UIText>
 ) : ViewModel() {
 
     val listOfTasksFlow = getListOfTasksUseCase.execute()
@@ -23,7 +24,7 @@ class ListViewModel(
             kotlin.runCatching {
                 saveTaskUseCase.execute(task = task)
             }.onFailure {
-                snackbarChannel.send(it.message.toString())
+                snackbarChannel.send(UIText.DynamicString(it.message.toString()))
             }
         }
     }
@@ -33,7 +34,7 @@ class ListViewModel(
             kotlin.runCatching {
                 deleteTasksUseCase.execute(list = list)
             }.onFailure {
-                snackbarChannel.send(it.message.toString())
+                snackbarChannel.send(UIText.DynamicString(it.message.toString()))
             }
         }
     }

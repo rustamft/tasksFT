@@ -4,13 +4,14 @@ import android.os.Bundle
 import com.rustamft.tasksft.presentation.screen.backup.BackupViewModel
 import com.rustamft.tasksft.presentation.screen.editor.EditorViewModel
 import com.rustamft.tasksft.presentation.screen.list.ListViewModel
+import com.rustamft.tasksft.presentation.util.UIText
 import kotlinx.coroutines.channels.Channel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
 
-    single<Channel<String>> {
+    single<Channel<UIText>> {
         Channel()
     }
 
