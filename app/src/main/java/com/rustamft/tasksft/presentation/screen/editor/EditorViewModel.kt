@@ -12,10 +12,9 @@ import com.rustamft.tasksft.domain.util.toTimeUntil
 import com.rustamft.tasksft.presentation.model.MutableTask
 import com.rustamft.tasksft.presentation.util.UIText
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
 
 class EditorViewModel(
     arguments: Bundle,
@@ -29,22 +28,14 @@ class EditorViewModel(
     val successFlow = successChannel.receiveAsFlow()
 
     private val taskId = arguments.getInt(TASK_ID)
-    private val taskFlow = if (taskId == 0) {
-        emptyFlow()
-    } else {
-        getTaskByIdUseCase.execute(taskId = taskId)
-    }
 
     val mutableTask = MutableTask()
 
     init {
         viewModelScope.launch {
-            withTimeout(2000) {
-                taskFlow.collect { task ->
-                    if (task != null) {
-                        mutableTask.setFieldsFromTask(task = task)
-                    }
-                }
+            val task = getTaskByIdUseCase.execute(taskId = taskId).first()
+            if (task != null) {
+                mutableTask.setFieldsFromTask(task = task)
             }
         }
     }
@@ -63,7 +54,7 @@ class EditorViewModel(
                         timeUntil.hours,
                         timeUntil.minutes
                     )
-                ) // TODO: show actual time, maybe use UIText
+                )
                 successChannel.send(true)
             }.onFailure {
                 snackbarChannel.send(UIText.DynamicString(it.message.toString()))

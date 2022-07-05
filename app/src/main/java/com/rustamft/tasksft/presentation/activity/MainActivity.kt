@@ -45,7 +45,6 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(Unit) {
                 snackbarFlow.collect { uiText ->
-                    uiText.asString(context)
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = uiText.asString(context)
                     )

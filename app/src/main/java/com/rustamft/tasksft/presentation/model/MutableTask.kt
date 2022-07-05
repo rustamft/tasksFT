@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import com.rustamft.tasksft.domain.model.Task
 import java.util.Calendar
 
-class MutableTask { // TODO: clean up here
+class MutableTask {
 
     private var id by mutableStateOf(-1)
     var title by mutableStateOf("")

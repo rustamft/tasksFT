@@ -1,5 +1,7 @@
 package com.rustamft.tasksft.presentation.screen.list
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rustamft.tasksft.domain.model.Task
@@ -17,7 +19,16 @@ class ListViewModel(
     private val snackbarChannel: Channel<UIText>
 ) : ViewModel() {
 
-    val listOfTasksFlow = getListOfTasksUseCase.execute()
+    private var listOfTasksState = mutableStateOf(emptyList<Task>())
+    val listOfTasks by listOfTasksState
+
+    init {
+        viewModelScope.launch {
+            getListOfTasksUseCase.execute().collect { list ->
+                listOfTasksState.value = list
+            }
+        }
+    }
 
     fun saveTask(task: Task) {
         viewModelScope.launch {
