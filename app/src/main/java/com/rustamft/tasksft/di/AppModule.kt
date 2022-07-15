@@ -1,7 +1,8 @@
 package com.rustamft.tasksft.di
 
 import android.os.Bundle
-import com.rustamft.tasksft.presentation.screen.backup.BackupViewModel
+import com.rustamft.tasksft.presentation.activity.MainViewModel
+import com.rustamft.tasksft.presentation.screen.settings.SettingsViewModel
 import com.rustamft.tasksft.presentation.screen.editor.EditorViewModel
 import com.rustamft.tasksft.presentation.screen.list.ListViewModel
 import com.rustamft.tasksft.presentation.util.UIText
@@ -13,6 +14,10 @@ val appModule = module {
 
     single<Channel<UIText>> {
         Channel()
+    }
+
+    viewModel<MainViewModel> {
+        MainViewModel(getAppPreferencesUseCase = get())
     }
 
     viewModel<ListViewModel> {
@@ -34,8 +39,8 @@ val appModule = module {
         )
     }
 
-    viewModel<BackupViewModel> {
-        BackupViewModel(
+    viewModel<SettingsViewModel> {
+        SettingsViewModel(
             getAppPreferencesUseCase = get(),
             saveAppPreferencesUseCase = get(),
             exportTasksUseCase = get(),

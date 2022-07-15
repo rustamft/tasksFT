@@ -11,7 +11,7 @@ class MutableTask {
     private var id by mutableStateOf(-1)
     var title by mutableStateOf("")
     var description by mutableStateOf("")
-    private var created by mutableStateOf(0L)
+    var created by mutableStateOf(0L)
     var reminderIsSet by mutableStateOf(false)
     var reminderCalendar: Calendar by mutableStateOf(
         Calendar.getInstance().apply {
@@ -35,7 +35,10 @@ class MutableTask {
 
     fun toTask(): Task {
         return if (id == -1) { // Creating new task
+            val now = System.currentTimeMillis()
             Task(
+                id = (now % Integer.MAX_VALUE).toInt(),
+                created = now,
                 title = title,
                 description = description,
                 reminder = if (reminderIsSet) {

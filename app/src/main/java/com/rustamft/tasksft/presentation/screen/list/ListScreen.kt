@@ -39,11 +39,11 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.app.App
 import com.rustamft.tasksft.domain.util.GITHUB_LINK
-import com.rustamft.tasksft.domain.util.ROUTE_BACKUP
+import com.rustamft.tasksft.domain.util.ROUTE_SETTINGS
 import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
 import com.rustamft.tasksft.domain.util.ROUTE_LIST
 import com.rustamft.tasksft.domain.util.toDateTime
-import com.rustamft.tasksft.presentation.element.TextButtonElement
+import com.rustamft.tasksft.presentation.composable.TextButtonComposable
 import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
@@ -76,14 +76,14 @@ fun ListScreen(
                         descriptionResId = R.string.action_delete_finished,
                         onClick = {
                             viewModel.deleteTasks(
-                                list = viewModel.listOfTasks.filter { it.isFinished }
+                                list = viewModel.listOfTasks.filter { it.finished }
                             )
                         }
                     ),
                     NavItem(
-                        painterResId = R.drawable.ic_backup,
-                        descriptionResId = R.string.action_backup,
-                        onClick = { navigator.navigate(ROUTE_BACKUP) }
+                        painterResId = R.drawable.ic_settings,
+                        descriptionResId = R.string.action_settings,
+                        onClick = { navigator.navigate(ROUTE_SETTINGS) }
                     ),
                     NavItem(
                         painterResId = R.drawable.ic_info,
@@ -113,7 +113,7 @@ fun ListScreen(
                 key = { it.id }
             ) { task ->
 
-                val textColor = if (task.isFinished) {
+                val textColor = if (task.finished) {
                     Color.Gray
                 } else {
                     AppTheme.colors.onBackground
@@ -123,13 +123,13 @@ fun ListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(DIMEN_SMALL)
-                        .pointerInput(Unit) {
+                        .pointerInput(key1 = task.finished) {
                             detectTapGestures(
                                 onTap = {
                                     viewModel.saveTask(
-                                        task = task.copy(isFinished = !task.isFinished)
+                                        task = task.copy(finished = !task.finished)
                                     )
-                                }, // TODO: after tap stops reacting
+                                },
                                 onLongPress = {
                                     navigator.navigate(
                                         direction = EditorScreenDestination(taskId = task.id)
@@ -152,7 +152,7 @@ fun ListScreen(
                             verticalAlignment = Alignment.Top
                         ) {
                             Column {
-                                if (task.isFinished) {
+                                if (task.finished) {
                                     Image(
                                         painter = painterResource(id = R.drawable.ic_checked),
                                         contentDescription = stringResource(id = R.string.task_finished_state),
@@ -213,13 +213,13 @@ fun ListScreen(
                     Text(text = "${stringResource(id = R.string.app_info_content)} ${App.version}")
                 },
                 confirmButton = {
-                    TextButtonElement(
+                    TextButtonComposable(
                         onClick = { openAppInfoDialog = false },
                         text = stringResource(R.string.action_close)
                     )
                 },
                 dismissButton = {
-                    TextButtonElement(
+                    TextButtonComposable(
                         onClick = { openGitHub = true },
                         text = "GitHub"
                     )

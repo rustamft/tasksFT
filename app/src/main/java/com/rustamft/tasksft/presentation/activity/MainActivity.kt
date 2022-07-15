@@ -9,20 +9,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.compose.rememberNavController
-import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.navigation.dependency
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.util.CHANNEL_ID
-import com.rustamft.tasksft.presentation.screen.NavGraphs
-import com.rustamft.tasksft.presentation.theme.AppTheme
-import com.rustamft.tasksft.presentation.util.UIText
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
-import org.koin.androidx.compose.inject
+import com.rustamft.tasksft.presentation.composable.MainComposable
 
 class MainActivity : ComponentActivity() {
 
@@ -35,6 +24,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
+            MainComposable()
+
+            /* TODO: remove
             val context = LocalContext.current
 
             val snackbarChannel: Channel<UIText> by inject()
@@ -51,7 +43,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            AppTheme {
+            AppTheme(darkTheme = ) {
                 DestinationsNavHost(
                     navGraph = NavGraphs.root,
                     navController = navController,
@@ -60,6 +52,7 @@ class MainActivity : ComponentActivity() {
                     }
                 )
             }
+            */
         }
     }
 

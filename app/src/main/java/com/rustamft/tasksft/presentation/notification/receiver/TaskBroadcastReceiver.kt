@@ -51,7 +51,7 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
 
     private suspend fun finishTask() {
         runCatching {
-            saveTaskUseCase.execute(task = task.copy(isFinished = true))
+            saveTaskUseCase.execute(task = task.copy(finished = true))
         }.onFailure {
             displayToast(it.message.toString())
         }

@@ -13,7 +13,6 @@ import org.koin.core.logger.Level
 class App : Application() {
 
     companion object App {
-        //val language: String get() = Locale.getDefault().language // TODO: delete if not needed
         const val version = BuildConfig.VERSION_NAME
     }
 

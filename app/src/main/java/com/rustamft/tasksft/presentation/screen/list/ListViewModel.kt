@@ -1,5 +1,6 @@
 package com.rustamft.tasksft.presentation.screen.list
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -16,10 +17,10 @@ class ListViewModel(
     getListOfTasksUseCase: GetListOfTasksUseCase,
     private val saveTaskUseCase: SaveTaskUseCase,
     private val deleteTasksUseCase: DeleteTaskUseCase,
-    private val snackbarChannel: Channel<UIText>
+    private val snackbarChannel: Channel<UIText>,
+    private var listOfTasksState: MutableState<List<Task>> = mutableStateOf(emptyList())
 ) : ViewModel() {
 
-    private var listOfTasksState = mutableStateOf(emptyList<Task>())
     val listOfTasks by listOfTasksState
 
     init {

@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.presentation.element.IconButtonElement
+import com.rustamft.tasksft.presentation.composable.IconButtonComposable
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
 
 @Composable
@@ -25,7 +25,7 @@ fun TopBar(
         navigationIcon = backButton,
         actions = {
             items.forEach { item ->
-                IconButtonElement(
+                IconButtonComposable(
                     painter = painterResource(id = item.painterResId),
                     contentDescription = stringResource(id = item.descriptionResId),
                     onClick = item.onClick

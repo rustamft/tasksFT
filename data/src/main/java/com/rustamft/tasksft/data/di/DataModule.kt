@@ -1,6 +1,6 @@
 package com.rustamft.tasksft.data.di
 
-import android.app.Application
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
@@ -27,7 +27,7 @@ import org.koin.dsl.module
 val dataModule = module {
 
     single<DataStore<AppPreferencesData>> {
-        val context: Application = get()
+        val context: Context = get()
         DataStoreFactory.create(
             serializer = AppPreferencesData.Serializer,
             produceFile = { context.dataStoreFile(STORED_PREFERENCES) },
@@ -45,9 +45,8 @@ val dataModule = module {
     }
 
     single<TaskRoomDatabase> {
-        val context: Application = get()
         Room.databaseBuilder(
-            context,
+            get(),
             TaskRoomDatabase::class.java,
             "app_database"
         ).build()
@@ -55,7 +54,7 @@ val dataModule = module {
 
     single<TaskStorage> {
         val taskRoomDatabase: TaskRoomDatabase = get()
-        taskRoomDatabase.tasksDao()
+        taskRoomDatabase.taskRoomDao()
     }
 
     single<TaskRepository> {

@@ -21,7 +21,7 @@ class ImportTasksUseCase(
             }
             launch {
                 taskWorkManager.scheduleOneTime(
-                    list = list.filter { !it.isFinished && it.reminder != 0L }
+                    list = list.filter { !it.finished && it.reminder != 0L }
                 )
             }
         }

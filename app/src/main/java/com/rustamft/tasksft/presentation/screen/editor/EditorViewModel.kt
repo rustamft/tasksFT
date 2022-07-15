@@ -21,15 +21,13 @@ class EditorViewModel(
     getTaskByIdUseCase: GetTaskByIdUseCase,
     private val saveTaskUseCase: SaveTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
-    private val snackbarChannel: Channel<UIText>
+    private val snackbarChannel: Channel<UIText>,
+    private val taskId: Int = arguments.getInt(TASK_ID),
+    val mutableTask: MutableTask = MutableTask()
 ) : ViewModel() {
 
     private val successChannel = Channel<Boolean>()
     val successFlow = successChannel.receiveAsFlow()
-
-    private val taskId = arguments.getInt(TASK_ID)
-
-    val mutableTask = MutableTask()
 
     init {
         viewModelScope.launch {
@@ -45,16 +43,18 @@ class EditorViewModel(
             kotlin.runCatching {
                 saveTaskUseCase.execute(task = mutableTask.toTask())
             }.onSuccess {
-                val timeUntil = mutableTask.reminderCalendar.timeInMillis.toTimeUntil()
-                snackbarChannel.send(
-                    UIText.StringResource(
-                        R.string.reminder_in,
-                        timeUntil.months,
-                        timeUntil.days,
-                        timeUntil.hours,
-                        timeUntil.minutes
+                if (mutableTask.reminderIsSet) {
+                    val timeUntil = mutableTask.reminderCalendar.timeInMillis.toTimeUntil()
+                    snackbarChannel.send(
+                        UIText.StringResource(
+                            R.string.reminder_in,
+                            timeUntil.months,
+                            timeUntil.days,
+                            timeUntil.hours,
+                            timeUntil.minutes
+                        )
                     )
-                )
+                }
                 successChannel.send(true)
             }.onFailure {
                 snackbarChannel.send(UIText.DynamicString(it.message.toString()))

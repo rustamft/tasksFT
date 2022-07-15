@@ -4,19 +4,17 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Calendar
 
-@Entity
+@Entity(tableName = "task")
 internal data class TaskData(
     @PrimaryKey
-    val id: Int = (Calendar.getInstance().timeInMillis % Integer.MAX_VALUE).toInt(), // TODO: remove
+    val id: Int = -1,
     val title: String = "",
     val description: String = "",
     @NonNull @ColumnInfo(name = "created")
-    val created: Long = Calendar.getInstance().timeInMillis,
+    val created: Long = 0L,
     @NonNull @ColumnInfo(name = "reminder")
     val reminder: Long = 0L,
-    //val isNew: Boolean = true, // TODO: remove?
-    @NonNull @ColumnInfo(name = "is_finished")
-    val isFinished: Boolean = false
+    @NonNull @ColumnInfo(name = "finished")
+    val finished: Boolean = false
 )

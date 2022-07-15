@@ -38,8 +38,9 @@ import com.rustamft.tasksft.domain.util.DEEP_LINK_URI
 import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
 import com.rustamft.tasksft.domain.util.TASK_ID
 import com.rustamft.tasksft.domain.util.format
-import com.rustamft.tasksft.presentation.element.IconButtonElement
-import com.rustamft.tasksft.presentation.element.TextButtonElement
+import com.rustamft.tasksft.domain.util.toDateTime
+import com.rustamft.tasksft.presentation.composable.IconButtonComposable
+import com.rustamft.tasksft.presentation.composable.TextButtonComposable
 import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
@@ -161,7 +162,7 @@ fun EditorScreen(
         topBar = {
             TopBar(
                 backButton = {
-                    IconButtonElement(
+                    IconButtonComposable(
                         painter = painterResource(id = R.drawable.ic_arrow_back),
                         contentDescription = stringResource(id = R.string.action_back),
                         onClick = {
@@ -251,10 +252,16 @@ fun EditorScreen(
                 onDismissRequest = { openTaskInfoDialog = false },
                 title = { Text(text = stringResource(id = R.string.task_info)) },
                 text = {
-                    // TODO: implement task info
+                    val createdString = if (viewModel.mutableTask.created == 0L) {
+                        stringResource(id = R.string.now)
+                    } else {
+                        val dateTime = viewModel.mutableTask.created.toDateTime()
+                        "${dateTime.date} ${dateTime.time}"
+                    }
+                    Text(text = stringResource(id = R.string.task_info_content, createdString))
                 },
                 confirmButton = {
-                    TextButtonElement(
+                    TextButtonComposable(
                         onClick = { openTaskInfoDialog = false },
                         text = stringResource(R.string.action_close)
                     )
@@ -269,7 +276,7 @@ fun EditorScreen(
                 title = { Text(text = stringResource(id = R.string.task_unsaved)) },
                 text = { Text(text = stringResource(id = R.string.task_unsaved_content)) },
                 confirmButton = {
-                    TextButtonElement(
+                    TextButtonComposable(
                         onClick = {
                             openUnsavedTaskDialog = false
                             navigator.popBackStack()
@@ -278,7 +285,7 @@ fun EditorScreen(
                     )
                 },
                 dismissButton = {
-                    TextButtonElement(
+                    TextButtonComposable(
                         onClick = { openUnsavedTaskDialog = false },
                         text = stringResource(R.string.action_no)
                     )

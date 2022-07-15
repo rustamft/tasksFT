@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.presentation.element
+package com.rustamft.tasksft.presentation.composable
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
@@ -6,7 +6,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 
 @Composable
-fun TextButtonElement(
+fun TextButtonComposable(
     onClick: () -> Unit,
     text: String,
 ) {

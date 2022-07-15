@@ -6,7 +6,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 internal data class AppPreferencesData(
-    val darkTheme: Boolean = true,
+    val darkTheme: Boolean? = null,
     val backupDirectory: String = ""
 ) {
 
