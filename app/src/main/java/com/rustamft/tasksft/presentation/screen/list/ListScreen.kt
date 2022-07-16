@@ -39,9 +39,9 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.app.App
 import com.rustamft.tasksft.domain.util.GITHUB_LINK
-import com.rustamft.tasksft.domain.util.ROUTE_SETTINGS
 import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
 import com.rustamft.tasksft.domain.util.ROUTE_LIST
+import com.rustamft.tasksft.domain.util.ROUTE_SETTINGS
 import com.rustamft.tasksft.domain.util.toDateTime
 import com.rustamft.tasksft.presentation.composable.TextButtonComposable
 import com.rustamft.tasksft.presentation.navigation.Fab
@@ -50,6 +50,7 @@ import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.screen.destinations.EditorScreenDestination
 import com.rustamft.tasksft.presentation.theme.AppTheme
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
+import com.rustamft.tasksft.presentation.theme.Gray
 import com.rustamft.tasksft.presentation.theme.Shapes
 import com.rustamft.tasksft.presentation.theme.TEXT_SMALL
 import org.koin.androidx.compose.koinViewModel
@@ -137,7 +138,8 @@ fun ListScreen(
                                 }
                             )
                         },
-                    shape = Shapes.large
+                    shape = Shapes.large,
+                    backgroundColor = AppTheme.colors.secondary
                 ) {
                     Row(
                         modifier = Modifier
@@ -156,13 +158,13 @@ fun ListScreen(
                                     Image(
                                         painter = painterResource(id = R.drawable.ic_checked),
                                         contentDescription = stringResource(id = R.string.task_finished_state),
-                                        colorFilter = ColorFilter.tint(Color.Cyan)
+                                        colorFilter = ColorFilter.tint(AppTheme.colors.primary)
                                     )
                                 } else {
                                     Image(
                                         painter = painterResource(id = R.drawable.ic_unchecked),
                                         contentDescription = stringResource(id = R.string.task_finished_state),
-                                        colorFilter = ColorFilter.tint(Color.Gray)
+                                        colorFilter = ColorFilter.tint(Gray)
                                     )
                                 }
                             }
@@ -210,7 +212,11 @@ fun ListScreen(
                 onDismissRequest = { openAppInfoDialog = false },
                 title = { Text(text = stringResource(id = R.string.app_info)) },
                 text = {
-                    Text(text = "${stringResource(id = R.string.app_info_content)} ${App.version}")
+                    Text(
+                        text = "${
+                            stringResource(id = R.string.app_info_dialog_content)
+                        } ${App.version}"
+                    )
                 },
                 confirmButton = {
                     TextButtonComposable(
@@ -224,7 +230,7 @@ fun ListScreen(
                         text = "GitHub"
                     )
                 },
-                backgroundColor = MaterialTheme.colors.background
+                backgroundColor = MaterialTheme.colors.surface
             )
         }
 

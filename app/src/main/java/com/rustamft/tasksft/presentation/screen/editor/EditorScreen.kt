@@ -258,7 +258,7 @@ fun EditorScreen(
                         val dateTime = viewModel.mutableTask.created.toDateTime()
                         "${dateTime.date} ${dateTime.time}"
                     }
-                    Text(text = stringResource(id = R.string.task_info_content, createdString))
+                    Text(text = stringResource(id = R.string.task_info_dialog_content, createdString))
                 },
                 confirmButton = {
                     TextButtonComposable(
@@ -266,7 +266,7 @@ fun EditorScreen(
                         text = stringResource(R.string.action_close)
                     )
                 },
-                backgroundColor = MaterialTheme.colors.background
+                backgroundColor = MaterialTheme.colors.surface
             )
         }
 
@@ -274,7 +274,7 @@ fun EditorScreen(
             AlertDialog(
                 onDismissRequest = { openUnsavedTaskDialog = false },
                 title = { Text(text = stringResource(id = R.string.task_unsaved)) },
-                text = { Text(text = stringResource(id = R.string.task_unsaved_content)) },
+                text = { Text(text = stringResource(id = R.string.task_unsaved_dialog_content)) },
                 confirmButton = {
                     TextButtonComposable(
                         onClick = {
@@ -290,7 +290,7 @@ fun EditorScreen(
                         text = stringResource(R.string.action_no)
                     )
                 },
-                backgroundColor = MaterialTheme.colors.background
+                backgroundColor = MaterialTheme.colors.surface
             )
         }
     }

@@ -10,7 +10,7 @@
     <string name="action_save">Save</string>
     <string name="action_yes">Yes</string>
     <string name="app_info">App info</string>
-    <string name="app_info_content">\n
+    <string name="app_info_dialog_content">\n
         This app is FOSS.\n
         Source code is available at GitHub.\n
         \n
@@ -18,6 +18,8 @@
     </string>
     <string name="app_name">tasksFT</string>
     <string name="backup">Backup</string>
+    <string name="backup_dialog_choose_dir">Choose directory</string>
+    <string name="backup_dialog_content">Backup file is going to be saved in %1$s</string>
     <string name="backup_file_exported">Backup file exported</string>
     <string name="backup_file_imported">Backup file imported</string>
     <string name="description">Description</string>
@@ -29,13 +31,13 @@
     <string name="reminder_in">Reminder in %1$d\mth %2$d\d %3$d\h %4$d\m</string>
     <string name="task_finished_state">Task finished state</string>
     <string name="task_info">Task info</string>
-    <string name="task_info_content">Created: %1$s</string>
+    <string name="task_info_dialog_content">Created: %1$s</string>
     <string name="task_notification_channel_description">Sends a scheduled notification</string>
     <string name="task_notification_channel_name">Task notification</string>
     <string name="task_title_empty">Task title is empty!</string>
     <string name="task_unsaved">Task is not saved!
     </string>
-    <string name="task_unsaved_content">\n
+    <string name="task_unsaved_dialog_content">\n
         Would you like to discard changes?
     </string>
     <string name="theme">Theme</string>

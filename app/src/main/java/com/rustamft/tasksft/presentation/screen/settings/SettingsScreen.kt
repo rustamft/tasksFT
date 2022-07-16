@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
@@ -20,16 +22,21 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.model.AppPreferences
 import com.rustamft.tasksft.domain.util.ROUTE_SETTINGS
 import com.rustamft.tasksft.presentation.composable.IconButtonComposable
+import com.rustamft.tasksft.presentation.composable.TextButtonComposable
 import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
 import org.koin.androidx.compose.koinViewModel
@@ -46,6 +53,8 @@ fun SettingsScreen(
 ) {
 
     val appPreferences by appPreferencesState
+    var openExportConfirmDialog by remember { mutableStateOf(false) }
+
     val exportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -67,6 +76,19 @@ fun SettingsScreen(
                 navigator.popBackStack()
             }
         }
+    }
+
+    fun chooseDirectory() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+        exportLauncher.launch(intent)
+    }
+
+    fun chooseFile() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "application/octet-stream"
+        }
+        importLauncher.launch(intent)
     }
 
     Scaffold(
@@ -130,11 +152,10 @@ fun SettingsScreen(
                         painter = painterResource(id = R.drawable.ic_save),
                         contentDescription = stringResource(id = R.string.action_save),
                         onClick = {
-                            if (appPreferences.backupDirectory == "") {
-                                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                                exportLauncher.launch(intent)
+                            if (appPreferences.backupDirectory.isEmpty()) {
+                                chooseDirectory()
                             } else {
-                                // TODO: show dialog
+                                openExportConfirmDialog = true
                             }
                         }
                     )
@@ -142,16 +163,38 @@ fun SettingsScreen(
                     IconButtonComposable(
                         painter = painterResource(id = R.drawable.ic_restore),
                         contentDescription = stringResource(id = R.string.action_restore),
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                                addCategory(Intent.CATEGORY_OPENABLE)
-                                type = "application/json"
-                            }
-                            importLauncher.launch(intent)
-                        }
+                        onClick = { chooseFile() }
                     )
                 }
             }
         }
+    }
+
+    if (openExportConfirmDialog) {
+        AlertDialog(
+            onDismissRequest = { openExportConfirmDialog = false },
+            title = { Text(text = stringResource(id = R.string.backup)) },
+            text = {
+                Text(
+                    text = stringResource(
+                        id = R.string.backup_dialog_content,
+                        appPreferences.backupDirectory
+                    )
+                )
+            },
+            confirmButton = {
+                TextButtonComposable(
+                    onClick = { chooseDirectory() },
+                    text = stringResource(id = R.string.backup_dialog_choose_dir)
+                )
+            },
+            dismissButton = {
+                TextButtonComposable(
+                    onClick = { viewModel.exportTasks(appPreferences.backupDirectory.toUri()) },
+                    text = stringResource(R.string.action_save)
+                )
+            },
+            backgroundColor = MaterialTheme.colors.surface
+        )
     }
 }

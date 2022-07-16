@@ -5,6 +5,7 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.rustamft.tasksft.presentation.theme.AppTheme
 
 @Composable
 fun Fab(item: NavItem) {
@@ -15,6 +16,8 @@ fun Fab(item: NavItem) {
                 painter = painterResource(id = item.painterResId),
                 contentDescription = stringResource(id = item.descriptionResId)
             )
-        }
+        },
+        contentColor = AppTheme.colors.secondaryVariant,
+        backgroundColor = AppTheme.colors.primaryVariant
     )
 }

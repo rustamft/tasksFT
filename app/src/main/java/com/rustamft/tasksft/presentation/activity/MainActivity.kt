@@ -22,38 +22,7 @@ class MainActivity : ComponentActivity() {
             createNotificationChannel()
         }
 
-        setContent {
-
-            MainComposable()
-
-            /* TODO: remove
-            val context = LocalContext.current
-
-            val snackbarChannel: Channel<UIText> by inject()
-            val snackbarFlow = snackbarChannel.receiveAsFlow()
-
-            val scaffoldState = rememberScaffoldState()
-            val navController = rememberNavController()
-
-            LaunchedEffect(Unit) {
-                snackbarFlow.collect { uiText ->
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = uiText.asString(context)
-                    )
-                }
-            }
-
-            AppTheme(darkTheme = ) {
-                DestinationsNavHost(
-                    navGraph = NavGraphs.root,
-                    navController = navController,
-                    dependenciesContainerBuilder = {
-                        dependency(scaffoldState)
-                    }
-                )
-            }
-            */
-        }
+        setContent { MainComposable() }
     }
 
     override fun onNewIntent(intent: Intent?) {
