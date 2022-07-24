@@ -86,8 +86,8 @@ fun SettingsScreen(
     fun chooseFile() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/octet-stream"
-        }
+            type = "application/*"
+        } // for old API works type "application/octet-stream", for new - "application/json"
         importLauncher.launch(intent)
     }
 
