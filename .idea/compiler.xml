@@ -3,6 +3,9 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
       <module name="tasksFT.app" target="11" />
+      <module name="tasksFT.buildSrc" target="11" />
+      <module name="tasksFT.buildSrc.main" target="11" />
+      <module name="tasksFT.buildSrc.test" target="11" />
       <module name="tasksFT.data" target="11" />
     </bytecodeTargetLevel>
   </component>
