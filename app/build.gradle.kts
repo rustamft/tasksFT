@@ -26,7 +26,7 @@ android {
         minSdk = 21
         targetSdk = 32
         versionCode = 1
-        versionName = "0.9.4"
+        versionName = "0.9.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -54,7 +54,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0"
+        kotlinCompilerExtensionVersion = "1.3.0-rc02"
     }
     packagingOptions {
         resources {
