@@ -22,6 +22,7 @@
     <string name="backup_dialog_content">Backup file is going to be saved in %1$s</string>
     <string name="backup_file_exported">Backup file exported</string>
     <string name="backup_file_imported">Backup file imported</string>
+    <string name="color">Color</string>
     <string name="description">Description</string>
     <string name="notification_finish">Finish</string>
     <string name="notification_snooze">Snooze for 1 hour</string>

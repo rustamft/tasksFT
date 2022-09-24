@@ -1,10 +1,12 @@
 package com.rustamft.tasksft.domain.model
 
+
 data class Task(
     val id: Int = -1,
     val created: Long = 0L,
     val title: String = "",
     val description: String = "",
     val reminder: Long = 0L,
-    val finished: Boolean = false
+    val finished: Boolean = false,
+    val color: Int = 0xFF000000.toInt()
 )

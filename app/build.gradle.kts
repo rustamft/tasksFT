@@ -19,12 +19,12 @@ kotlin {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.rustamft.tasksft"
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "0.9.5"
 
@@ -61,11 +61,12 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    namespace = "com.rustamft.tasksft"
 }
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
@@ -74,19 +75,19 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     // Compose
-    val composeVersion = "1.3.0-alpha02"
+    val composeVersion = "1.3.0-beta03"
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
-    implementation("androidx.activity:activity-compose:1.5.1")
+    implementation("androidx.activity:activity-compose:1.6.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
     // Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.24.11-rc")
     // Compose destinations
-    val composeDestinationsVersion = "1.7.15-beta"
+    val composeDestinationsVersion = "1.7.21-beta"
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestinationsVersion")
     ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestinationsVersion")
     // Koin

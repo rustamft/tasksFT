@@ -19,6 +19,7 @@ class MutableTask {
             add(Calendar.HOUR_OF_DAY, 1)
         }
     )
+    // TODO: add color
 
     fun setFieldsFromTask(task: Task) {
         id = task.id

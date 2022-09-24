@@ -16,5 +16,6 @@ internal data class TaskData(
     @NonNull @ColumnInfo(name = "reminder")
     val reminder: Long = 0L,
     @NonNull @ColumnInfo(name = "finished")
-    val finished: Boolean = false
+    val finished: Boolean = false,
+    val color: Int = 0xFF000000.toInt()
 )

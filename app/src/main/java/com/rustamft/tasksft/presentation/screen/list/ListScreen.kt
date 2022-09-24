@@ -139,7 +139,7 @@ fun ListScreen(
                             )
                         },
                     shape = Shapes.large,
-                    backgroundColor = AppTheme.colors.secondary
+                    backgroundColor = Color(task.color)
                 ) {
                     Row(
                         modifier = Modifier

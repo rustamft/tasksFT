@@ -3,12 +3,18 @@ package com.rustamft.tasksft.presentation.screen.editor
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -25,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,7 +51,11 @@ import com.rustamft.tasksft.presentation.composable.TextButtonComposable
 import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
+import com.rustamft.tasksft.presentation.theme.AppTheme
+import com.rustamft.tasksft.presentation.theme.BORDER_SMALL
+import com.rustamft.tasksft.presentation.theme.DIMEN_MEDIUM
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
+import com.rustamft.tasksft.presentation.theme.DarkBlue
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import java.util.Calendar
@@ -228,6 +239,25 @@ fun EditorScreen(
                 modifier = modifier,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Text(text = stringResource(id = R.string.color))
+                Spacer(modifier = Modifier.width(DIMEN_SMALL))
+                Box(
+                    modifier = Modifier
+                        .clickable { /*TODO: show color picker*/ }
+                        .border(
+                            width = BORDER_SMALL,
+                            color = AppTheme.colors.onBackground,
+                            shape = CircleShape
+                        )
+                        .size(DIMEN_MEDIUM)
+                        .clip(CircleShape)
+                        .background(DarkBlue)
+                )
+            }
+            Row(
+                modifier = modifier,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(text = stringResource(id = R.string.reminder))
                 Spacer(modifier = Modifier.width(DIMEN_SMALL))
                 Switch(
@@ -258,7 +288,12 @@ fun EditorScreen(
                         val dateTime = viewModel.mutableTask.created.toDateTime()
                         "${dateTime.date} ${dateTime.time}"
                     }
-                    Text(text = stringResource(id = R.string.task_info_dialog_content, createdString))
+                    Text(
+                        text = stringResource(
+                            id = R.string.task_info_dialog_content,
+                            createdString
+                        )
+                    )
                 },
                 confirmButton = {
                     TextButtonComposable(

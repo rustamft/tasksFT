@@ -4,7 +4,10 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.rustamft.tasksft.data.model.TaskData
 
-@Database(entities = [TaskData::class], version = 1)
+@Database(
+    version = 1,
+    entities = [TaskData::class],
+)
 internal abstract class TaskRoomDatabase : RoomDatabase() {
 
     abstract fun taskRoomDao(): TaskRoomDao
