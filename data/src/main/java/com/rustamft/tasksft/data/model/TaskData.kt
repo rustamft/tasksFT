@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.rustamft.tasksft.domain.util.TASK_DEFAULT_COLOR
 
 @Entity(tableName = "task")
 internal data class TaskData(
@@ -17,5 +18,5 @@ internal data class TaskData(
     val reminder: Long = 0L,
     @NonNull @ColumnInfo(name = "finished")
     val finished: Boolean = false,
-    val color: Int = 0xFF000000.toInt()
+    val color: Int = TASK_DEFAULT_COLOR
 )

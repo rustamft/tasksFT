@@ -3,7 +3,10 @@ package com.rustamft.tasksft.presentation.model
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.rustamft.tasksft.domain.model.Task
+import com.rustamft.tasksft.presentation.theme.AppTheme
 import java.util.Calendar
 
 class MutableTask {
@@ -19,7 +22,7 @@ class MutableTask {
             add(Calendar.HOUR_OF_DAY, 1)
         }
     )
-    // TODO: add color
+    var color by mutableStateOf(AppTheme.taskColors.random())
 
     fun setFieldsFromTask(task: Task) {
         id = task.id
@@ -32,6 +35,7 @@ class MutableTask {
                 timeInMillis = task.reminder
             }
         }
+        color = Color(task.color)
     }
 
     fun toTask(): Task {
@@ -46,7 +50,8 @@ class MutableTask {
                     reminderCalendar.timeInMillis
                 } else {
                     0L
-                }
+                },
+                color = color.toArgb()
             )
         } else { // Updating existing task
             Task(
@@ -58,7 +63,8 @@ class MutableTask {
                     reminderCalendar.timeInMillis
                 } else {
                     0L
-                }
+                },
+                color = color.toArgb()
             )
         }
     }

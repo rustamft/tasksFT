@@ -3,18 +3,14 @@ package com.rustamft.tasksft.presentation.screen.editor
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -31,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -46,16 +41,14 @@ import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
 import com.rustamft.tasksft.domain.util.TASK_ID
 import com.rustamft.tasksft.domain.util.format
 import com.rustamft.tasksft.domain.util.toDateTime
+import com.rustamft.tasksft.presentation.composable.ColorButtonComposable
 import com.rustamft.tasksft.presentation.composable.IconButtonComposable
 import com.rustamft.tasksft.presentation.composable.TextButtonComposable
 import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.theme.AppTheme
-import com.rustamft.tasksft.presentation.theme.BORDER_SMALL
-import com.rustamft.tasksft.presentation.theme.DIMEN_MEDIUM
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
-import com.rustamft.tasksft.presentation.theme.DarkBlue
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import java.util.Calendar
@@ -77,6 +70,7 @@ fun EditorScreen(
 ) {
 
     var openTaskInfoDialog by remember { mutableStateOf(false) }
+    var openChooseColorDialog by remember { mutableStateOf(false) }
     var openUnsavedTaskDialog by remember { mutableStateOf(false) }
     var valueChanged by remember { mutableStateOf(false) }
     val onValueChange = {
@@ -239,19 +233,11 @@ fun EditorScreen(
                 modifier = modifier,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = stringResource(id = R.string.color))
+                Text(text = stringResource(id = R.string.task_color))
                 Spacer(modifier = Modifier.width(DIMEN_SMALL))
-                Box(
-                    modifier = Modifier
-                        .clickable { /*TODO: show color picker*/ }
-                        .border(
-                            width = BORDER_SMALL,
-                            color = AppTheme.colors.onBackground,
-                            shape = CircleShape
-                        )
-                        .size(DIMEN_MEDIUM)
-                        .clip(CircleShape)
-                        .background(DarkBlue)
+                ColorButtonComposable(
+                    color = viewModel.mutableTask.color,
+                    onClick = { openChooseColorDialog = true }
                 )
             }
             Row(
@@ -275,6 +261,33 @@ fun EditorScreen(
                     TimePickerElement()
                 }
             }
+        }
+
+        if (openChooseColorDialog) {
+            AlertDialog(
+                onDismissRequest = { openChooseColorDialog = false },
+                title = { Text(text = stringResource(id = R.string.task_color)) },
+                text = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        AppTheme.taskColors.forEach { color ->
+                            ColorButtonComposable(
+                                color = color,
+                                onClick = {
+                                    viewModel.mutableTask.color = color
+                                    onValueChange()
+                                    openChooseColorDialog = false
+                                }
+                            )
+                        }
+                    }
+                },
+                confirmButton = {},
+                dismissButton = {},
+                backgroundColor = MaterialTheme.colors.surface
+            )
         }
 
         if (openTaskInfoDialog) {

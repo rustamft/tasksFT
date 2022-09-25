@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -114,10 +115,10 @@ fun ListScreen(
                 key = { it.id }
             ) { task ->
 
-                val textColor = if (task.finished) {
-                    Color.Gray
+                val (backGroundColor, textColor) = if (task.finished) {
+                    Color.Gray.copy(alpha = 0.3f) to Color.Gray
                 } else {
-                    AppTheme.colors.onBackground
+                    Color(task.color) to AppTheme.colors.onBackground
                 }
 
                 Card(
@@ -139,7 +140,7 @@ fun ListScreen(
                             )
                         },
                     shape = Shapes.large,
-                    backgroundColor = Color(task.color)
+                    backgroundColor = backGroundColor.compositeOver(AppTheme.colors.background)
                 ) {
                     Row(
                         modifier = Modifier

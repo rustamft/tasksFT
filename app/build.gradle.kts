@@ -26,7 +26,7 @@ android {
         minSdk = 21
         targetSdk = 33
         versionCode = 1
-        versionName = "0.9.5"
+        versionName = "0.9.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -85,7 +85,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.6.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
     // Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.24.11-rc")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.4-beta")
     // Compose destinations
     val composeDestinationsVersion = "1.7.21-beta"
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestinationsVersion")
@@ -100,7 +100,7 @@ dependencies {
     // Coroutine test
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${Constants.COROUTINE_VERSION}")
     // MockK
-    testImplementation("io.mockk:mockk:1.12.4")
+    testImplementation("io.mockk:mockk:1.13.1")
     // LeakCanary
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
 }

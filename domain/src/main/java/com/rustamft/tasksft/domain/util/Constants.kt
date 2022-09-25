@@ -11,6 +11,7 @@ const val ROUTE_SETTINGS = "settings_screen"
 const val TASK_ID = "com.rustamft.tasksft.TASK_ID"
 const val TASK_TITLE = "com.rustamft.tasksft.TASK_TITLE"
 const val TASK_DESCRIPTION = "com.rustamft.tasksft.TASK_DESCRIPTION"
+const val TASK_DEFAULT_COLOR = 0x00000000
 
 const val CHANNEL_ID = "com.rustamft.tasksft.CHANNEL_ID"
 const val ACTION_FINISH = "com.rustamft.tasksft.FINISH"

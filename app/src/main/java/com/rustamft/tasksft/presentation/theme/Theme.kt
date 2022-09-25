@@ -27,21 +27,28 @@ private val LightColorPalette = lightColors(
     onBackground = PitchBlack,
     surface = IndigoWhite,
     onSurface = DarkBlue
+)
 
-    /* Other default colors to override
+/* Other default colors to override
     background = Color.White,
     surface = Color.White,
     onPrimary = Color.White,
     onSecondary = Color.Black,
     onBackground = Color.Black,
     onSurface = Color.Black,
-    */
-)
+*/
 
 private var Colors = DarkColorPalette
 
 object AppTheme {
     val colors get() = Colors
+    val taskColors = listOf(
+        PureCrimson,
+        Corn,
+        Patina,
+        LightBlue,
+        WisteriaPurple
+    )
 }
 
 @Composable
@@ -49,21 +56,19 @@ fun AppTheme(
     darkTheme: Boolean?,
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme ?: isSystemInDarkTheme()) {
+    Colors = if (darkTheme ?: isSystemInDarkTheme()) {
         DarkColorPalette
     } else {
         LightColorPalette
     }
     val systemUiController = rememberSystemUiController()
 
-    systemUiController.setSystemBarsColor(color = colors.background)
+    systemUiController.setSystemBarsColor(color = Colors.background)
 
     MaterialTheme(
-        colors = colors,
+        colors = Colors,
         typography = Typography,
         shapes = Shapes,
         content = content
     )
-
-    Colors = colors
 }
