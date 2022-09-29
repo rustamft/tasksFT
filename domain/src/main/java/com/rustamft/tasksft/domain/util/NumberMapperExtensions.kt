@@ -1,7 +1,7 @@
 package com.rustamft.tasksft.domain.util
 
 import com.rustamft.tasksft.domain.model.DateTime
-import com.rustamft.tasksft.domain.model.TimeUntil
+import com.rustamft.tasksft.domain.model.TimeDifference
 import java.util.Calendar
 import java.util.Locale
 
@@ -33,11 +33,11 @@ fun Long.toDateTime(): DateTime {
     )
 }
 
-fun Long.toTimeUntil(): TimeUntil {
+fun Long.toTimeDifference(): TimeDifference { // TODO: buggy, test and fix
     val currentCalendar = Calendar.getInstance()
     val difference = this - currentCalendar.timeInMillis
     if (difference <= 0L) {
-        return TimeUntil(0, 0, 0, 0)
+        return TimeDifference(0, 0, 0, 0)
     } else {
         val futureCalendar = Calendar.getInstance()
         futureCalendar.timeInMillis = this
@@ -64,6 +64,6 @@ fun Long.toTimeUntil(): TimeUntil {
             diffHour--
             diffMin += 60
         }
-        return TimeUntil(diffMonth, diffDay, diffHour, diffMin)
+        return TimeDifference(diffMonth, diffDay, diffHour, diffMin)
     }
 }

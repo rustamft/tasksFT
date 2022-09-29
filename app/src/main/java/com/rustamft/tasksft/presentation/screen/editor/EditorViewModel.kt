@@ -8,7 +8,7 @@ import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.domain.util.TASK_ID
-import com.rustamft.tasksft.domain.util.toTimeUntil
+import com.rustamft.tasksft.domain.util.toTimeDifference
 import com.rustamft.tasksft.presentation.model.MutableTask
 import com.rustamft.tasksft.presentation.util.UIText
 import kotlinx.coroutines.channels.Channel
@@ -44,16 +44,17 @@ class EditorViewModel(
                 saveTaskUseCase.execute(task = mutableTask.toTask())
             }.onSuccess {
                 if (mutableTask.reminderIsSet) {
-                    val timeUntil = mutableTask.reminderCalendar.timeInMillis.toTimeUntil()
-                    snackbarChannel.send(
-                        UIText.StringResource(
-                            R.string.reminder_in,
-                            timeUntil.months,
-                            timeUntil.days,
-                            timeUntil.hours,
-                            timeUntil.minutes
+                    with(mutableTask.reminderCalendar.timeInMillis.toTimeDifference()) {
+                        snackbarChannel.send(
+                            UIText.StringResource(
+                                R.string.reminder_in,
+                                months,
+                                days,
+                                hours,
+                                minutes
+                            )
                         )
-                    )
+                    }
                 }
                 successChannel.send(true)
             }.onFailure {

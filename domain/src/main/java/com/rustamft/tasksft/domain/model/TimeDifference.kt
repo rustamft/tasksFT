@@ -1,6 +1,6 @@
 package com.rustamft.tasksft.domain.model
 
-data class TimeUntil(
+data class TimeDifference(
     val months: Int,
     val days: Int,
     val hours: Int,

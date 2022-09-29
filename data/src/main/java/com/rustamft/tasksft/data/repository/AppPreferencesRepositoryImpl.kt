@@ -2,7 +2,7 @@ package com.rustamft.tasksft.data.repository
 
 import com.rustamft.tasksft.data.model.AppPreferencesData
 import com.rustamft.tasksft.data.storage.AppPreferencesStorage
-import com.rustamft.tasksft.data.util.convertTo
+import com.rustamft.tasksft.data.util.mapTo
 import com.rustamft.tasksft.domain.model.AppPreferences
 import com.rustamft.tasksft.domain.repository.AppPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -19,7 +19,7 @@ internal class AppPreferencesRepositoryImpl(
     override suspend fun saveAppPreferences(appPreferences: AppPreferences) {
         withContext(dispatcher) {
             appPreferencesStorage.save(
-                appPreferencesData = appPreferences.convertTo(
+                appPreferencesData = appPreferences.mapTo(
                     AppPreferencesData::class.java
                 )
             )
@@ -27,5 +27,5 @@ internal class AppPreferencesRepositoryImpl(
     }
 
     override fun getAppPreferences(): Flow<AppPreferences> =
-        appPreferencesStorage.get().map { it.convertTo(AppPreferences::class.java) }
+        appPreferencesStorage.get().map { it.mapTo(AppPreferences::class.java) }
 }

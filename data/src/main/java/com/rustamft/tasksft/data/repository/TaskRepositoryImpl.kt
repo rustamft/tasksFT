@@ -2,10 +2,10 @@ package com.rustamft.tasksft.data.repository
 
 import com.rustamft.tasksft.data.model.TaskData
 import com.rustamft.tasksft.data.storage.TaskStorage
-import com.rustamft.tasksft.data.util.convertToListOf
-import com.rustamft.tasksft.data.util.convertTo
-import com.rustamft.tasksft.data.util.convertToFlowOf
-import com.rustamft.tasksft.data.util.convertToFlowOfListOf
+import com.rustamft.tasksft.data.util.mapToListOf
+import com.rustamft.tasksft.data.util.mapTo
+import com.rustamft.tasksft.data.util.mapToFlowOf
+import com.rustamft.tasksft.data.util.mapToFlowOfListOf
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.repository.TaskRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,21 +22,21 @@ internal class TaskRepositoryImpl(
     @Throws(IOException::class, Exception::class)
     override suspend fun saveTask(task: Task) {
         withContext(dispatcher) {
-            taskStorage.save(taskData = task.convertTo(TaskData::class.java))
+            taskStorage.save(taskData = task.mapTo(TaskData::class.java))
         }
     }
 
     @Throws(IOException::class, Exception::class)
     override suspend fun saveTasks(list: List<Task>) {
         withContext(dispatcher) {
-            taskStorage.save(list = list.convertToListOf(TaskData::class.java))
+            taskStorage.save(list = list.mapToListOf(TaskData::class.java))
         }
     }
 
     @Throws(IOException::class, Exception::class)
     override suspend fun deleteTask(task: Task) {
         withContext(dispatcher) {
-            taskStorage.delete(task = task.convertTo(TaskData::class.java))
+            taskStorage.delete(task = task.mapTo(TaskData::class.java))
         }
     }
 
@@ -44,15 +44,15 @@ internal class TaskRepositoryImpl(
     @Throws(IOException::class, Exception::class)
     override suspend fun deleteTasks(list: List<Task>) {
         withContext(dispatcher) {
-            taskStorage.delete(list = list.convertToListOf(TaskData::class.java))
+            taskStorage.delete(list = list.mapToListOf(TaskData::class.java))
         }
     }
 
     override fun getAllTasks(): Flow<List<Task>> {
-        return taskStorage.getAll().convertToFlowOfListOf(Task::class.java)
+        return taskStorage.getAll().mapToFlowOfListOf(Task::class.java)
     }
 
     override fun getTaskById(taskId: Int): Flow<Task?> {
-        return taskStorage.getById(id = taskId).convertToFlowOf(Task::class.java)
+        return taskStorage.getById(id = taskId).mapToFlowOf(Task::class.java)
     }
 }
