@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.domain.model
+package com.rustamft.tasksft.domain.util
 
 data class TimeDifference(
     val months: Int,

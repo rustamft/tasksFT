@@ -74,7 +74,7 @@ fun EditorScreen(
     var openUnsavedTaskDialog by remember { mutableStateOf(false) }
     var valueChanged by remember { mutableStateOf(false) }
     val onValueChange = {
-        if (viewModel.mutableTask.title.isBlank()) {
+        if (viewModel.taskStateHolder.title.isBlank()) {
             valueChanged = false
         } else if (!valueChanged) {
             valueChanged = true
@@ -91,7 +91,7 @@ fun EditorScreen(
 
     @Composable
     fun DatePickerElement() {
-        with(viewModel.mutableTask.reminderCalendar) {
+        with(viewModel.taskStateHolder.reminderCalendar) {
 
             fun getStringFromCalendar(): String {
                 return "${
@@ -125,7 +125,7 @@ fun EditorScreen(
 
     @Composable
     fun TimePickerElement() {
-        with(viewModel.mutableTask.reminderCalendar) {
+        with(viewModel.taskStateHolder.reminderCalendar) {
 
             fun getStringFromCalendar(): String {
                 return "${
@@ -213,18 +213,18 @@ fun EditorScreen(
 
             TextField(
                 modifier = modifier,
-                value = viewModel.mutableTask.title,
+                value = viewModel.taskStateHolder.title,
                 onValueChange = {
-                    viewModel.mutableTask.title = it
+                    viewModel.taskStateHolder.title = it
                     onValueChange()
                 },
                 placeholder = { Text(text = stringResource(id = R.string.title)) }
             )
             TextField(
                 modifier = modifier,
-                value = viewModel.mutableTask.description,
+                value = viewModel.taskStateHolder.description,
                 onValueChange = {
-                    viewModel.mutableTask.description = it
+                    viewModel.taskStateHolder.description = it
                     onValueChange()
                 },
                 placeholder = { Text(text = stringResource(id = R.string.description)) }
@@ -236,7 +236,7 @@ fun EditorScreen(
                 Text(text = stringResource(id = R.string.task_color))
                 Spacer(modifier = Modifier.width(DIMEN_SMALL))
                 ColorButtonComposable(
-                    color = viewModel.mutableTask.color,
+                    color = viewModel.taskStateHolder.color,
                     onClick = { openChooseColorDialog = true }
                 )
             }
@@ -247,14 +247,14 @@ fun EditorScreen(
                 Text(text = stringResource(id = R.string.reminder))
                 Spacer(modifier = Modifier.width(DIMEN_SMALL))
                 Switch(
-                    checked = viewModel.mutableTask.reminderIsSet,
+                    checked = viewModel.taskStateHolder.reminderIsSet,
                     onCheckedChange = {
-                        viewModel.mutableTask.reminderIsSet = it
+                        viewModel.taskStateHolder.reminderIsSet = it
                         onValueChange()
                     }
                 )
             }
-            if (viewModel.mutableTask.reminderIsSet) {
+            if (viewModel.taskStateHolder.reminderIsSet) {
                 Row(modifier = modifier) {
                     DatePickerElement()
                     Spacer(modifier = Modifier.width(DIMEN_SMALL))
@@ -276,7 +276,7 @@ fun EditorScreen(
                             ColorButtonComposable(
                                 color = color,
                                 onClick = {
-                                    viewModel.mutableTask.color = color
+                                    viewModel.taskStateHolder.color = color
                                     onValueChange()
                                     openChooseColorDialog = false
                                 }
@@ -295,10 +295,10 @@ fun EditorScreen(
                 onDismissRequest = { openTaskInfoDialog = false },
                 title = { Text(text = stringResource(id = R.string.task_info)) },
                 text = {
-                    val createdString = if (viewModel.mutableTask.created == 0L) {
+                    val createdString = if (viewModel.taskStateHolder.created == 0L) {
                         stringResource(id = R.string.now)
                     } else {
-                        val dateTime = viewModel.mutableTask.created.toDateTime()
+                        val dateTime = viewModel.taskStateHolder.created.toDateTime()
                         "${dateTime.date} ${dateTime.time}"
                     }
                     Text(

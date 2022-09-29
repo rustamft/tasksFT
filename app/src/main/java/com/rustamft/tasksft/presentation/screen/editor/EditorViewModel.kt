@@ -9,7 +9,7 @@ import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.domain.util.TASK_ID
 import com.rustamft.tasksft.domain.util.toTimeDifference
-import com.rustamft.tasksft.presentation.model.MutableTask
+import com.rustamft.tasksft.presentation.util.TaskStateHolder
 import com.rustamft.tasksft.presentation.util.UIText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
@@ -23,7 +23,7 @@ class EditorViewModel(
     private val deleteTaskUseCase: DeleteTaskUseCase,
     private val snackbarChannel: Channel<UIText>,
     private val taskId: Int = arguments.getInt(TASK_ID),
-    val mutableTask: MutableTask = MutableTask()
+    val taskStateHolder: TaskStateHolder = TaskStateHolder()
 ) : ViewModel() {
 
     private val successChannel = Channel<Boolean>()
@@ -33,7 +33,7 @@ class EditorViewModel(
         viewModelScope.launch {
             val task = getTaskByIdUseCase.execute(taskId = taskId).first()
             if (task != null) {
-                mutableTask.setFieldsFromTask(task = task)
+                taskStateHolder.setStateFromTask(task = task)
             }
         }
     }
@@ -41,10 +41,10 @@ class EditorViewModel(
     fun saveTask() {
         viewModelScope.launch {
             kotlin.runCatching {
-                saveTaskUseCase.execute(task = mutableTask.toTask())
+                saveTaskUseCase.execute(task = taskStateHolder.getStateAsTask())
             }.onSuccess {
-                if (mutableTask.reminderIsSet) {
-                    with(mutableTask.reminderCalendar.timeInMillis.toTimeDifference()) {
+                if (taskStateHolder.reminderIsSet) {
+                    with(taskStateHolder.reminderCalendar.timeInMillis.toTimeDifference()) {
                         snackbarChannel.send(
                             UIText.StringResource(
                                 R.string.reminder_in,
@@ -66,7 +66,7 @@ class EditorViewModel(
     fun deleteTask() {
         viewModelScope.launch {
             kotlin.runCatching {
-                deleteTaskUseCase.execute(task = mutableTask.toTask())
+                deleteTaskUseCase.execute(task = taskStateHolder.getStateAsTask())
             }.onSuccess {
                 successChannel.send(true)
             }.onFailure {

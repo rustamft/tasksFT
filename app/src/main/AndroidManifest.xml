@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
@@ -30,15 +32,21 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="tasksft.rustamft.com" />
+
+                <data
+                    android:host="tasksft.rustamft.com"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
-        <receiver android:name=".presentation.notification.receiver.TaskBroadcastReceiver" android:exported="false">
+        <receiver
+            android:name=".presentation.notification.receiver.TaskBroadcastReceiver"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.rustamft.tasksft.FINISH"/>
-                <action android:name="com.rustamft.tasksft.SNOOZE"/>
+                <action android:name="com.rustamft.tasksft.FINISH" />
+                <action android:name="com.rustamft.tasksft.SNOOZE" />
             </intent-filter>
         </receiver>
     </application>

@@ -1,7 +1,5 @@
 package com.rustamft.tasksft.domain.util
 
-import com.rustamft.tasksft.domain.model.DateTime
-import com.rustamft.tasksft.domain.model.TimeDifference
 import java.util.Calendar
 import java.util.Locale
 

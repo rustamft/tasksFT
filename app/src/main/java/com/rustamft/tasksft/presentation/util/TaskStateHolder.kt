@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.presentation.model
+package com.rustamft.tasksft.presentation.util
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,7 +9,7 @@ import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.presentation.theme.AppTheme
 import java.util.Calendar
 
-class MutableTask {
+class TaskStateHolder {
 
     private var id by mutableStateOf(-1)
     var title by mutableStateOf("")
@@ -24,7 +24,7 @@ class MutableTask {
     )
     var color by mutableStateOf(AppTheme.taskColors.random())
 
-    fun setFieldsFromTask(task: Task) {
+    fun setStateFromTask(task: Task) {
         id = task.id
         title = task.title
         description = task.description
@@ -38,7 +38,7 @@ class MutableTask {
         color = Color(task.color)
     }
 
-    fun toTask(): Task {
+    fun getStateAsTask(): Task {
         return if (id == -1) { // Creating new task
             val now = System.currentTimeMillis()
             Task(
