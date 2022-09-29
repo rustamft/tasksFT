@@ -1,14 +1,14 @@
 package com.rustamft.tasksft.domain.usecase
 
 import com.rustamft.tasksft.domain.model.Task
-import com.rustamft.tasksft.domain.notification.TaskWorkManager
+import com.rustamft.tasksft.domain.notification.TaskNotificationScheduler
 import com.rustamft.tasksft.domain.repository.TaskRepository
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class SaveTaskUseCase(
     private val taskRepository: TaskRepository,
-    private val taskWorkManager: TaskWorkManager
+    private val taskNotificationScheduler: TaskNotificationScheduler
 ) {
 
     @Throws(Exception::class)
@@ -18,9 +18,9 @@ class SaveTaskUseCase(
                 taskRepository.saveTask(task = task)
             }
             launch {
-                taskWorkManager.cancel(task = task)
+                taskNotificationScheduler.cancel(task = task)
                 if (!task.finished && task.reminder != 0L) {
-                    taskWorkManager.scheduleOneTime(task = task)
+                    taskNotificationScheduler.scheduleOneTime(task = task)
                 }
             }
         }

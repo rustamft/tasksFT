@@ -2,7 +2,7 @@ package com.rustamft.tasksft.domain.notification
 
 import com.rustamft.tasksft.domain.model.Task
 
-interface TaskWorkManager {
+interface TaskNotificationScheduler {
 
     fun scheduleOneTime(task: Task)
     suspend fun scheduleOneTime(list: List<Task>)

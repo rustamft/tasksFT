@@ -2,7 +2,7 @@ package com.rustamft.tasksft.di
 
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
-import com.rustamft.tasksft.domain.notification.TaskWorkManager
+import com.rustamft.tasksft.domain.notification.TaskNotificationScheduler
 import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.ExportTasksUseCase
 import com.rustamft.tasksft.domain.usecase.GetAppPreferencesUseCase
@@ -11,13 +11,13 @@ import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.ImportTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SaveAppPreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
-import com.rustamft.tasksft.presentation.notification.manager.TaskWorkManagerImpl
+import com.rustamft.tasksft.presentation.notification.manager.TaskNotificationSchedulerImpl
 import org.koin.dsl.module
 
 val domainModule = module {
 
-    single<TaskWorkManager> {
-        TaskWorkManagerImpl(
+    single<TaskNotificationScheduler> {
+        TaskNotificationSchedulerImpl(
             WorkManager.getInstance(get()),
             NotificationManagerCompat.from(get())
         )
@@ -40,11 +40,11 @@ val domainModule = module {
     }
 
     factory<SaveTaskUseCase> {
-        SaveTaskUseCase(taskRepository = get(), taskWorkManager = get())
+        SaveTaskUseCase(taskRepository = get(), taskNotificationScheduler = get())
     }
 
     factory<DeleteTaskUseCase> {
-        DeleteTaskUseCase(taskRepository = get(), taskWorkManager = get())
+        DeleteTaskUseCase(taskRepository = get(), taskNotificationScheduler = get())
     }
 
     factory<ExportTasksUseCase> {
@@ -55,7 +55,7 @@ val domainModule = module {
         ImportTasksUseCase(
             backupRepository = get(),
             tasksRepository = get(),
-            taskWorkManager = get()
+            taskNotificationScheduler = get()
         )
     }
 }
