@@ -2,6 +2,10 @@ package com.rustamft.tasksft.domain.service
 
 interface TaskBackupService {
 
-    fun startExport(run: () -> Unit)
-    fun startImport(run: () -> Unit)
+    enum class OperationType {
+        EXPORT,
+        IMPORT
+    }
+
+    fun start(operationType: OperationType, block: suspend () -> Unit)
 }

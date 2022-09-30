@@ -13,12 +13,14 @@ const val TASK_TITLE = "com.rustamft.tasksft.TASK_TITLE"
 const val TASK_DESCRIPTION = "com.rustamft.tasksft.TASK_DESCRIPTION"
 const val TASK_DEFAULT_COLOR = 0x00000000
 
-const val CHANNEL_ID = "com.rustamft.tasksft.CHANNEL_ID"
-const val ACTION_FINISH = "com.rustamft.tasksft.FINISH"
-const val ACTION_SNOOZE = "com.rustamft.tasksft.SNOOZE"
+const val BACKUP_FILE_NAME = "tasksFT backup "
+const val BACKUP_FILE_EXTENSION = ".json"
+
 const val ONE_HOUR = 60L * 60L * 1000L
 
 const val DEEP_LINK_URI = "https://tasksft.rustamft.com/"
 
-const val BACKUP_FILE_NAME = "tasksFT backup "
-const val BACKUP_FILE_EXTENSION = ".json"
+const val NOTIFICATION_CHANNEL_ID_TASK = "com.rustamft.tasksft.NOTIFICATION_CHANNEL_ID_TASK"
+const val NOTIFICATION_ACTION_FINISH_TASK = "com.rustamft.tasksft.NOTIFICATION_ACTION_FINISH_TASK"
+const val NOTIFICATION_ACTION_SNOOZE_TASK = "com.rustamft.tasksft.NOTIFICATION_ACTION_SNOOZE_TASK"
+const val NOTIFICATION_CHANNEL_ID_BACKUP = "com.rustamft.tasksft.NOTIFICATION_CHANNEL_ID_BACKUP"

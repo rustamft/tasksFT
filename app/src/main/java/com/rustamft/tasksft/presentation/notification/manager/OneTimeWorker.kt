@@ -11,9 +11,9 @@ import androidx.core.net.toUri
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.domain.util.ACTION_FINISH
-import com.rustamft.tasksft.domain.util.ACTION_SNOOZE
-import com.rustamft.tasksft.domain.util.CHANNEL_ID
+import com.rustamft.tasksft.domain.util.NOTIFICATION_ACTION_FINISH_TASK
+import com.rustamft.tasksft.domain.util.NOTIFICATION_ACTION_SNOOZE_TASK
+import com.rustamft.tasksft.domain.util.NOTIFICATION_CHANNEL_ID_TASK
 import com.rustamft.tasksft.domain.util.DEEP_LINK_URI
 import com.rustamft.tasksft.domain.util.TASK_DESCRIPTION
 import com.rustamft.tasksft.domain.util.TASK_ID
@@ -43,7 +43,7 @@ class OneTimeWorker(
     }
 
     private fun displayNotification() {
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+        val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID_TASK)
             .setSmallIcon(R.drawable.ic_event)
             .setContentTitle(taskTitle)
             .setContentText(taskDescription)
@@ -74,7 +74,7 @@ class OneTimeWorker(
 
     private fun buildFinishAction(): NotificationCompat.Action {
         val intent = Intent(context, TaskBroadcastReceiver::class.java).apply {
-            action = ACTION_FINISH
+            action = NOTIFICATION_ACTION_FINISH_TASK
             putExtra(TASK_ID, taskId)
         }
         val pendingIntent = PendingIntent.getBroadcast(
@@ -92,7 +92,7 @@ class OneTimeWorker(
 
     private fun buildSnoozeAction(): NotificationCompat.Action {
         val intent = Intent(context, TaskBroadcastReceiver::class.java).apply {
-            action = ACTION_SNOOZE
+            action = NOTIFICATION_ACTION_SNOOZE_TASK
             putExtra(TASK_ID, taskId)
         }
         val pendingIntent = PendingIntent.getBroadcast(

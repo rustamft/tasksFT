@@ -2,9 +2,9 @@ package com.rustamft.tasksft.di
 
 import android.os.Bundle
 import com.rustamft.tasksft.presentation.activity.MainViewModel
-import com.rustamft.tasksft.presentation.screen.settings.SettingsViewModel
 import com.rustamft.tasksft.presentation.screen.editor.EditorViewModel
 import com.rustamft.tasksft.presentation.screen.list.ListViewModel
+import com.rustamft.tasksft.presentation.screen.settings.SettingsViewModel
 import com.rustamft.tasksft.presentation.util.UIText
 import kotlinx.coroutines.channels.Channel
 import org.koin.androidx.viewmodel.dsl.viewModel

@@ -9,8 +9,8 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
-import com.rustamft.tasksft.domain.util.ACTION_FINISH
-import com.rustamft.tasksft.domain.util.ACTION_SNOOZE
+import com.rustamft.tasksft.domain.util.NOTIFICATION_ACTION_FINISH_TASK
+import com.rustamft.tasksft.domain.util.NOTIFICATION_ACTION_SNOOZE_TASK
 import com.rustamft.tasksft.domain.util.ONE_HOUR
 import com.rustamft.tasksft.domain.util.TASK_ID
 import kotlinx.coroutines.flow.first
@@ -31,10 +31,10 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
             if (id != null) {
                 task = getTaskByIdUseCase.execute(taskId = id).first()!!
                 when (intent.action) {
-                    ACTION_FINISH -> {
+                    NOTIFICATION_ACTION_FINISH_TASK -> {
                         finishTask()
                     }
-                    ACTION_SNOOZE -> {
+                    NOTIFICATION_ACTION_SNOOZE_TASK -> {
                         snoozeTask()
                         displayToast(context.getString(R.string.notification_snoozed))
                     }
