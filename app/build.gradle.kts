@@ -81,7 +81,7 @@ dependencies {
     // Activity
     implementation("androidx.activity:activity-compose:1.6.0")
     // Compose
-    val composeVersion = "1.3.0-beta03"
+    val composeVersion = "1.3.0-rc01"
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
@@ -89,7 +89,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
     // Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.4-beta")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.5-rc")
     // Compose destinations
     val composeDestinationsVersion = "1.7.21-beta"
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestinationsVersion")
@@ -104,7 +104,7 @@ dependencies {
     // Coroutine test
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${Constants.COROUTINE_VERSION}")
     // MockK
-    testImplementation("io.mockk:mockk:1.13.1")
+    testImplementation("io.mockk:mockk:1.13.2")
     // LeakCanary
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
 }

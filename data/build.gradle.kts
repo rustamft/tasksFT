@@ -48,7 +48,7 @@ dependencies {
     // DataStore
     implementation("androidx.datastore:datastore:1.0.0")
     // Room
-    val roomVersion = "2.5.0-alpha03"
+    val roomVersion = "2.5.0-beta01"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")

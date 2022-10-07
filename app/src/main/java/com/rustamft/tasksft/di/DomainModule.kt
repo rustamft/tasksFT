@@ -3,7 +3,6 @@ package com.rustamft.tasksft.di
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
 import com.rustamft.tasksft.domain.notification.TaskNotificationScheduler
-import com.rustamft.tasksft.domain.service.TaskBackupService
 import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.ExportTasksUseCase
 import com.rustamft.tasksft.domain.usecase.GetAppPreferencesUseCase
@@ -13,7 +12,6 @@ import com.rustamft.tasksft.domain.usecase.ImportTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SaveAppPreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.presentation.notification.manager.TaskNotificationSchedulerImpl
-import com.rustamft.tasksft.presentation.service.TaskBackupServiceImpl
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -23,10 +21,6 @@ val domainModule = module {
             WorkManager.getInstance(get()),
             NotificationManagerCompat.from(get())
         )
-    }
-
-    factory<TaskBackupService> {
-        TaskBackupServiceImpl(context = get())
     }
 
     factory<GetAppPreferencesUseCase> {
@@ -56,8 +50,7 @@ val domainModule = module {
     factory<ExportTasksUseCase> {
         ExportTasksUseCase(
             backupRepository = get(),
-            tasksRepository = get(),
-            taskBackupService = get()
+            tasksRepository = get()
         )
     }
 
