@@ -41,9 +41,9 @@ import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
 import com.rustamft.tasksft.domain.util.TASK_ID
 import com.rustamft.tasksft.domain.util.format
 import com.rustamft.tasksft.domain.util.toDateTime
-import com.rustamft.tasksft.presentation.composable.ColorButtonComposable
-import com.rustamft.tasksft.presentation.composable.IconButtonComposable
-import com.rustamft.tasksft.presentation.composable.TextButtonComposable
+import com.rustamft.tasksft.presentation.element.ColorButtonElement
+import com.rustamft.tasksft.presentation.element.IconButtonElement
+import com.rustamft.tasksft.presentation.element.TextButtonElement
 import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
@@ -167,7 +167,7 @@ fun EditorScreen(
         topBar = {
             TopBar(
                 backButton = {
-                    IconButtonComposable(
+                    IconButtonElement(
                         painter = painterResource(id = R.drawable.ic_arrow_back),
                         contentDescription = stringResource(id = R.string.action_back),
                         onClick = {
@@ -235,7 +235,7 @@ fun EditorScreen(
             ) {
                 Text(text = stringResource(id = R.string.task_color))
                 Spacer(modifier = Modifier.width(DIMEN_SMALL))
-                ColorButtonComposable(
+                ColorButtonElement(
                     color = viewModel.taskStateHolder.color,
                     onClick = { openChooseColorDialog = true }
                 )
@@ -273,7 +273,7 @@ fun EditorScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         AppTheme.taskColors.forEach { color ->
-                            ColorButtonComposable(
+                            ColorButtonElement(
                                 color = color,
                                 onClick = {
                                     viewModel.taskStateHolder.color = color
@@ -309,7 +309,7 @@ fun EditorScreen(
                     )
                 },
                 confirmButton = {
-                    TextButtonComposable(
+                    TextButtonElement(
                         onClick = { openTaskInfoDialog = false },
                         text = stringResource(R.string.action_close)
                     )
@@ -324,7 +324,7 @@ fun EditorScreen(
                 title = { Text(text = stringResource(id = R.string.task_unsaved)) },
                 text = { Text(text = stringResource(id = R.string.task_unsaved_dialog_content)) },
                 confirmButton = {
-                    TextButtonComposable(
+                    TextButtonElement(
                         onClick = {
                             openUnsavedTaskDialog = false
                             navigator.popBackStack()
@@ -333,7 +333,7 @@ fun EditorScreen(
                     )
                 },
                 dismissButton = {
-                    TextButtonComposable(
+                    TextButtonElement(
                         onClick = { openUnsavedTaskDialog = false },
                         text = stringResource(R.string.action_no)
                     )

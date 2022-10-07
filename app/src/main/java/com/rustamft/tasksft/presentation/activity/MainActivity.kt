@@ -11,7 +11,6 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.util.NOTIFICATION_CHANNEL_ID_TASK
-import com.rustamft.tasksft.presentation.composable.MainComposable
 
 class MainActivity : ComponentActivity() {
 
@@ -22,7 +21,7 @@ class MainActivity : ComponentActivity() {
             createNotificationChannel()
         }
 
-        setContent { MainComposable() }
+        setContent { MainActivityContent() }
     }
 
     override fun onNewIntent(intent: Intent?) {

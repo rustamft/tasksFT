@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.presentation.composable
+package com.rustamft.tasksft.presentation.activity
 
 import android.content.Context
 import androidx.compose.material.ScaffoldState
@@ -13,7 +13,6 @@ import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.dependency
 import com.rustamft.tasksft.domain.model.AppPreferences
-import com.rustamft.tasksft.presentation.activity.MainViewModel
 import com.rustamft.tasksft.presentation.screen.NavGraphs
 import com.rustamft.tasksft.presentation.theme.AppTheme
 import com.rustamft.tasksft.presentation.util.UIText
@@ -24,7 +23,7 @@ import org.koin.androidx.compose.get
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun MainComposable(
+fun MainActivityContent(
     context: Context = LocalContext.current,
     snackbarChannel: Channel<UIText> = get(),
     snackbarFlow: Flow<UIText> = snackbarChannel.receiveAsFlow(),

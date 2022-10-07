@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.presentation.composable
+package com.rustamft.tasksft.presentation.element
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,7 +15,7 @@ import com.rustamft.tasksft.presentation.theme.BORDER_SMALL
 import com.rustamft.tasksft.presentation.theme.DIMEN_MEDIUM
 
 @Composable
-fun ColorButtonComposable(
+fun ColorButtonElement(
     color: Color,
     onClick: () -> Unit
 ) {

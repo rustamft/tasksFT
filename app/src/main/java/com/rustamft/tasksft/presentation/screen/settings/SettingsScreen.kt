@@ -35,8 +35,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.model.AppPreferences
 import com.rustamft.tasksft.domain.util.ROUTE_SETTINGS
-import com.rustamft.tasksft.presentation.composable.IconButtonComposable
-import com.rustamft.tasksft.presentation.composable.TextButtonComposable
+import com.rustamft.tasksft.presentation.element.IconButtonElement
+import com.rustamft.tasksft.presentation.element.TextButtonElement
 import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
 import org.koin.androidx.compose.koinViewModel
@@ -98,7 +98,7 @@ fun SettingsScreen(
             TopBar(
                 items = emptyList(),
                 backButton = {
-                    IconButtonComposable(
+                    IconButtonElement(
                         painter = painterResource(id = R.drawable.ic_arrow_back),
                         contentDescription = stringResource(id = R.string.action_back),
                         onClick = { navigator.popBackStack() }
@@ -139,7 +139,7 @@ fun SettingsScreen(
                         { viewModel.setTheme(darkTheme = null) }
                     }
 
-                    IconButtonComposable(
+                    IconButtonElement(
                         painter = painterResource(id = painterId),
                         contentDescription = stringResource(id = contentDescriptionId),
                         onClick = onThemeSwitch
@@ -148,7 +148,7 @@ fun SettingsScreen(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = stringResource(id = R.string.backup))
                     Spacer(modifier = spacerModifier)
-                    IconButtonComposable(
+                    IconButtonElement(
                         painter = painterResource(id = R.drawable.ic_save),
                         contentDescription = stringResource(id = R.string.action_save),
                         onClick = {
@@ -160,7 +160,7 @@ fun SettingsScreen(
                         }
                     )
                     Spacer(modifier = spacerModifier)
-                    IconButtonComposable(
+                    IconButtonElement(
                         painter = painterResource(id = R.drawable.ic_restore),
                         contentDescription = stringResource(id = R.string.action_restore),
                         onClick = { chooseFile() }
@@ -183,13 +183,13 @@ fun SettingsScreen(
                 )
             },
             confirmButton = {
-                TextButtonComposable(
+                TextButtonElement(
                     onClick = { chooseDirectory() },
                     text = stringResource(id = R.string.backup_dialog_choose_dir)
                 )
             },
             dismissButton = {
-                TextButtonComposable(
+                TextButtonElement(
                     onClick = { viewModel.exportTasks(appPreferences.backupDirectory.toUri()) },
                     text = stringResource(R.string.action_save)
                 )

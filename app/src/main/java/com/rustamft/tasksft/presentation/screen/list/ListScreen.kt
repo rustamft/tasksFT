@@ -44,7 +44,7 @@ import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
 import com.rustamft.tasksft.domain.util.ROUTE_LIST
 import com.rustamft.tasksft.domain.util.ROUTE_SETTINGS
 import com.rustamft.tasksft.domain.util.toDateTime
-import com.rustamft.tasksft.presentation.composable.TextButtonComposable
+import com.rustamft.tasksft.presentation.element.TextButtonElement
 import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
@@ -220,13 +220,13 @@ fun ListScreen(
                     )
                 },
                 confirmButton = {
-                    TextButtonComposable(
+                    TextButtonElement(
                         onClick = { openAppInfoDialog = false },
                         text = stringResource(R.string.action_close)
                     )
                 },
                 dismissButton = {
-                    TextButtonComposable(
+                    TextButtonElement(
                         onClick = { openGitHub = true },
                         text = "GitHub"
                     )
