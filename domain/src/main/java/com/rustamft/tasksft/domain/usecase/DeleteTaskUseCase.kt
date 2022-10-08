@@ -3,8 +3,8 @@ package com.rustamft.tasksft.domain.usecase
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.notification.TaskNotificationScheduler
 import com.rustamft.tasksft.domain.repository.TaskRepository
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import java.io.IOException
 
 class DeleteTaskUseCase(
@@ -14,7 +14,7 @@ class DeleteTaskUseCase(
 
     @Throws(IOException::class, Exception::class)
     suspend fun execute(task: Task) {
-        coroutineScope {
+        supervisorScope {
             launch {
                 taskRepository.deleteTask(task = task)
             }
@@ -26,7 +26,7 @@ class DeleteTaskUseCase(
 
     @Throws(IOException::class, Exception::class)
     suspend fun execute(list: List<Task>) {
-        coroutineScope {
+        supervisorScope {
             launch {
                 taskRepository.deleteTasks(list = list)
             }

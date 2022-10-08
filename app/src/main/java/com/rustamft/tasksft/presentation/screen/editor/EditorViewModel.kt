@@ -11,10 +11,13 @@ import com.rustamft.tasksft.domain.util.TASK_ID
 import com.rustamft.tasksft.domain.util.toTimeDifference
 import com.rustamft.tasksft.presentation.util.TaskStateHolder
 import com.rustamft.tasksft.presentation.util.UIText
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 
 class EditorViewModel(
     arguments: Bundle,
@@ -22,55 +25,59 @@ class EditorViewModel(
     private val saveTaskUseCase: SaveTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
     private val snackbarChannel: Channel<UIText>,
-    private val taskId: Int = arguments.getInt(TASK_ID),
-    val taskStateHolder: TaskStateHolder = TaskStateHolder()
+    private val exceptionHandler: CoroutineExceptionHandler,
 ) : ViewModel() {
 
+    private val taskId: Int = arguments.getInt(TASK_ID)
     private val successChannel = Channel<Boolean>()
     val successFlow = successChannel.receiveAsFlow()
+    val taskStateHolder: TaskStateHolder = TaskStateHolder()
 
     init {
-        viewModelScope.launch {
-            val task = getTaskByIdUseCase.execute(taskId = taskId).first()
-            if (task != null) {
-                taskStateHolder.setStateFromTask(task = task)
+        viewModelScope.launch(exceptionHandler) {
+            supervisorScope {
+                val task = getTaskByIdUseCase.execute(taskId = taskId).first()
+                if (task != null) {
+                    taskStateHolder.setStateFromTask(task = task)
+                }
             }
         }
     }
 
     fun saveTask() {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                saveTaskUseCase.execute(task = taskStateHolder.getStateAsTask())
-            }.onSuccess {
-                if (taskStateHolder.reminderIsSet) {
-                    with(taskStateHolder.reminderCalendar.timeInMillis.toTimeDifference()) {
-                        snackbarChannel.send(
-                            UIText.StringResource(
-                                R.string.reminder_in,
-                                months,
-                                days,
-                                hours,
-                                minutes
-                            )
-                        )
-                    }
-                }
-                successChannel.send(true)
-            }.onFailure {
-                snackbarChannel.send(UIText.DynamicString(it.message.toString()))
-            }
+        launchInViewModelScope(
+            successMessage = if (taskStateHolder.reminderIsSet) {
+                val difference = taskStateHolder.reminderCalendar.timeInMillis.toTimeDifference()
+                UIText.StringResource(
+                    R.string.reminder_in,
+                    difference.months,
+                    difference.days,
+                    difference.hours,
+                    difference.minutes
+                )
+            } else null
+        ) {
+            saveTaskUseCase.execute(task = taskStateHolder.getStateAsTask())
         }
     }
 
     fun deleteTask() {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                deleteTaskUseCase.execute(task = taskStateHolder.getStateAsTask())
-            }.onSuccess {
+        launchInViewModelScope {
+            deleteTaskUseCase.execute(task = taskStateHolder.getStateAsTask())
+        }
+    }
+
+    private fun launchInViewModelScope(
+        successMessage: UIText? = null,
+        block: suspend CoroutineScope.() -> Unit
+    ) {
+        viewModelScope.launch(exceptionHandler) {
+            supervisorScope {
+                launch { block() }.join()
+                if (successMessage != null) {
+                    snackbarChannel.send(successMessage)
+                }
                 successChannel.send(true)
-            }.onFailure {
-                snackbarChannel.send(UIText.DynamicString(it.message.toString()))
             }
         }
     }

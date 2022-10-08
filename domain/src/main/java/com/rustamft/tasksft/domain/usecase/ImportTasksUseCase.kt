@@ -3,9 +3,9 @@ package com.rustamft.tasksft.domain.usecase
 import com.rustamft.tasksft.domain.notification.TaskNotificationScheduler
 import com.rustamft.tasksft.domain.repository.BackupRepository
 import com.rustamft.tasksft.domain.repository.TaskRepository
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 
 class ImportTasksUseCase(
     private val backupRepository: BackupRepository,
@@ -15,7 +15,7 @@ class ImportTasksUseCase(
 
     suspend fun execute(fileUriString: String) {
         val list = backupRepository.getBackup(fileUriString = fileUriString).first()
-        coroutineScope {
+        supervisorScope {
             launch {
                 tasksRepository.saveTasks(list = list)
             }

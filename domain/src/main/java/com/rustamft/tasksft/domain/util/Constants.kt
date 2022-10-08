@@ -1,5 +1,7 @@
 package com.rustamft.tasksft.domain.util
 
+const val TAG_COROUTINE_EXCEPTION = "com.rustamft.tasksft.TAG_COROUTINE_EXCEPTION"
+
 const val GITHUB_LINK = "https://github.com/rustamft/tasksFT"
 
 const val STORED_PREFERENCES = "tasksft_preferences.json"

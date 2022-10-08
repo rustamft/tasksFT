@@ -10,11 +10,15 @@ import com.rustamft.tasksft.domain.usecase.GetAppPreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.ImportTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SaveAppPreferencesUseCase
 import com.rustamft.tasksft.presentation.util.UIText
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 
 class SettingsViewModel(
     getAppPreferencesUseCase: GetAppPreferencesUseCase,
@@ -22,49 +26,67 @@ class SettingsViewModel(
     private val exportTasksUseCase: ExportTasksUseCase,
     private val importTasksUseCase: ImportTasksUseCase,
     private val snackbarChannel: Channel<UIText>,
-    val appPreferencesFlow: Flow<AppPreferences> = getAppPreferencesUseCase.execute()
+    private val exceptionHandler: CoroutineExceptionHandler
 ) : ViewModel() {
 
     private val successChannel = Channel<Boolean>()
     val successFlow = successChannel.receiveAsFlow()
+    val appPreferencesFlow: Flow<AppPreferences> = getAppPreferencesUseCase.execute()
 
     fun setTheme(darkTheme: Boolean?) {
-        viewModelScope.launch {
-            saveAppPreferencesUseCase.execute(
-                appPreferences = appPreferencesFlow.first().copy(
-                    darkTheme = darkTheme
+        viewModelScope.launch(exceptionHandler) {
+            supervisorScope {
+                saveAppPreferencesUseCase.execute(
+                    appPreferences = appPreferencesFlow.first().copy(
+                        darkTheme = darkTheme
+                    )
                 )
-            )
+            }
         }
     }
 
     fun exportTasks(directoryUri: Uri?) {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                exportTasksUseCase.execute(directoryUriString = directoryUri.toString())
+        launchInViewModelScope(
+            successMessage = UIText.StringResource(R.string.backup_file_exported)
+        ) {
+            listOf(
+                exportTasksUseCase.execute(directoryUriString = directoryUri.toString()),
                 saveAppPreferencesUseCase.execute(
                     appPreferences = appPreferencesFlow.first().copy(
                         backupDirectory = directoryUri.toString()
                     )
                 )
-            }.onSuccess {
-                snackbarChannel.send(UIText.StringResource(R.string.backup_file_exported))
-                successChannel.send(true)
-            }.onFailure {
-                snackbarChannel.send(UIText.DynamicString(it.message.toString()))
-            }
+            )
         }
     }
 
     fun importTasks(fileUri: Uri?) {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                importTasksUseCase.execute(fileUriString = fileUri.toString())
-            }.onSuccess {
-                snackbarChannel.send(UIText.StringResource(R.string.backup_file_imported))
+        launchInViewModelScope(
+            successMessage = UIText.StringResource(R.string.backup_file_imported)
+        ) {
+            importTasksUseCase.execute(fileUriString = fileUri.toString())
+        }
+    }
+
+    private fun launchInViewModelScope(
+        successMessage: UIText? = null,
+        block: suspend CoroutineScope.() -> Unit
+    ) {
+        launchInViewModelScope(successMessage, listOf(block))
+    }
+
+    private fun launchInViewModelScope(
+        successMessage: UIText? = null,
+        blocks: List<suspend CoroutineScope.() -> Unit>
+    ) {
+        viewModelScope.launch(exceptionHandler) {
+            supervisorScope {
+                val jobs = blocks.map { block -> launch { block() } }
+                jobs.joinAll()
+                if (successMessage != null) {
+                    snackbarChannel.send(successMessage)
+                }
                 successChannel.send(true)
-            }.onFailure {
-                snackbarChannel.send(UIText.DynamicString(it.message.toString()))
             }
         }
     }

@@ -21,6 +21,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +41,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.app.App
+import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.util.GITHUB_LINK
 import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
 import com.rustamft.tasksft.domain.util.ROUTE_LIST
@@ -61,9 +64,13 @@ import org.koin.androidx.compose.koinViewModel
 fun ListScreen(
     navigator: DestinationsNavigator, // From ComposeDestinations
     scaffoldState: ScaffoldState, // From DependenciesContainer
-    viewModel: ListViewModel = koinViewModel()
+    viewModel: ListViewModel = koinViewModel(),
+    listOfTasksState: State<List<Task>> = viewModel.listOfTasksFlow.collectAsState(
+        initial = emptyList()
+    )
 ) {
 
+    val listOfTasks by listOfTasksState
     var openAppInfoDialog by remember { mutableStateOf(false) }
     var openGitHub by remember { mutableStateOf(false) }
 
@@ -78,7 +85,7 @@ fun ListScreen(
                         descriptionResId = R.string.action_delete_finished,
                         onClick = {
                             viewModel.deleteTasks(
-                                list = viewModel.listOfTasks.filter { it.finished }
+                                list = listOfTasks.filter { it.finished }
                             )
                         }
                     ),
@@ -111,7 +118,7 @@ fun ListScreen(
         LazyColumn(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
 
             items(
-                items = viewModel.listOfTasks,
+                items = listOfTasks,
                 key = { it.id }
             ) { task ->
 

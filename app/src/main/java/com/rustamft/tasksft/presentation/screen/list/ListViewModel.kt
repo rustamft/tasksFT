@@ -1,53 +1,34 @@
 package com.rustamft.tasksft.presentation.screen.list
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.GetListOfTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
-import com.rustamft.tasksft.presentation.util.UIText
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 
 class ListViewModel(
     getListOfTasksUseCase: GetListOfTasksUseCase,
     private val saveTaskUseCase: SaveTaskUseCase,
     private val deleteTasksUseCase: DeleteTaskUseCase,
-    private val snackbarChannel: Channel<UIText>,
-    private var listOfTasksState: MutableState<List<Task>> = mutableStateOf(emptyList())
+    private val exceptionHandler: CoroutineExceptionHandler
 ) : ViewModel() {
 
-    val listOfTasks by listOfTasksState
-
-    init {
-        viewModelScope.launch {
-            getListOfTasksUseCase.execute().collect { list ->
-                listOfTasksState.value = list
-            }
-        }
-    }
+    val listOfTasksFlow = getListOfTasksUseCase.execute()
 
     fun saveTask(task: Task) {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                saveTaskUseCase.execute(task = task)
-            }.onFailure {
-                snackbarChannel.send(UIText.DynamicString(it.message.toString()))
-            }
-        }
+        launchInViewModelScope { saveTaskUseCase.execute(task = task) }
     }
 
     fun deleteTasks(list: List<Task>) {
-        viewModelScope.launch {
-            kotlin.runCatching {
-                deleteTasksUseCase.execute(list = list)
-            }.onFailure {
-                snackbarChannel.send(UIText.DynamicString(it.message.toString()))
-            }
-        }
+        launchInViewModelScope { deleteTasksUseCase.execute(list = list) }
+    }
+
+    private fun launchInViewModelScope(block: suspend CoroutineScope.() -> Unit) {
+        viewModelScope.launch(exceptionHandler) { supervisorScope { block() } }
     }
 }

@@ -12,8 +12,10 @@ import com.rustamft.tasksft.data.storage.BackupStorage
 import com.rustamft.tasksft.domain.util.BACKUP_FILE_EXTENSION
 import com.rustamft.tasksft.domain.util.BACKUP_FILE_NAME
 import com.rustamft.tasksft.domain.util.format
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -24,26 +26,24 @@ internal class BackupDiskStorage(
 ) : BackupStorage {
 
     override suspend fun save(directoryUri: Uri, list: List<TaskData>) {
-        kotlin.runCatching {
-            val json = Gson().toJson(list)
-            val file = createFile(directoryUri)
-            val pfd: ParcelFileDescriptor =
-                context.contentResolver.openFileDescriptor(file!!.uri, "wt")!!
-            val fos = FileOutputStream(pfd.fileDescriptor)
+        val json = Gson().toJson(list)
+        val file = createFile(directoryUri)
+        val pfd: ParcelFileDescriptor =
+            context.contentResolver.openFileDescriptor(file!!.uri, "wt")!!
+        val fos = FileOutputStream(pfd.fileDescriptor)
+        withContext(Dispatchers.IO) {
             fos.write(json.toByteArray())
             fos.close()
-            pfd.close()
         }
+        pfd.close()
     }
 
     override fun get(fileUri: Uri): Flow<List<TaskData>> {
         return flow {
             val list = emptyList<TaskData>().toMutableList()
-            kotlin.runCatching {
-                val json = readFile(fileUri)
-                val type = object : TypeToken<List<TaskData>>() {}.type
-                list.addAll(Gson().fromJson(json, type))
-            }
+            val json = readFile(fileUri)
+            val type = object : TypeToken<List<TaskData>>() {}.type
+            list.addAll(Gson().fromJson(json, type))
             emit(list)
         }
     }
@@ -83,13 +83,13 @@ internal class BackupDiskStorage(
 
     private fun readFile(fileUri: Uri): String {
         val stringBuilder = StringBuilder()
-        kotlin.runCatching {
-            context.contentResolver.openInputStream(fileUri).use { inputStream ->
-                BufferedReader(InputStreamReader(inputStream!!)).use { br ->
-                    var line: String
-                    while (br.readLine().also { line = it } != null) {
-                        stringBuilder.append(line)
-                    }
+        context.contentResolver.openInputStream(fileUri).use { inputStream ->
+            if (inputStream == null) return@use
+            BufferedReader(InputStreamReader(inputStream)).use { br ->
+                var line = br.readLine()
+                while (line != null) {
+                    stringBuilder.append(line)
+                    line = br.readLine()
                 }
             }
         }
