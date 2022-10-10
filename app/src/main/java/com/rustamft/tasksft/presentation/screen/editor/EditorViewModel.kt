@@ -35,7 +35,9 @@ class EditorViewModel(
     init {
         viewModelScope.launch(exceptionHandler) {
             val task = getTaskByIdUseCase.execute(taskId = taskId).first()
-            taskStateHolder.setStateFromTask(task = task)
+            if (task.id != -1) {
+                taskStateHolder.setStateFromTask(task = task)
+            }
         }
     }
 
