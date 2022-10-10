@@ -13,9 +13,9 @@ private val DarkColorPalette = darkColors(
     primaryVariant = Sappanwood,
     secondary = DarkBlue,
     secondaryVariant = White,
-    background = PitchBlack,
+    background = TraditionalBlack,
     onBackground = White,
-    surface = TraditionalBlack,
+    surface = PitchBlack,
     onSurface = IndigoWhite
 )
 

@@ -16,7 +16,7 @@ import com.rustamft.tasksft.domain.model.Preferences
 import com.rustamft.tasksft.domain.usecase.GetPreferencesUseCase
 import com.rustamft.tasksft.presentation.screen.NavGraphs
 import com.rustamft.tasksft.presentation.theme.AppTheme
-import com.rustamft.tasksft.presentation.util.UIText
+import com.rustamft.tasksft.presentation.util.model.UIText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.androidx.compose.get

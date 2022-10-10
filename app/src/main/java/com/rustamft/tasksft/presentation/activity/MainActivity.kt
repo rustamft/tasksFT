@@ -10,7 +10,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.domain.util.NOTIFICATION_CHANNEL_ID_TASK
+import com.rustamft.tasksft.presentation.util.NOTIFICATION_CHANNEL_ID_TASK
 
 class MainActivity : ComponentActivity() {
 

@@ -7,10 +7,10 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
-import com.rustamft.tasksft.domain.util.TASK_ID
-import com.rustamft.tasksft.domain.util.toTimeDifference
-import com.rustamft.tasksft.presentation.util.TaskStateHolder
-import com.rustamft.tasksft.presentation.util.UIText
+import com.rustamft.tasksft.presentation.util.TASK_ID
+import com.rustamft.tasksft.presentation.util.model.TaskStateHolder
+import com.rustamft.tasksft.presentation.util.model.UIText
+import com.rustamft.tasksft.presentation.util.toTimeDifference
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel

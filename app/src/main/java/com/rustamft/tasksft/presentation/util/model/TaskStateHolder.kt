@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.presentation.util
+package com.rustamft.tasksft.presentation.util.model
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

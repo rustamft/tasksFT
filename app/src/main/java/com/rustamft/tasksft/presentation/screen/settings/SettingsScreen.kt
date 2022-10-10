@@ -35,7 +35,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.model.Preferences
 import com.rustamft.tasksft.domain.model.Preferences.Theme
-import com.rustamft.tasksft.domain.util.ROUTE_SETTINGS
+import com.rustamft.tasksft.presentation.util.ROUTE_SETTINGS
 import com.rustamft.tasksft.presentation.element.IconButtonElement
 import com.rustamft.tasksft.presentation.element.TextButtonElement
 import com.rustamft.tasksft.presentation.navigation.TopBar

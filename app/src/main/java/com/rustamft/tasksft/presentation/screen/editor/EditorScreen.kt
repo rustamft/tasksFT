@@ -36,11 +36,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.domain.util.DEEP_LINK_URI
-import com.rustamft.tasksft.domain.util.ROUTE_EDITOR
-import com.rustamft.tasksft.domain.util.TASK_ID
-import com.rustamft.tasksft.domain.util.format
-import com.rustamft.tasksft.domain.util.toDateTime
+import com.rustamft.tasksft.presentation.util.DEEP_LINK_URI
+import com.rustamft.tasksft.presentation.util.ROUTE_EDITOR
+import com.rustamft.tasksft.presentation.util.TASK_ID
 import com.rustamft.tasksft.presentation.element.ColorButtonElement
 import com.rustamft.tasksft.presentation.element.IconButtonElement
 import com.rustamft.tasksft.presentation.element.TextButtonElement
@@ -49,6 +47,8 @@ import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.theme.AppTheme
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
+import com.rustamft.tasksft.presentation.util.format
+import com.rustamft.tasksft.presentation.util.toDateTime
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import java.util.Calendar
@@ -56,7 +56,7 @@ import java.util.Locale
 
 @Destination(
     route = ROUTE_EDITOR,
-    deepLinks = [DeepLink(uriPattern = "${DEEP_LINK_URI}${FULL_ROUTE_PLACEHOLDER}")]
+    deepLinks = [DeepLink(uriPattern = "$DEEP_LINK_URI${FULL_ROUTE_PLACEHOLDER}")]
 )
 @Composable
 fun EditorScreen(

@@ -11,13 +11,13 @@ import androidx.core.net.toUri
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.domain.util.NOTIFICATION_ACTION_FINISH_TASK
-import com.rustamft.tasksft.domain.util.NOTIFICATION_ACTION_SNOOZE_TASK
-import com.rustamft.tasksft.domain.util.NOTIFICATION_CHANNEL_ID_TASK
-import com.rustamft.tasksft.domain.util.DEEP_LINK_URI
-import com.rustamft.tasksft.domain.util.TASK_DESCRIPTION
-import com.rustamft.tasksft.domain.util.TASK_ID
-import com.rustamft.tasksft.domain.util.TASK_TITLE
+import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_FINISH_TASK
+import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_SNOOZE_TASK
+import com.rustamft.tasksft.presentation.util.NOTIFICATION_CHANNEL_ID_TASK
+import com.rustamft.tasksft.presentation.util.DEEP_LINK_URI
+import com.rustamft.tasksft.presentation.util.TASK_DESCRIPTION
+import com.rustamft.tasksft.presentation.util.TASK_ID
+import com.rustamft.tasksft.presentation.util.TASK_TITLE
 import com.rustamft.tasksft.presentation.activity.MainActivity
 import com.rustamft.tasksft.presentation.notification.receiver.TaskBroadcastReceiver
 import com.rustamft.tasksft.presentation.screen.destinations.EditorScreenDestination
@@ -61,7 +61,7 @@ class OneTimeWorker(
         val route = EditorScreenDestination(taskId = taskId).route
         val deepLinkIntent = Intent(
             Intent.ACTION_VIEW,
-            "${DEEP_LINK_URI}${route}".toUri(),
+            "$DEEP_LINK_URI${route}".toUri(),
             context,
             MainActivity::class.java
         )

@@ -1,13 +1,11 @@
-package com.rustamft.tasksft.domain.util
+package com.rustamft.tasksft.presentation.util
 
-import com.rustamft.tasksft.domain.util.model.DateTime
-import com.rustamft.tasksft.domain.util.model.TimeDifference
+import com.rustamft.tasksft.presentation.util.model.DateTime
+import com.rustamft.tasksft.presentation.util.model.TimeDifference
 import java.util.Calendar
 import java.util.Locale
 
-fun Int.format(digits: Int) = String.format("%0${digits}d", this)
-
-fun Long.toDateTime(): DateTime {
+internal fun Long.toDateTime(): DateTime {
 
     val calendar = Calendar.getInstance()
     if (this != 0L) {
@@ -33,7 +31,7 @@ fun Long.toDateTime(): DateTime {
     )
 }
 
-fun Long.toTimeDifference(): TimeDifference { // TODO: buggy, test and fix
+internal fun Long.toTimeDifference(): TimeDifference { // TODO: buggy, try to use kotlin.time
     val currentCalendar = Calendar.getInstance()
     val difference = this - currentCalendar.timeInMillis
     if (difference <= 0L) {

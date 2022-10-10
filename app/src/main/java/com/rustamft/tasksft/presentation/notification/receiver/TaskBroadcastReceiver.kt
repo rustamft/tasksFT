@@ -9,10 +9,10 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
-import com.rustamft.tasksft.domain.util.NOTIFICATION_ACTION_FINISH_TASK
-import com.rustamft.tasksft.domain.util.NOTIFICATION_ACTION_SNOOZE_TASK
-import com.rustamft.tasksft.domain.util.ONE_HOUR
-import com.rustamft.tasksft.domain.util.TASK_ID
+import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_FINISH_TASK
+import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_SNOOZE_TASK
+import com.rustamft.tasksft.presentation.util.ONE_HOUR
+import com.rustamft.tasksft.presentation.util.TASK_ID
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.java.KoinJavaComponent.inject
@@ -26,10 +26,10 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(contextNullable: Context?, intent: Intent?) {
         val pendingResult = goAsync()
-        runBlocking {
+        runBlocking { // TODO: avoid using runBlocking
             val id = intent?.extras?.getInt(TASK_ID)
             if (id != null) {
-                task = getTaskByIdUseCase.execute(taskId = id).first()!!
+                task = getTaskByIdUseCase.execute(taskId = id).first()
                 when (intent.action) {
                     NOTIFICATION_ACTION_FINISH_TASK -> {
                         finishTask()

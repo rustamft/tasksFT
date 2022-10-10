@@ -1,7 +1,5 @@
 package com.rustamft.tasksft.domain.model
 
-import com.rustamft.tasksft.domain.util.TASK_DEFAULT_COLOR
-
 
 data class Task(
     val id: Int = -1,
@@ -10,5 +8,5 @@ data class Task(
     val description: String = "",
     val reminder: Long = 0L,
     val finished: Boolean = false,
-    val color: Int = TASK_DEFAULT_COLOR
+    val color: Int = 0x00000000
 )

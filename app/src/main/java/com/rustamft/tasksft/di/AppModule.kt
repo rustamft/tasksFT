@@ -2,11 +2,11 @@ package com.rustamft.tasksft.di
 
 import android.os.Bundle
 import android.util.Log
-import com.rustamft.tasksft.domain.util.TAG_COROUTINE_EXCEPTION
+import com.rustamft.tasksft.presentation.util.TAG_COROUTINE_EXCEPTION
 import com.rustamft.tasksft.presentation.screen.editor.EditorViewModel
 import com.rustamft.tasksft.presentation.screen.list.ListViewModel
 import com.rustamft.tasksft.presentation.screen.settings.SettingsViewModel
-import com.rustamft.tasksft.presentation.util.UIText
+import com.rustamft.tasksft.presentation.util.model.UIText
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.onSuccess
