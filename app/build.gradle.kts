@@ -26,7 +26,7 @@ android {
         minSdk = 21
         targetSdk = 33
         versionCode = 1
-        versionName = "0.9.10"
+        versionName = "0.9.11"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -91,7 +91,7 @@ dependencies {
     // Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.5-rc")
     // Compose destinations
-    val composeDestinationsVersion = "1.7.21-beta"
+    val composeDestinationsVersion = "1.7.22-beta"
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestinationsVersion")
     ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestinationsVersion")
     // Koin

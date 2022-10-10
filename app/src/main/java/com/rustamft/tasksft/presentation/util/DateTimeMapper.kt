@@ -4,6 +4,8 @@ import com.rustamft.tasksft.presentation.util.model.DateTime
 import com.rustamft.tasksft.presentation.util.model.TimeDifference
 import java.util.Calendar
 import java.util.Locale
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 internal fun Long.toDateTime(): DateTime {
 
@@ -31,37 +33,13 @@ internal fun Long.toDateTime(): DateTime {
     )
 }
 
-internal fun Long.toTimeDifference(): TimeDifference { // TODO: buggy, try to use kotlin.time
-    val currentCalendar = Calendar.getInstance()
-    val difference = this - currentCalendar.timeInMillis
-    if (difference <= 0L) {
-        return TimeDifference(0, 0, 0, 0)
-    } else {
-        val futureCalendar = Calendar.getInstance()
-        futureCalendar.timeInMillis = this
-        var diffMonth =
-            futureCalendar.get(Calendar.MONTH) - currentCalendar.get(Calendar.MONTH)
-        if (diffMonth < 0) {
-            diffMonth += 12
-        }
-        var diffDay =
-            futureCalendar.get(Calendar.DAY_OF_MONTH) - currentCalendar.get(Calendar.DAY_OF_MONTH)
-        if (diffDay < 0) {
-            diffMonth--
-            diffDay += futureCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-        }
-        var diffHour =
-            futureCalendar.get(Calendar.HOUR_OF_DAY) - currentCalendar.get(Calendar.HOUR_OF_DAY)
-        if (diffHour < 0) {
-            diffDay--
-            diffHour += 24
-        }
-        var diffMin =
-            futureCalendar.get(Calendar.MINUTE) - currentCalendar.get(Calendar.MINUTE)
-        if (diffMin < 0) {
-            diffHour--
-            diffMin += 60
-        }
-        return TimeDifference(diffMonth, diffDay, diffHour, diffMin)
+internal fun Long.toTimeDifference(): TimeDifference {
+    val difference = this - System.currentTimeMillis()
+    difference.toDuration(DurationUnit.MILLISECONDS).toComponents { days, hours, minutes, _, _ ->
+        return TimeDifference(
+            days.toInt(),
+            hours,
+            minutes
+        )
     }
 }

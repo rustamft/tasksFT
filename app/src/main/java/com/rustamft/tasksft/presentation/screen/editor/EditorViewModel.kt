@@ -47,7 +47,6 @@ class EditorViewModel(
                 val difference = taskStateHolder.reminderCalendar.timeInMillis.toTimeDifference()
                 UIText.StringResource(
                     R.string.reminder_in,
-                    difference.months,
                     difference.days,
                     difference.hours,
                     difference.minutes

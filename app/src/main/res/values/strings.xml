@@ -35,7 +35,7 @@
     <string name="now">Now</string>
 
     <string name="reminder">Reminder</string>
-    <string name="reminder_in">Reminder in %1$d\mth %2$d\d %3$d\h %4$d\m</string>
+    <string name="reminder_in">Reminder in %1$d\d %2$d\h %3$d\m</string>
 
     <string name="task_color">Task color</string>
     <string name="task_finished_state">Task finished state</string>
