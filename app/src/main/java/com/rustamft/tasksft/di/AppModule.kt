@@ -3,7 +3,6 @@ package com.rustamft.tasksft.di
 import android.os.Bundle
 import android.util.Log
 import com.rustamft.tasksft.domain.util.TAG_COROUTINE_EXCEPTION
-import com.rustamft.tasksft.presentation.activity.MainViewModel
 import com.rustamft.tasksft.presentation.screen.editor.EditorViewModel
 import com.rustamft.tasksft.presentation.screen.list.ListViewModel
 import com.rustamft.tasksft.presentation.screen.settings.SettingsViewModel
@@ -31,10 +30,6 @@ val appModule = module {
         }
     }
 
-    viewModel<MainViewModel> {
-        MainViewModel(getAppPreferencesUseCase = get())
-    }
-
     viewModel<ListViewModel> {
         ListViewModel(
             getListOfTasksUseCase = get(),
@@ -57,8 +52,8 @@ val appModule = module {
 
     viewModel<SettingsViewModel> {
         SettingsViewModel(
-            getAppPreferencesUseCase = get(),
-            saveAppPreferencesUseCase = get(),
+            getPreferencesUseCase = get(),
+            savePreferencesUseCase = get(),
             exportTasksUseCase = get(),
             importTasksUseCase = get(),
             snackbarChannel = get(),

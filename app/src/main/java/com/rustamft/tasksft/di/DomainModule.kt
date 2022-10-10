@@ -5,11 +5,11 @@ import androidx.work.WorkManager
 import com.rustamft.tasksft.domain.notification.TaskNotificationScheduler
 import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.ExportTasksUseCase
-import com.rustamft.tasksft.domain.usecase.GetAppPreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.GetListOfTasksUseCase
+import com.rustamft.tasksft.domain.usecase.GetPreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.ImportTasksUseCase
-import com.rustamft.tasksft.domain.usecase.SaveAppPreferencesUseCase
+import com.rustamft.tasksft.domain.usecase.SavePreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.presentation.notification.manager.TaskNotificationSchedulerImpl
 import org.koin.dsl.module
@@ -23,8 +23,8 @@ val domainModule = module {
         )
     }
 
-    factory<GetAppPreferencesUseCase> {
-        GetAppPreferencesUseCase(appPreferencesRepository = get())
+    single<GetPreferencesUseCase> {
+        GetPreferencesUseCase(preferencesRepository = get())
     }
 
     factory<GetListOfTasksUseCase> {
@@ -35,8 +35,8 @@ val domainModule = module {
         GetTaskByIdUseCase(taskRepository = get())
     }
 
-    factory<SaveAppPreferencesUseCase> {
-        SaveAppPreferencesUseCase(appPreferencesRepository = get())
+    factory<SavePreferencesUseCase> {
+        SavePreferencesUseCase(preferencesRepository = get())
     }
 
     factory<SaveTaskUseCase> {

@@ -9,7 +9,6 @@ import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
 
 class ListViewModel(
     getListOfTasksUseCase: GetListOfTasksUseCase,
@@ -29,6 +28,6 @@ class ListViewModel(
     }
 
     private fun launchInViewModelScope(block: suspend CoroutineScope.() -> Unit) {
-        viewModelScope.launch(exceptionHandler) { supervisorScope { block() } }
+        viewModelScope.launch(exceptionHandler) { block() }
     }
 }

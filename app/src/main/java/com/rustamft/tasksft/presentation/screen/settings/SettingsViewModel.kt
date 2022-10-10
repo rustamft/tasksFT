@@ -4,25 +4,23 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.domain.model.AppPreferences
+import com.rustamft.tasksft.domain.model.Preferences.Theme
 import com.rustamft.tasksft.domain.usecase.ExportTasksUseCase
-import com.rustamft.tasksft.domain.usecase.GetAppPreferencesUseCase
+import com.rustamft.tasksft.domain.usecase.GetPreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.ImportTasksUseCase
-import com.rustamft.tasksft.domain.usecase.SaveAppPreferencesUseCase
+import com.rustamft.tasksft.domain.usecase.SavePreferencesUseCase
 import com.rustamft.tasksft.presentation.util.UIText
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
 
 class SettingsViewModel(
-    getAppPreferencesUseCase: GetAppPreferencesUseCase,
-    private val saveAppPreferencesUseCase: SaveAppPreferencesUseCase,
+    getPreferencesUseCase: GetPreferencesUseCase,
+    private val savePreferencesUseCase: SavePreferencesUseCase,
     private val exportTasksUseCase: ExportTasksUseCase,
     private val importTasksUseCase: ImportTasksUseCase,
     private val snackbarChannel: Channel<UIText>,
@@ -31,17 +29,13 @@ class SettingsViewModel(
 
     private val successChannel = Channel<Boolean>()
     val successFlow = successChannel.receiveAsFlow()
-    val appPreferencesFlow: Flow<AppPreferences> = getAppPreferencesUseCase.execute()
+    val preferencesFlow = getPreferencesUseCase.execute()
 
-    fun setTheme(darkTheme: Boolean?) {
+    fun setTheme(theme: Theme) {
         viewModelScope.launch(exceptionHandler) {
-            supervisorScope {
-                saveAppPreferencesUseCase.execute(
-                    appPreferences = appPreferencesFlow.first().copy(
-                        darkTheme = darkTheme
-                    )
-                )
-            }
+            savePreferencesUseCase.execute(
+                preferences = preferencesFlow.first().copy(theme = theme)
+            )
         }
     }
 
@@ -51,8 +45,8 @@ class SettingsViewModel(
         ) {
             listOf(
                 exportTasksUseCase.execute(directoryUriString = directoryUri.toString()),
-                saveAppPreferencesUseCase.execute(
-                    appPreferences = appPreferencesFlow.first().copy(
+                savePreferencesUseCase.execute(
+                    preferences = preferencesFlow.first().copy(
                         backupDirectory = directoryUri.toString()
                     )
                 )
@@ -80,14 +74,12 @@ class SettingsViewModel(
         blocks: List<suspend CoroutineScope.() -> Unit>
     ) {
         viewModelScope.launch(exceptionHandler) {
-            supervisorScope {
-                val jobs = blocks.map { block -> launch { block() } }
-                jobs.joinAll()
-                if (successMessage != null) {
-                    snackbarChannel.send(successMessage)
-                }
-                successChannel.send(true)
+            val jobs = blocks.map { block -> launch { block() } }
+            jobs.joinAll()
+            if (successMessage != null) {
+                snackbarChannel.send(successMessage)
             }
+            successChannel.send(true)
         }
     }
 }

@@ -8,5 +8,5 @@ class GetTaskByIdUseCase(
     private val taskRepository: TaskRepository
 ) {
 
-    fun execute(taskId: Int): Flow<Task?> = taskRepository.getTaskById(taskId = taskId)
+    fun execute(taskId: Int): Flow<Task> = taskRepository.getTaskById(taskId = taskId)
 }

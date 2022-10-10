@@ -6,6 +6,7 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.rustamft.tasksft.domain.model.Preferences.Theme
 
 private val DarkColorPalette = darkColors(
     primary = RedWisteria,
@@ -53,14 +54,15 @@ object AppTheme {
 
 @Composable
 fun AppTheme(
-    darkTheme: Boolean?,
+    theme: Theme,
     content: @Composable () -> Unit
 ) {
-    Colors = if (darkTheme ?: isSystemInDarkTheme()) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
+    Colors = when (theme) {
+        is Theme.Auto -> if (isSystemInDarkTheme()) DarkColorPalette else LightColorPalette
+        is Theme.Light -> LightColorPalette
+        is Theme.Dark -> DarkColorPalette
     }
+
     val systemUiController = rememberSystemUiController()
 
     systemUiController.setSystemBarsColor(color = Colors.background)

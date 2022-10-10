@@ -45,8 +45,6 @@ dependencies {
     implementation("androidx.documentfile:documentfile:1.0.1")
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Constants.COROUTINE_VERSION}")
-    // DataStore
-    implementation("androidx.datastore:datastore:1.0.0")
     // Room
     val roomVersion = "2.5.0-beta01"
     implementation("androidx.room:room-runtime:$roomVersion")

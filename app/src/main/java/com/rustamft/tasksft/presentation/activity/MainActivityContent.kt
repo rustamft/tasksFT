@@ -12,39 +12,35 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.dependency
-import com.rustamft.tasksft.domain.model.AppPreferences
+import com.rustamft.tasksft.domain.model.Preferences
+import com.rustamft.tasksft.domain.usecase.GetPreferencesUseCase
 import com.rustamft.tasksft.presentation.screen.NavGraphs
 import com.rustamft.tasksft.presentation.theme.AppTheme
 import com.rustamft.tasksft.presentation.util.UIText
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.androidx.compose.get
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainActivityContent(
     context: Context = LocalContext.current,
     snackbarChannel: Channel<UIText> = get(),
-    snackbarFlow: Flow<UIText> = snackbarChannel.receiveAsFlow(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     navController: NavHostController = rememberNavController(),
-    viewModel: MainViewModel = koinViewModel()
+    getPreferencesUseCase: GetPreferencesUseCase = get()
 ) {
 
-    val appPreferences by viewModel.appPreferencesFlow.collectAsState(
-        initial = AppPreferences()
-    )
+    val preferences by getPreferencesUseCase.execute().collectAsState(initial = Preferences())
 
     LaunchedEffect(Unit) {
-        snackbarFlow.collect { uiText ->
+        snackbarChannel.receiveAsFlow().collect { uiText ->
             scaffoldState.snackbarHostState.showSnackbar(
                 message = uiText.asString(context)
             )
         }
     }
 
-    AppTheme(darkTheme = appPreferences.darkTheme) {
+    AppTheme(theme = preferences.theme) {
         DestinationsNavHost(
             navGraph = NavGraphs.root,
             navController = navController,

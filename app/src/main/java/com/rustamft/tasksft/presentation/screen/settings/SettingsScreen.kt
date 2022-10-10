@@ -33,7 +33,8 @@ import androidx.core.net.toUri
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.domain.model.AppPreferences
+import com.rustamft.tasksft.domain.model.Preferences
+import com.rustamft.tasksft.domain.model.Preferences.Theme
 import com.rustamft.tasksft.domain.util.ROUTE_SETTINGS
 import com.rustamft.tasksft.presentation.element.IconButtonElement
 import com.rustamft.tasksft.presentation.element.TextButtonElement
@@ -47,12 +48,12 @@ fun SettingsScreen(
     navigator: DestinationsNavigator, // From ComposeDestinations
     scaffoldState: ScaffoldState, // From DependenciesContainer
     viewModel: SettingsViewModel = koinViewModel(),
-    appPreferencesState: State<AppPreferences> = viewModel.appPreferencesFlow.collectAsState(
-        initial = AppPreferences()
+    preferencesState: State<Preferences> = viewModel.preferencesFlow.collectAsState(
+        initial = Preferences()
     )
 ) {
 
-    val appPreferences by appPreferencesState
+    val preferences by preferencesState
     var openExportConfirmDialog by remember { mutableStateOf(false) }
 
     val exportLauncher = rememberLauncherForActivityResult(
@@ -125,18 +126,22 @@ fun SettingsScreen(
 
                     val painterId: Int
                     val contentDescriptionId: Int
-                    val onThemeSwitch = if (appPreferences.darkTheme == null) {
-                        painterId = R.drawable.ic_theme_auto
-                        contentDescriptionId = R.string.theme_auto
-                        { viewModel.setTheme(darkTheme = true) }
-                    } else if (appPreferences.darkTheme!!) {
-                        painterId = R.drawable.ic_theme_dark
-                        contentDescriptionId = R.string.theme_dark
-                        { viewModel.setTheme(darkTheme = false) }
-                    } else {
-                        painterId = R.drawable.ic_theme_light
-                        contentDescriptionId = R.string.theme_light
-                        { viewModel.setTheme(darkTheme = null) }
+                    val onThemeSwitch = when (preferences.theme) {
+                        is Theme.Auto -> {
+                            painterId = R.drawable.ic_theme_auto
+                            contentDescriptionId = R.string.theme_auto
+                            { viewModel.setTheme(theme = Theme.Light) }
+                        }
+                        is Theme.Light -> {
+                            painterId = R.drawable.ic_theme_light
+                            contentDescriptionId = R.string.theme_light
+                            { viewModel.setTheme(theme = Theme.Dark) }
+                        }
+                        is Theme.Dark -> {
+                            painterId = R.drawable.ic_theme_dark
+                            contentDescriptionId = R.string.theme_dark
+                            { viewModel.setTheme(theme = Theme.Auto) }
+                        }
                     }
 
                     IconButtonElement(
@@ -152,7 +157,7 @@ fun SettingsScreen(
                         painter = painterResource(id = R.drawable.ic_save),
                         contentDescription = stringResource(id = R.string.action_save),
                         onClick = {
-                            if (appPreferences.backupDirectory.isEmpty()) {
+                            if (preferences.backupDirectory.isEmpty()) {
                                 chooseDirectory()
                             } else {
                                 openExportConfirmDialog = true
@@ -178,7 +183,7 @@ fun SettingsScreen(
                 Text(
                     text = stringResource(
                         id = R.string.backup_dialog_content,
-                        appPreferences.backupDirectory
+                        preferences.backupDirectory
                     )
                 )
             },
@@ -190,7 +195,7 @@ fun SettingsScreen(
             },
             dismissButton = {
                 TextButtonElement(
-                    onClick = { viewModel.exportTasks(appPreferences.backupDirectory.toUri()) },
+                    onClick = { viewModel.exportTasks(preferences.backupDirectory.toUri()) },
                     text = stringResource(R.string.action_save)
                 )
             },

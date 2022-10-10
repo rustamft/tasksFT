@@ -17,7 +17,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
 
 class EditorViewModel(
     arguments: Bundle,
@@ -35,12 +34,8 @@ class EditorViewModel(
 
     init {
         viewModelScope.launch(exceptionHandler) {
-            supervisorScope {
-                val task = getTaskByIdUseCase.execute(taskId = taskId).first()
-                if (task != null) {
-                    taskStateHolder.setStateFromTask(task = task)
-                }
-            }
+            val task = getTaskByIdUseCase.execute(taskId = taskId).first()
+            taskStateHolder.setStateFromTask(task = task)
         }
     }
 
@@ -72,13 +67,11 @@ class EditorViewModel(
         block: suspend CoroutineScope.() -> Unit
     ) {
         viewModelScope.launch(exceptionHandler) {
-            supervisorScope {
-                launch { block() }.join()
-                if (successMessage != null) {
-                    snackbarChannel.send(successMessage)
-                }
-                successChannel.send(true)
+            launch { block() }.join()
+            if (successMessage != null) {
+                snackbarChannel.send(successMessage)
             }
+            successChannel.send(true)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.domain.util
+package com.rustamft.tasksft.domain.util.model
 
 data class DateTime(
     var date: String = "",

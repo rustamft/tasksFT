@@ -10,6 +10,6 @@ internal interface TaskStorage {
     suspend fun delete(task: TaskData)
     suspend fun delete(list: List<TaskData>)
     fun getAll(): Flow<List<TaskData>>
-    fun getById(id: Int): Flow<TaskData>
+    fun getById(id: Int): Flow<TaskData?>
     fun getFinished(): Flow<List<TaskData>>
 }

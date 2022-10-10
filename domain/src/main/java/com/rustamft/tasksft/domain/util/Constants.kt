@@ -4,8 +4,6 @@ const val TAG_COROUTINE_EXCEPTION = "com.rustamft.tasksft.TAG_COROUTINE_EXCEPTIO
 
 const val GITHUB_LINK = "https://github.com/rustamft/tasksFT"
 
-const val STORED_PREFERENCES = "tasksft_preferences.json"
-
 const val ROUTE_LIST = "list_screen"
 const val ROUTE_EDITOR = "editor_screen"
 const val ROUTE_SETTINGS = "settings_screen"
