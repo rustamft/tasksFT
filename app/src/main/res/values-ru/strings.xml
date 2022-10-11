@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="action_add">Добавить</string>
+    <string name="action_back">Назад</string>
+    <string name="action_close">Закрыть</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_delete_finished">Удалить завершенные</string>
+    <string name="action_discard">Не сохранять</string>
+    <string name="action_restore">Восстановить</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_settings">Настройки</string>
+
+    <string name="app_info">Информация о приложении</string>
+    <string name="app_info_dialog_content">\n
+        Это приложения является свободным ПО.\n
+        Исходный код доступен на GitHub.\n
+        \n
+        Версия приложения:\u0020
+    </string>
+    <string name="app_name">tasksFT</string>
+
+    <string name="backup">Резервное копирование</string>
+    <string name="backup_dialog_choose_dir">Выбрать папку</string>
+    <string name="backup_dialog_content">Резервная копия будет сохранена в %1$s</string>
+    <string name="backup_file_exported">Резервная копия экспортирована</string>
+    <string name="backup_file_imported">Резервная копия импортирована</string>
+
+    <string name="notification_finish">Завершить</string>
+    <string name="notification_snooze">Отложить на 1 час</string>
+    <string name="notification_snoozed">Напоминание отложена на 1 час</string>
+
+    <string name="now">Сейчас</string>
+
+    <string name="reminder">Напоминание</string>
+    <string name="reminder_in">Напоминание через %1$d\д %2$d\ч %3$d\м</string>
+
+    <string name="task_color">Цвет задачи</string>
+    <string name="task_description">Описание</string>
+    <string name="task_finished_state">Состояние завершенности задачи</string>
+    <string name="task_info">Информация о задаче</string>
+    <string name="task_info_dialog_content">Создано: %1$s</string>
+    <string name="task_notification_channel_description">Посылает запланированное уведомление</string>
+    <string name="task_notification_channel_name">Уведомление о задаче</string>
+    <string name="task_title">Название</string>
+    <string name="task_unsaved">Задача не сохранена!</string>
+    <string name="task_unsaved_dialog_content">\n
+        Что вы хотите сделать?
+    </string>
+
+    <string name="theme">Тема</string>
+    <string name="theme_auto">Системная тема</string>
+    <string name="theme_dark">Темная тема</string>
+    <string name="theme_light">Светлая тема</string>
+</resources>

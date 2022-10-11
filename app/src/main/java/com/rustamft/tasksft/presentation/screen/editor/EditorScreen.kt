@@ -235,7 +235,7 @@ fun EditorScreen(
                     viewModel.taskStateHolder.title = it
                     onValueChange()
                 },
-                placeholder = { Text(text = stringResource(id = R.string.title)) },
+                placeholder = { Text(text = stringResource(id = R.string.task_title)) },
                 shape = textFieldShape,
                 colors = textFieldColors
             )
@@ -246,7 +246,7 @@ fun EditorScreen(
                     viewModel.taskStateHolder.description = it
                     onValueChange()
                 },
-                placeholder = { Text(text = stringResource(id = R.string.description)) },
+                placeholder = { Text(text = stringResource(id = R.string.task_description)) },
                 shape = textFieldShape,
                 colors = textFieldColors
             )

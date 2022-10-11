@@ -25,8 +25,6 @@
     <string name="backup_file_exported">Backup file exported</string>
     <string name="backup_file_imported">Backup file imported</string>
 
-    <string name="description">Description</string>
-
     <string name="notification_finish">Finish</string>
     <string name="notification_snooze">Snooze for 1 hour</string>
     <string name="notification_snoozed">Reminder snoozed for 1 hour</string>
@@ -37,13 +35,14 @@
     <string name="reminder_in">Reminder in %1$d\d %2$d\h %3$d\m</string>
 
     <string name="task_color">Task color</string>
+    <string name="task_description">Description</string>
     <string name="task_finished_state">Task finished state</string>
     <string name="task_info">Task info</string>
     <string name="task_info_dialog_content">Created: %1$s</string>
     <string name="task_notification_channel_description">Sends a scheduled notification</string>
     <string name="task_notification_channel_name">Task notification</string>
-    <string name="task_unsaved">Task is not saved!
-    </string>
+    <string name="task_title">Title</string>
+    <string name="task_unsaved">Task is not saved!</string>
     <string name="task_unsaved_dialog_content">\n
         What would you like to do?
     </string>
@@ -52,6 +51,4 @@
     <string name="theme_auto">System theme</string>
     <string name="theme_dark">Dark theme</string>
     <string name="theme_light">Light theme</string>
-
-    <string name="title">Title</string>
 </resources>
