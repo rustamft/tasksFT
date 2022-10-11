@@ -84,6 +84,11 @@ fun EditorScreen(
             valueChanged = true
         }
     }
+    val dialogThemeResId = if (AppTheme.isDark) {
+        R.style.DateTimePickerDarkTheme
+    } else {
+        R.style.DateTimePickerLightTheme
+    }
 
     LaunchedEffect(key1 = viewModel) {
         viewModel.successFlow.collect { success ->
@@ -96,7 +101,6 @@ fun EditorScreen(
     @Composable
     fun DatePickerElement() {
         with(viewModel.taskStateHolder.reminderCalendar) {
-
             fun getStringFromCalendar(): String {
                 return "${
                     get(Calendar.DAY_OF_MONTH)
@@ -110,6 +114,7 @@ fun EditorScreen(
             var text by remember { mutableStateOf(getStringFromCalendar()) }
             val datePickerDialog = DatePickerDialog(
                 context,
+                dialogThemeResId,
                 { _, year: Int, month: Int, day: Int ->
                     set(year, month, day)
                     text = getStringFromCalendar()
@@ -130,7 +135,6 @@ fun EditorScreen(
     @Composable
     fun TimePickerElement() {
         with(viewModel.taskStateHolder.reminderCalendar) {
-
             fun getStringFromCalendar(): String {
                 return "${
                     get(Calendar.HOUR_OF_DAY).format(2)
@@ -142,6 +146,7 @@ fun EditorScreen(
             var text by remember { mutableStateOf(getStringFromCalendar()) }
             val timePickerDialog = TimePickerDialog(
                 context,
+                dialogThemeResId,
                 { _, hour: Int, minute: Int ->
                     apply {
                         set(Calendar.HOUR_OF_DAY, hour)

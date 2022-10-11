@@ -5,4 +5,14 @@
         <item name="android:statusBarColor">@color/purple_700</item>
         <item name="android:windowBackground">@color/black</item>
     </style>
+
+    <style name="DateTimePickerLightTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#7E2639</item> <!-- Sappanwood -->
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="DateTimePickerDarkTheme" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">#BB7796</item> <!-- RedWisteria -->
+        <item name="android:windowBackground">#171412</item> <!-- TraditionalBlack -->
+    </style>
 </resources>

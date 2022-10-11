@@ -43,6 +43,7 @@ private var Colors = DarkColorPalette
 
 object AppTheme {
     val colors get() = Colors
+    val isDark get() = Colors == DarkColorPalette
     val taskColors = listOf(
         PureCrimson,
         Corn,
