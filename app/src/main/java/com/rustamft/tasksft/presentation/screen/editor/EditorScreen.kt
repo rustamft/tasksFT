@@ -17,8 +17,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Switch
+import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,9 +39,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.presentation.util.DEEP_LINK_URI
-import com.rustamft.tasksft.presentation.util.ROUTE_EDITOR
-import com.rustamft.tasksft.presentation.util.TASK_ID
 import com.rustamft.tasksft.presentation.element.ColorButtonElement
 import com.rustamft.tasksft.presentation.element.IconButtonElement
 import com.rustamft.tasksft.presentation.element.TextButtonElement
@@ -47,6 +47,10 @@ import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.theme.AppTheme
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
+import com.rustamft.tasksft.presentation.theme.Shapes
+import com.rustamft.tasksft.presentation.util.DEEP_LINK_URI
+import com.rustamft.tasksft.presentation.util.ROUTE_EDITOR
+import com.rustamft.tasksft.presentation.util.TASK_ID
 import com.rustamft.tasksft.presentation.util.format
 import com.rustamft.tasksft.presentation.util.toDateTime
 import org.koin.androidx.compose.koinViewModel
@@ -210,6 +214,19 @@ fun EditorScreen(
 
             val modifier = Modifier
                 .padding(DIMEN_SMALL)
+            val textFieldShape = Shapes.large
+            val textFieldColors = TextFieldDefaults.textFieldColors(
+                backgroundColor = viewModel.taskStateHolder.color,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent
+            )
+            val switchColors = SwitchDefaults.colors(
+                checkedThumbColor = AppTheme.colors.primary,
+                checkedTrackColor = AppTheme.colors.primary.copy(alpha = 0.3f),
+                uncheckedThumbColor = Color.Gray,
+                uncheckedTrackColor = Color.Gray.copy(alpha = 0.3f)
+            )
 
             TextField(
                 modifier = modifier,
@@ -218,7 +235,9 @@ fun EditorScreen(
                     viewModel.taskStateHolder.title = it
                     onValueChange()
                 },
-                placeholder = { Text(text = stringResource(id = R.string.title)) }
+                placeholder = { Text(text = stringResource(id = R.string.title)) },
+                shape = textFieldShape,
+                colors = textFieldColors
             )
             TextField(
                 modifier = modifier,
@@ -227,7 +246,9 @@ fun EditorScreen(
                     viewModel.taskStateHolder.description = it
                     onValueChange()
                 },
-                placeholder = { Text(text = stringResource(id = R.string.description)) }
+                placeholder = { Text(text = stringResource(id = R.string.description)) },
+                shape = textFieldShape,
+                colors = textFieldColors
             )
             Row(
                 modifier = modifier,
@@ -251,7 +272,8 @@ fun EditorScreen(
                     onCheckedChange = {
                         viewModel.taskStateHolder.reminderIsSet = it
                         onValueChange()
-                    }
+                    },
+                    colors = switchColors
                 )
             }
             if (viewModel.taskStateHolder.reminderIsSet) {
@@ -327,15 +349,18 @@ fun EditorScreen(
                     TextButtonElement(
                         onClick = {
                             openUnsavedTaskDialog = false
-                            navigator.popBackStack()
+                            viewModel.saveTask()
                         },
-                        text = stringResource(R.string.action_yes)
+                        text = stringResource(R.string.action_save)
                     )
                 },
                 dismissButton = {
                     TextButtonElement(
-                        onClick = { openUnsavedTaskDialog = false },
-                        text = stringResource(R.string.action_no)
+                        onClick = {
+                            openUnsavedTaskDialog = false
+                            navigator.popBackStack()
+                        },
+                        text = stringResource(R.string.action_discard)
                     )
                 },
                 backgroundColor = MaterialTheme.colors.surface

@@ -5,11 +5,10 @@
     <string name="action_close">Close</string>
     <string name="action_delete">Delete</string>
     <string name="action_delete_finished">Delete finished</string>
-    <string name="action_no">No</string>
+    <string name="action_discard">Discard</string>
     <string name="action_restore">Restore</string>
     <string name="action_save">Save</string>
     <string name="action_settings">Settings</string>
-    <string name="action_yes">Yes</string>
 
     <string name="app_info">App info</string>
     <string name="app_info_dialog_content">\n
@@ -43,11 +42,10 @@
     <string name="task_info_dialog_content">Created: %1$s</string>
     <string name="task_notification_channel_description">Sends a scheduled notification</string>
     <string name="task_notification_channel_name">Task notification</string>
-    <string name="task_title_empty">Task title is empty!</string>
     <string name="task_unsaved">Task is not saved!
     </string>
     <string name="task_unsaved_dialog_content">\n
-        Would you like to discard changes?
+        What would you like to do?
     </string>
 
     <string name="theme">Theme</string>
