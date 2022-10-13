@@ -1,5 +1,6 @@
 package com.rustamft.tasksft.presentation.screen.list
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rustamft.tasksft.domain.model.Task
@@ -18,6 +19,8 @@ class ListViewModel(
 ) : ViewModel() {
 
     val listOfTasksFlow = getListOfTasksUseCase.execute()
+    val openAppInfoDialogState = mutableStateOf(false)
+    val openGitHubState = mutableStateOf(false)
 
     fun saveTask(task: Task) {
         launchInViewModelScope { saveTaskUseCase.execute(task = task) }

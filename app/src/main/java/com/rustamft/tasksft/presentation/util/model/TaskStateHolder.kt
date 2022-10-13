@@ -1,5 +1,6 @@
 package com.rustamft.tasksft.presentation.util.model
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,20 +10,28 @@ import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.presentation.theme.AppTheme
 import java.util.Calendar
 
-class TaskStateHolder {
-
-    private var id by mutableStateOf(-1)
-    var title by mutableStateOf("")
-    var description by mutableStateOf("")
-    var created by mutableStateOf(0L)
-    var reminderIsSet by mutableStateOf(false)
-    var reminderCalendar: Calendar by mutableStateOf(
+class TaskStateHolder(
+    idState: MutableState<Int> = mutableStateOf(-1),
+    titleState: MutableState<String> = mutableStateOf(""),
+    descriptionState: MutableState<String> = mutableStateOf(""),
+    createdState: MutableState<Long> = mutableStateOf(0L),
+    reminderIsSetState: MutableState<Boolean> = mutableStateOf(false),
+    reminderCalendarState: MutableState<Calendar> = mutableStateOf(
         Calendar.getInstance().apply {
             set(Calendar.MINUTE, 0)
             add(Calendar.HOUR_OF_DAY, 1)
         }
-    )
-    var color by mutableStateOf(AppTheme.taskColors.random())
+    ),
+    colorState: MutableState<Color> = mutableStateOf(AppTheme.taskColors.random())
+) {
+
+    private var id by idState
+    var title by titleState
+    var description by descriptionState
+    var created by createdState
+    var reminderIsSet by reminderIsSetState
+    var reminderCalendar: Calendar by reminderCalendarState
+    var color by colorState
 
     fun setStateFromTask(task: Task) {
         id = task.id

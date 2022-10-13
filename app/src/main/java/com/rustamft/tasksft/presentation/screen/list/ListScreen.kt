@@ -16,11 +16,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Card
+import androidx.compose.material.DrawerState
+import androidx.compose.material.DrawerValue
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,11 +36,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
@@ -64,15 +70,50 @@ import org.koin.androidx.compose.koinViewModel
 fun ListScreen(
     navigator: DestinationsNavigator, // From ComposeDestinations
     scaffoldState: ScaffoldState, // From DependenciesContainer
-    viewModel: ListViewModel = koinViewModel(),
-    listOfTasksState: State<List<Task>> = viewModel.listOfTasksFlow.collectAsState(
-        initial = emptyList()
+    viewModel: ListViewModel = koinViewModel()
+) {
+
+    val listOfTasksState = viewModel.listOfTasksFlow.collectAsState(initial = emptyList())
+
+    ListScreenContent(
+        scaffoldState = scaffoldState,
+        listOfTasksState = listOfTasksState,
+        openAppInfoDialogState = viewModel.openAppInfoDialogState,
+        openGitHubState = viewModel.openGitHubState,
+        onNavigateToSettings = { navigator.navigate(ROUTE_SETTINGS) },
+        onNavigateToEditorNewTask = { navigator.navigate(ROUTE_EDITOR) },
+        onNavigateToEditorExistingTask = { id ->
+            navigator.navigate(EditorScreenDestination(taskId = id))
+        },
+        onDeleteFinishedTasks = {
+            viewModel.deleteTasks(
+                list = listOfTasksState.value.filter { it.finished }
+            )
+        },
+        onSaveTask = { task ->
+            viewModel.saveTask(
+                task = task.copy(finished = !task.finished)
+            )
+        }
     )
+}
+
+@Composable
+fun ListScreenContent(
+    scaffoldState: ScaffoldState,
+    listOfTasksState: State<List<Task>>,
+    openAppInfoDialogState: MutableState<Boolean>,
+    openGitHubState: MutableState<Boolean>,
+    onNavigateToSettings: () -> Unit,
+    onNavigateToEditorNewTask: () -> Unit,
+    onNavigateToEditorExistingTask: (Int) -> Unit,
+    onDeleteFinishedTasks: () -> Unit,
+    onSaveTask: (Task) -> Unit,
 ) {
 
     val listOfTasks by listOfTasksState
-    var openAppInfoDialog by remember { mutableStateOf(false) }
-    var openGitHub by remember { mutableStateOf(false) }
+    var openAppInfoDialog by remember { openAppInfoDialogState }
+    var openGitHub by remember { openGitHubState }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -83,16 +124,12 @@ fun ListScreen(
                     NavItem(
                         painterResId = R.drawable.ic_clean,
                         descriptionResId = R.string.action_delete_finished,
-                        onClick = {
-                            viewModel.deleteTasks(
-                                list = listOfTasks.filter { it.finished }
-                            )
-                        }
+                        onClick = onDeleteFinishedTasks
                     ),
                     NavItem(
                         painterResId = R.drawable.ic_settings,
                         descriptionResId = R.string.action_settings,
-                        onClick = { navigator.navigate(ROUTE_SETTINGS) }
+                        onClick = onNavigateToSettings
                     ),
                     NavItem(
                         painterResId = R.drawable.ic_info,
@@ -107,9 +144,7 @@ fun ListScreen(
                 item = NavItem(
                     painterResId = R.drawable.ic_add,
                     descriptionResId = R.string.action_add,
-                    onClick = {
-                        navigator.navigate(ROUTE_EDITOR)
-                    }
+                    onClick = onNavigateToEditorNewTask
                 )
             )
         }
@@ -134,16 +169,8 @@ fun ListScreen(
                         .padding(DIMEN_SMALL)
                         .pointerInput(key1 = task.finished) {
                             detectTapGestures(
-                                onTap = {
-                                    viewModel.saveTask(
-                                        task = task.copy(finished = !task.finished)
-                                    )
-                                },
-                                onLongPress = {
-                                    navigator.navigate(
-                                        direction = EditorScreenDestination(taskId = task.id)
-                                    )
-                                }
+                                onTap = { onSaveTask(task) },
+                                onLongPress = { onNavigateToEditorExistingTask(task.id) }
                             )
                         },
                     shape = Shapes.large,
@@ -249,4 +276,41 @@ fun ListScreen(
             openGitHub = false
         }
     }
+}
+
+@Preview
+@Composable
+fun ListScreenPreview() {
+    ListScreenContent(
+        scaffoldState = ScaffoldState(DrawerState(DrawerValue.Open), SnackbarHostState()),
+        listOfTasksState = mutableStateOf(
+            listOf(
+                Task(
+                    id = 0,
+                    created = 0L,
+                    title = "first",
+                    color = AppTheme.taskColors[0].toArgb()
+                ),
+                Task(
+                    id = 1,
+                    created = 1L,
+                    title = "second",
+                    color = AppTheme.taskColors[1].toArgb()
+                ),
+                Task(
+                    id = 2,
+                    created = 2L,
+                    title = "third",
+                    color = AppTheme.taskColors[2].toArgb()
+                )
+            )
+        ),
+        openAppInfoDialogState = mutableStateOf(false),
+        openGitHubState = mutableStateOf(false),
+        onNavigateToSettings = {},
+        onNavigateToEditorNewTask = {},
+        onNavigateToEditorExistingTask = {},
+        onDeleteFinishedTasks = {},
+        onSaveTask = {}
+    )
 }

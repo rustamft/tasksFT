@@ -1,6 +1,7 @@
 package com.rustamft.tasksft.presentation.screen.editor
 
 import android.os.Bundle
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rustamft.tasksft.R
@@ -31,6 +32,10 @@ class EditorViewModel(
     private val successChannel = Channel<Boolean>()
     val successFlow = successChannel.receiveAsFlow()
     val taskStateHolder: TaskStateHolder = TaskStateHolder()
+    val openTaskInfoDialogState = mutableStateOf(false)
+    val openChooseColorDialogState = mutableStateOf(false)
+    val openUnsavedTaskDialogState = mutableStateOf(false)
+    val valueChangedState = mutableStateOf(false)
 
     init {
         viewModelScope.launch(exceptionHandler) {
