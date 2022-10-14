@@ -1,6 +1,7 @@
 package com.rustamft.tasksft.presentation.screen.settings
 
 import android.net.Uri
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rustamft.tasksft.R
@@ -30,6 +31,7 @@ class SettingsViewModel(
     private val successChannel = Channel<Boolean>()
     val successFlow = successChannel.receiveAsFlow()
     val preferencesFlow = getPreferencesUseCase.execute()
+    val openExportConfirmDialogState = mutableStateOf(false)
 
     fun setTheme(theme: Theme) {
         viewModelScope.launch(exceptionHandler) {
@@ -39,7 +41,7 @@ class SettingsViewModel(
         }
     }
 
-    fun exportTasks(directoryUri: Uri?) {
+    fun exportTasks(directoryUri: Uri) {
         launchInViewModelScope(
             successMessage = UIText.StringResource(R.string.backup_file_exported)
         ) {
@@ -54,7 +56,7 @@ class SettingsViewModel(
         }
     }
 
-    fun importTasks(fileUri: Uri?) {
+    fun importTasks(fileUri: Uri) {
         launchInViewModelScope(
             successMessage = UIText.StringResource(R.string.backup_file_imported)
         ) {

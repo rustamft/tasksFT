@@ -2,6 +2,7 @@ package com.rustamft.tasksft.presentation.screen.settings
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -13,12 +14,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.DrawerState
+import androidx.compose.material.DrawerValue
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -47,27 +53,25 @@ import org.koin.androidx.compose.koinViewModel
 fun SettingsScreen(
     navigator: DestinationsNavigator, // From ComposeDestinations
     scaffoldState: ScaffoldState, // From DependenciesContainer
-    viewModel: SettingsViewModel = koinViewModel(),
-    preferencesState: State<Preferences> = viewModel.preferencesFlow.collectAsState(
-        initial = Preferences()
-    )
-) { // TODO: move content to separate fun and create preview
-
-    val preferences by preferencesState
-    var openExportConfirmDialog by remember { mutableStateOf(false) }
+    viewModel: SettingsViewModel = koinViewModel()
+) {
 
     val exportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.exportTasks(directoryUri = result.data?.data)
+            result.data?.data?.let { uri ->
+                viewModel.exportTasks(directoryUri = uri)
+            }
         }
     }
     val importLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.importTasks(fileUri = result.data?.data)
+            result.data?.data?.let { uri ->
+                viewModel.importTasks(fileUri = uri)
+            }
         }
     }
 
@@ -79,18 +83,41 @@ fun SettingsScreen(
         }
     }
 
-    fun chooseDirectory() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-        exportLauncher.launch(intent)
-    }
+    SettingsScreenContent(
+        scaffoldState = scaffoldState,
+        preferencesState = viewModel.preferencesFlow.collectAsState(initial = Preferences()),
+        openExportConfirmDialogState = viewModel.openExportConfirmDialogState,
+        onNavigateBack = { navigator.popBackStack() },
+        onSetTheme = { theme -> viewModel.setTheme(theme) },
+        onChooseDirectory = {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+            exportLauncher.launch(intent)
+        },
+        onChooseFile = {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/*"
+            } // for old API works type "application/octet-stream", for new - "application/json"
+            importLauncher.launch(intent)
+        },
+        onExportTasks = { uri -> viewModel.exportTasks(uri) }
+    )
+}
 
-    fun chooseFile() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/*"
-        } // for old API works type "application/octet-stream", for new - "application/json"
-        importLauncher.launch(intent)
-    }
+@Composable
+private fun SettingsScreenContent(
+    scaffoldState: ScaffoldState,
+    preferencesState: State<Preferences>,
+    openExportConfirmDialogState: MutableState<Boolean>,
+    onNavigateBack: () -> Unit,
+    onSetTheme: (Theme) -> Unit,
+    onChooseDirectory: () -> Unit,
+    onChooseFile: () -> Unit,
+    onExportTasks: (Uri) -> Unit
+) {
+
+    val preferences by preferencesState
+    var openExportConfirmDialog by remember { openExportConfirmDialogState }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -102,7 +129,7 @@ fun SettingsScreen(
                     IconButtonElement(
                         painter = painterResource(id = R.drawable.ic_arrow_back),
                         contentDescription = stringResource(id = R.string.action_back),
-                        onClick = { navigator.popBackStack() }
+                        onClick = onNavigateBack
                     )
                 }
             )
@@ -130,17 +157,17 @@ fun SettingsScreen(
                         is Theme.Auto -> {
                             painterId = R.drawable.ic_theme_auto
                             contentDescriptionId = R.string.theme_auto
-                            { viewModel.setTheme(theme = Theme.Light) }
+                            { onSetTheme(Theme.Light) }
                         }
                         is Theme.Light -> {
                             painterId = R.drawable.ic_theme_light
                             contentDescriptionId = R.string.theme_light
-                            { viewModel.setTheme(theme = Theme.Dark) }
+                            { onSetTheme(Theme.Dark) }
                         }
                         is Theme.Dark -> {
                             painterId = R.drawable.ic_theme_dark
                             contentDescriptionId = R.string.theme_dark
-                            { viewModel.setTheme(theme = Theme.Auto) }
+                            { onSetTheme(Theme.Auto) }
                         }
                     }
 
@@ -158,7 +185,7 @@ fun SettingsScreen(
                         contentDescription = stringResource(id = R.string.action_save),
                         onClick = {
                             if (preferences.backupDirectory.isEmpty()) {
-                                chooseDirectory()
+                                onChooseDirectory()
                             } else {
                                 openExportConfirmDialog = true
                             }
@@ -168,7 +195,7 @@ fun SettingsScreen(
                     IconButtonElement(
                         painter = painterResource(id = R.drawable.ic_restore),
                         contentDescription = stringResource(id = R.string.action_restore),
-                        onClick = { chooseFile() }
+                        onClick = onChooseFile
                     )
                 }
             }
@@ -189,17 +216,32 @@ fun SettingsScreen(
             },
             confirmButton = {
                 TextButtonElement(
-                    onClick = { chooseDirectory() },
+                    onClick = onChooseDirectory,
                     text = stringResource(id = R.string.backup_dialog_choose_dir)
                 )
             },
             dismissButton = {
                 TextButtonElement(
-                    onClick = { viewModel.exportTasks(preferences.backupDirectory.toUri()) },
+                    onClick = { onExportTasks(preferences.backupDirectory.toUri()) },
                     text = stringResource(R.string.action_save)
                 )
             },
             backgroundColor = MaterialTheme.colors.surface
         )
     }
+}
+
+@Preview
+@Composable
+private fun SettingsScreenPreview() {
+    SettingsScreenContent(
+        scaffoldState = ScaffoldState(DrawerState(DrawerValue.Open), SnackbarHostState()),
+        preferencesState = mutableStateOf(Preferences()),
+        openExportConfirmDialogState = mutableStateOf(false),
+        onNavigateBack = {},
+        onSetTheme = {},
+        onChooseDirectory = {},
+        onChooseFile = {},
+        onExportTasks = {}
+    )
 }

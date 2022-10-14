@@ -45,8 +45,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.rustamft.tasksft.BuildConfig
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.app.App
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.presentation.element.TextButtonElement
 import com.rustamft.tasksft.presentation.navigation.Fab
@@ -99,7 +99,7 @@ fun ListScreen(
 }
 
 @Composable
-fun ListScreenContent(
+private fun ListScreenContent(
     scaffoldState: ScaffoldState,
     listOfTasksState: State<List<Task>>,
     openAppInfoDialogState: MutableState<Boolean>,
@@ -250,7 +250,7 @@ fun ListScreenContent(
                     Text(
                         text = "${
                             stringResource(id = R.string.app_info_dialog_content)
-                        } ${App.version}"
+                        } ${BuildConfig.VERSION_NAME}"
                     )
                 },
                 confirmButton = {
@@ -280,7 +280,7 @@ fun ListScreenContent(
 
 @Preview
 @Composable
-fun ListScreenPreview() {
+private fun ListScreenPreview() {
     ListScreenContent(
         scaffoldState = ScaffoldState(DrawerState(DrawerValue.Open), SnackbarHostState()),
         listOfTasksState = mutableStateOf(

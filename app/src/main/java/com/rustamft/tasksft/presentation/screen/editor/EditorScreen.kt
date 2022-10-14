@@ -95,7 +95,7 @@ fun EditorScreen(
 }
 
 @Composable
-fun EditorScreenContent(
+private fun EditorScreenContent(
     scaffoldState: ScaffoldState,
     taskStateHolderState: State<TaskStateHolder>,
     openTaskInfoDialogState: MutableState<Boolean>,
@@ -339,7 +339,7 @@ fun EditorScreenContent(
 
 @Preview
 @Composable
-fun EditorScreenPreview() {
+private fun EditorScreenPreview() {
     EditorScreenContent(
         scaffoldState = ScaffoldState(DrawerState(DrawerValue.Open), SnackbarHostState()),
         taskStateHolderState = mutableStateOf(
