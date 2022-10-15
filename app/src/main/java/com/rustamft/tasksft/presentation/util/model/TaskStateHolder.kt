@@ -38,7 +38,7 @@ class TaskStateHolder(
         title = task.title
         description = task.description
         created = task.created
-        if (task.reminder != 0L) {
+        if (task.reminder > 0L) {
             reminderIsSet = true
             reminderCalendar = Calendar.getInstance().apply {
                 timeInMillis = task.reminder

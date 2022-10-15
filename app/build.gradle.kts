@@ -66,13 +66,11 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-
+    // Modules
     implementation(project(":domain"))
     implementation(project(":data"))
+    // Kotlin extensions for 'core' artifact
+    implementation("androidx.core:core-ktx:1.9.0")
     // Lifecycle
     val lifecycleVersion = "2.5.1"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
@@ -103,8 +101,14 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.7.1")
     // Coroutine test
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${Constants.COROUTINE_VERSION}")
-    // MockK
-    testImplementation("io.mockk:mockk:1.13.2")
     // LeakCanary
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
+    // JUnit
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+    // MockK
+    testImplementation("io.mockk:mockk:1.13.2")
+    // Espresso
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 }
