@@ -109,6 +109,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     // MockK
     testImplementation("io.mockk:mockk:1.13.2")
-    // Espresso
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    // Kaspresso
+    val kaspressoVersion = "1.4.2"
+    androidTestImplementation("com.kaspersky.android-components:kaspresso:$kaspressoVersion")
+    androidTestImplementation("com.kaspersky.android-components:kaspresso-compose-support:$kaspressoVersion")
 }
