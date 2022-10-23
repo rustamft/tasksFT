@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -62,6 +63,8 @@ import com.rustamft.tasksft.presentation.util.GITHUB_LINK
 import com.rustamft.tasksft.presentation.util.ROUTE_EDITOR
 import com.rustamft.tasksft.presentation.util.ROUTE_LIST
 import com.rustamft.tasksft.presentation.util.ROUTE_SETTINGS
+import com.rustamft.tasksft.presentation.util.TAG_LIST_SCREEN
+import com.rustamft.tasksft.presentation.util.TAG_LIST_SCREEN_FAB
 import com.rustamft.tasksft.presentation.util.toDateTime
 import org.koin.androidx.compose.koinViewModel
 
@@ -116,7 +119,9 @@ private fun ListScreenContent(
     var openGitHub by remember { openGitHubState }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag(TAG_LIST_SCREEN),
         scaffoldState = scaffoldState,
         topBar = {
             TopBar(
@@ -141,6 +146,7 @@ private fun ListScreenContent(
         },
         floatingActionButton = {
             Fab(
+                modifier = Modifier.testTag(TAG_LIST_SCREEN_FAB),
                 item = NavItem(
                     painterResId = R.drawable.ic_add,
                     descriptionResId = R.string.action_add,

@@ -1,4 +1,4 @@
-package com.rustamft.tasksft
+package com.rustamft.tasksft.test
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -8,6 +8,8 @@ import com.kaspersky.kaspresso.kaspresso.Kaspresso
 import com.kaspersky.kaspresso.params.FlakySafetyParams
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import com.rustamft.tasksft.presentation.activity.MainActivity
+import com.rustamft.tasksft.screen.ListScreen
+import io.github.kakaocup.compose.node.element.ComposeScreen.Companion.onComposeScreen
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,9 +33,14 @@ class ListScreenTest : TestCase(
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Test
-    fun test() = run {
-        step("Description") {
-            // test
+    fun listScreenTest() = run {
+        step("Click add FAB") {
+            onComposeScreen<ListScreen>(composeTestRule) {
+                addFab {
+                    assertIsDisplayed()
+                    performClick()
+                }
+            }
         }
     }
 }

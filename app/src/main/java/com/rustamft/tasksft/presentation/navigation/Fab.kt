@@ -3,13 +3,18 @@ package com.rustamft.tasksft.presentation.navigation
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.rustamft.tasksft.presentation.theme.AppTheme
 
 @Composable
-fun Fab(item: NavItem) {
+fun Fab(
+    modifier: Modifier = Modifier,
+    item: NavItem
+) {
     FloatingActionButton(
+        modifier = modifier,
         onClick = item.onClick,
         content = {
             Icon(
