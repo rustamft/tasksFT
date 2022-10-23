@@ -7,6 +7,7 @@ data class Task(
     val title: String = "",
     val description: String = "",
     val reminder: Long = 0L,
+    val repeat: Long = 0L,
     val finished: Boolean = false,
     val color: Int = 0x00000000
 )

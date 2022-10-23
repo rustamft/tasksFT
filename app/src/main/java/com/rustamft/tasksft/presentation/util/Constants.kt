@@ -24,3 +24,5 @@ internal const val NOTIFICATION_ACTION_FINISH_TASK =
     "com.rustamft.tasksft.notification_action_finish_task"
 internal const val NOTIFICATION_ACTION_SNOOZE_TASK =
     "com.rustamft.tasksft.notification_action_snooze_task"
+internal const val NOTIFICATION_ACTION_OK_TASK =
+    "com.rustamft.tasksft.notification_action_ok_task"

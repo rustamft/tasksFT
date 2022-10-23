@@ -20,7 +20,7 @@ class ImportTasksUseCase(
                 tasksRepository.saveTasks(list = list)
             }
             launch {
-                taskNotificationScheduler.scheduleOneTime(
+                taskNotificationScheduler.schedule(
                     list = list.filter { !it.finished && it.reminder != 0L }
                 )
             }

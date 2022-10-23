@@ -236,7 +236,7 @@ private fun EditorScreenContent(
                     colors = switchColors
                 )
             }
-            if (taskStateHolder.reminderIsSet) {
+            if (taskStateHolder.reminderIsSet) { // TODO: add repeat option
                 Row(modifier = modifier) {
                     DatePickerElement(
                         calendarState = mutableStateOf(taskStateHolder.reminderCalendar),

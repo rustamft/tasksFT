@@ -2,6 +2,7 @@ package com.rustamft.tasksft.presentation.notification.manager
 
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.rustamft.tasksft.domain.model.Task
@@ -9,8 +10,8 @@ import com.rustamft.tasksft.domain.notification.TaskNotificationScheduler
 import com.rustamft.tasksft.presentation.util.TASK_DESCRIPTION
 import com.rustamft.tasksft.presentation.util.TASK_ID
 import com.rustamft.tasksft.presentation.util.TASK_TITLE
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import java.util.concurrent.TimeUnit
 
 class TaskNotificationSchedulerImpl(
@@ -18,30 +19,37 @@ class TaskNotificationSchedulerImpl(
     private val notificationManager: NotificationManagerCompat
 ) : TaskNotificationScheduler {
 
-    override fun scheduleOneTime(task: Task) {
+    override fun schedule(task: Task) {
         val now = System.currentTimeMillis()
-        val delay: Long = task.reminder.minus(now)
+        var delay: Long = task.reminder.minus(now)
+        while (delay < 0 && task.repeat > 0) {
+            delay += task.repeat
+        }
         val data = workDataOf(
             Pair(TASK_ID, task.id),
             Pair(TASK_TITLE, task.title),
             Pair(TASK_DESCRIPTION, task.description)
         )
-        val work = OneTimeWorkRequestBuilder<OneTimeWorker>()
-            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-            .setInputData(data)
-            .addTag(task.id.toString())
-            .build()
-        workManager.enqueue(work)
+        workManager.enqueue(
+            if (task.repeat > 0) {
+                PeriodicWorkRequestBuilder<PeriodicWorker>(task.repeat, TimeUnit.MILLISECONDS)
+            } else {
+                OneTimeWorkRequestBuilder<OneTimeWorker>()
+            }
+                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                .setInputData(data)
+                .addTag(task.id.toString())
+                .build()
+        )
     }
 
-    override suspend fun scheduleOneTime(list: List<Task>) {
-        coroutineScope {
+    override suspend fun schedule(list: List<Task>) {
+        supervisorScope {
             for (task in list) {
-                launch { scheduleOneTime(task) }
+                launch { schedule(task) }
             }
         }
     }
-
 
     override fun cancel(task: Task) {
         notificationManager.cancel(task.id)
@@ -49,7 +57,7 @@ class TaskNotificationSchedulerImpl(
     }
 
     override suspend fun cancel(list: List<Task>) {
-        coroutineScope {
+        supervisorScope {
             for (task in list) {
                 launch { cancel(task) }
             }

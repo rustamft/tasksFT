@@ -20,7 +20,7 @@ class SaveTaskUseCase(
             launch {
                 taskNotificationScheduler.cancel(task = task)
                 if (!task.finished && task.reminder > 0L) {
-                    taskNotificationScheduler.scheduleOneTime(task = task)
+                    taskNotificationScheduler.schedule(task = task)
                 }
             }
         }

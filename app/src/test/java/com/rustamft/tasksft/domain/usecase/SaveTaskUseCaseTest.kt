@@ -24,7 +24,7 @@ internal class SaveTaskUseCaseTest {
             var taskScheduled = false
             coEvery { taskRepository.saveTask(task) } answers {}
             every { taskNotificationScheduler.cancel(task) } answers {}
-            every { taskNotificationScheduler.scheduleOneTime(task) } answers {
+            every { taskNotificationScheduler.schedule(task) } answers {
                 taskScheduled = true
             }
             saveTaskUseCase.execute(task)

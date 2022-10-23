@@ -11,10 +11,12 @@ import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_FINISH_TASK
+import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_OK_TASK
 import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_SNOOZE_TASK
 import com.rustamft.tasksft.presentation.util.ONE_HOUR
 import com.rustamft.tasksft.presentation.util.TAG_COROUTINE_EXCEPTION
 import com.rustamft.tasksft.presentation.util.TASK_ID
+import com.rustamft.tasksft.presentation.util.toTimeDifference
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +52,17 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
                         snoozeTask()
                         context.displayToast(R.string.notification_snoozed)
                     }
+                    NOTIFICATION_ACTION_OK_TASK -> {
+                        task?.let {
+                            val difference = it.reminder.toTimeDifference()
+                            context.displayToast(
+                                R.string.reminder_in,
+                                difference.days,
+                                difference.hours,
+                                difference.minutes
+                            )
+                        }
+                    }
                 }
                 context?.let { NotificationManagerCompat.from(it).cancel(id) }
             }
@@ -69,8 +82,8 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    private suspend fun Context?.displayToast(stringResId: Int) {
-        this?.let { displayToast(getString(stringResId)) }
+    private suspend fun Context?.displayToast(stringResId: Int, vararg args: Any) {
+        this?.let { displayToast(getString(stringResId, args)) }
     }
 
     private suspend fun Context?.displayToast(text: String) {
