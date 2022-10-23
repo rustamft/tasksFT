@@ -44,7 +44,7 @@ dependencies {
     // DocumentFile
     implementation("androidx.documentfile:documentfile:1.0.1")
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Constants.COROUTINE_VERSION}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     // Room
     val roomVersion = "2.5.0-beta01"
     implementation("androidx.room:room-runtime:$roomVersion")
@@ -53,7 +53,8 @@ dependencies {
     // Gson converter
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     // Koin
-    implementation("io.insert-koin:koin-android:${Constants.KOIN_VERSION}")
-    testImplementation("io.insert-koin:koin-test:${Constants.KOIN_VERSION}")
-    testImplementation("io.insert-koin:koin-test-junit4:${Constants.KOIN_VERSION}")
+    val koinVersion = "3.2.2"
+    implementation("io.insert-koin:koin-android:3.2.3")
+    testImplementation("io.insert-koin:koin-test:$koinVersion")
+    testImplementation("io.insert-koin:koin-test-junit4:$koinVersion")
 }

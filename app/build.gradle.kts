@@ -26,7 +26,7 @@ android {
         minSdk = 21
         targetSdk = 33
         versionCode = 1
-        versionName = "0.9.16"
+        versionName = "0.9.17"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -93,19 +93,21 @@ dependencies {
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestinationsVersion")
     ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestinationsVersion")
     // Koin
-    implementation("io.insert-koin:koin-android:${Constants.KOIN_VERSION}")
-    implementation("io.insert-koin:koin-androidx-compose:${Constants.KOIN_VERSION}")
-    testImplementation("io.insert-koin:koin-test:${Constants.KOIN_VERSION}")
-    testImplementation("io.insert-koin:koin-test-junit4:${Constants.KOIN_VERSION}")
+    val koinVersion = "3.2.2"
+    implementation("io.insert-koin:koin-android:3.2.3")
+    implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
+    testImplementation("io.insert-koin:koin-test:$koinVersion")
+    testImplementation("io.insert-koin:koin-test-junit4:$koinVersion")
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:2.7.1")
-    // Coroutine test
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${Constants.COROUTINE_VERSION}")
+    // Coroutines test
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     // LeakCanary
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
     // JUnit
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+    val junitVersion = "5.9.1"
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     // MockK
     testImplementation("io.mockk:mockk:1.13.2")
