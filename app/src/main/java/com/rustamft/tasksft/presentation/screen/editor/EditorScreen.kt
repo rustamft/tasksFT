@@ -40,8 +40,10 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.FULL_ROUTE_PLACEHOLDER
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.rustamft.tasksft.R
+import com.rustamft.tasksft.domain.model.Preferences.Theme
 import com.rustamft.tasksft.presentation.element.ColorButtonElement
 import com.rustamft.tasksft.presentation.element.DatePickerElement
+import com.rustamft.tasksft.presentation.element.DropdownMenuElement
 import com.rustamft.tasksft.presentation.element.IconButtonElement
 import com.rustamft.tasksft.presentation.element.TextButtonElement
 import com.rustamft.tasksft.presentation.element.TimePickerElement
@@ -58,6 +60,7 @@ import com.rustamft.tasksft.presentation.util.model.TaskStateHolder
 import com.rustamft.tasksft.presentation.util.toDateTime
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+import java.util.Calendar
 
 @Destination(
     route = ROUTE_EDITOR,
@@ -250,6 +253,19 @@ private fun EditorScreenContent(
                         onValueChange = onValueChange
                     )
                 }
+                Row(modifier = modifier) {
+                    Text(text = stringResource(id = R.string.reminder_repeat))
+                    Spacer(modifier = Modifier.width(DIMEN_SMALL))
+                    DropdownMenuElement(
+                        selectedItemState = taskStateHolder.reminderRepeatIntervalState,
+                        items = mapOf( // TODO: move name to resource
+                            0 to "never",
+                            Calendar.DAY_OF_MONTH to "every day",
+                            Calendar.WEEK_OF_MONTH to "every week",
+                            Calendar.MONTH to "every month"
+                        )
+                    )
+                }
             }
         }
 
@@ -340,17 +356,22 @@ private fun EditorScreenContent(
 @Preview
 @Composable
 private fun EditorScreenPreview() {
-    EditorScreenContent(
-        scaffoldState = ScaffoldState(DrawerState(DrawerValue.Open), SnackbarHostState()),
-        taskStateHolderState = mutableStateOf(
-            TaskStateHolder(colorState = mutableStateOf(AppTheme.taskColors[0]))
-        ),
-        openTaskInfoDialogState = mutableStateOf(false),
-        openChooseColorDialogState = mutableStateOf(false),
-        openUnsavedTaskDialogState = mutableStateOf(false),
-        valueChangedState = mutableStateOf(false),
-        onNavigateBack = {},
-        onSaveTask = {},
-        onDeleteTask = {}
-    )
+    AppTheme(theme = Theme.Auto) {
+        EditorScreenContent(
+            scaffoldState = ScaffoldState(DrawerState(DrawerValue.Open), SnackbarHostState()),
+            taskStateHolderState = mutableStateOf(
+                TaskStateHolder(
+                    reminderIsSetState = mutableStateOf(true),
+                    colorState = mutableStateOf(AppTheme.taskColors[0])
+                )
+            ),
+            openTaskInfoDialogState = mutableStateOf(false),
+            openChooseColorDialogState = mutableStateOf(false),
+            openUnsavedTaskDialogState = mutableStateOf(false),
+            valueChangedState = mutableStateOf(false),
+            onNavigateBack = {},
+            onSaveTask = {},
+            onDeleteTask = {}
+        )
+    }
 }

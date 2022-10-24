@@ -22,6 +22,7 @@ class TaskStateHolder(
             add(Calendar.HOUR_OF_DAY, 1)
         }
     ),
+    val reminderRepeatIntervalState: MutableState<Int> = mutableStateOf(0),
     colorState: MutableState<Color> = mutableStateOf(AppTheme.taskColors.random())
 ) {
 
@@ -30,10 +31,11 @@ class TaskStateHolder(
     var description by descriptionState
     var created by createdState
     var reminderIsSet by reminderIsSetState
-    var reminderCalendar: Calendar by reminderCalendarState
+    var reminderCalendar by reminderCalendarState
+    var reminderRepeatInterval by reminderRepeatIntervalState
     var color by colorState
 
-    fun setStateFromTask(task: Task) {
+    fun setStateFromTask(task: Task) { // TODO: update for repeat
         id = task.id
         title = task.title
         description = task.description
@@ -47,7 +49,7 @@ class TaskStateHolder(
         color = Color(task.color)
     }
 
-    fun getStateAsTask(): Task {
+    fun getStateAsTask(): Task { // TODO: update for repeat
         return if (id == -1) { // Creating new task
             val now = System.currentTimeMillis()
             Task(
