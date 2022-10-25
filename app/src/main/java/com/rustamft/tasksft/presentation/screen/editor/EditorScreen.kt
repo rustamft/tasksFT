@@ -60,7 +60,6 @@ import com.rustamft.tasksft.presentation.util.model.TaskStateHolder
 import com.rustamft.tasksft.presentation.util.toDateTime
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import java.util.Calendar
 
 @Destination(
     route = ROUTE_EDITOR,
@@ -175,8 +174,7 @@ private fun EditorScreenContent(
 
         Column(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
 
-            val modifier = Modifier
-                .padding(DIMEN_SMALL)
+            val modifier = Modifier.padding(DIMEN_SMALL)
             val textFieldShape = Shapes.large
             val textFieldColors = TextFieldDefaults.textFieldColors(
                 backgroundColor = taskStateHolder.color,
@@ -239,7 +237,7 @@ private fun EditorScreenContent(
                     colors = switchColors
                 )
             }
-            if (taskStateHolder.reminderIsSet) { // TODO: add repeat option
+            if (taskStateHolder.reminderIsSet) {
                 Row(modifier = modifier) {
                     DatePickerElement(
                         calendarState = mutableStateOf(taskStateHolder.reminderCalendar),
@@ -252,18 +250,11 @@ private fun EditorScreenContent(
                         themeResId = pickerDialogThemeResId,
                         onValueChange = onValueChange
                     )
-                }
-                Row(modifier = modifier) {
-                    Text(text = stringResource(id = R.string.reminder_repeat))
                     Spacer(modifier = Modifier.width(DIMEN_SMALL))
                     DropdownMenuElement(
-                        selectedItemState = taskStateHolder.reminderRepeatIntervalState,
-                        items = mapOf( // TODO: move name to resource
-                            0 to "never",
-                            Calendar.DAY_OF_MONTH to "every day",
-                            Calendar.WEEK_OF_MONTH to "every week",
-                            Calendar.MONTH to "every month"
-                        )
+                        items = taskStateHolder.reminderRepeatIntervalMap,
+                        selectedItemState = taskStateHolder.repeatIntervalState,
+                        onClickAdditional = onValueChange
                     )
                 }
             }

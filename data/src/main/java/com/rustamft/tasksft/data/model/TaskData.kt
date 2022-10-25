@@ -15,7 +15,6 @@ internal data class TaskData(
     val created: Long = 0L,
     @NonNull @ColumnInfo(name = "reminder")
     val reminder: Long = 0L,
-    @NonNull @ColumnInfo(name = "repeat")
     val repeat: Long = 0L,
     @NonNull @ColumnInfo(name = "finished")
     val finished: Boolean = false,

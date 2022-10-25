@@ -36,7 +36,7 @@ class TaskNotificationSchedulerImpl(
             } else {
                 OneTimeWorkRequestBuilder<OneTimeWorker>()
             }
-                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                .setInitialDelay(delay, TimeUnit.MILLISECONDS) // TODO: isn't sending notification
                 .setInputData(data)
                 .addTag(task.id.toString())
                 .build()
