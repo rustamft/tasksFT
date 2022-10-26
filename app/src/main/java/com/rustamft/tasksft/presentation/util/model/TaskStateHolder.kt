@@ -10,7 +10,6 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.presentation.theme.AppTheme
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
 
 class TaskStateHolder(
     idState: MutableState<Int> = mutableStateOf(-1),
@@ -24,24 +23,24 @@ class TaskStateHolder(
             add(Calendar.HOUR_OF_DAY, 1)
         }
     ),
-    val repeatIntervalState: MutableState<Long> = mutableStateOf(0),
+    val repeatCalendarUnitsState: MutableState<Int> = mutableStateOf(0),
     colorState: MutableState<Color> = mutableStateOf(AppTheme.taskColors.random())
 ) {
 
     private var id by idState
-    private var repeatInterval by repeatIntervalState
+    private var repeatCalendarUnits by repeatCalendarUnitsState
     var title by titleState
     var description by descriptionState
     var created by createdState
     var reminderIsSet by reminderIsSetState
     var reminderCalendar by reminderCalendarState
     var color by colorState
-    val reminderRepeatIntervalMap = mapOf(
-        0L to UIText.StringResource(R.string.reminder_one_time),
-        TimeUnit.DAYS.toMillis(1) to UIText.StringResource(R.string.reminder_every_day),
-        TimeUnit.DAYS.toMillis(7) to UIText.StringResource(R.string.reminder_every_week),
-        TimeUnit.DAYS.toMillis(30) to UIText.StringResource(R.string.reminder_every_month)
-    ) // TODO: find better solution for months
+    val calendarUnitsMap = mapOf(
+        0 to UIText.StringResource(R.string.reminder_one_time),
+        Calendar.DAY_OF_MONTH to UIText.StringResource(R.string.reminder_every_day),
+        Calendar.WEEK_OF_MONTH to UIText.StringResource(R.string.reminder_every_week),
+        Calendar.MONTH to UIText.StringResource(R.string.reminder_every_month)
+    )
 
     fun setStateFromTask(task: Task) {
         id = task.id
@@ -53,7 +52,7 @@ class TaskStateHolder(
             reminderCalendar = Calendar.getInstance().apply {
                 timeInMillis = task.reminder
             }
-            repeatInterval = task.repeat
+            repeatCalendarUnits = task.repeatCalendarUnit
         }
         color = Color(task.color)
     }
@@ -71,7 +70,7 @@ class TaskStateHolder(
                 } else {
                     0L
                 },
-                repeat = repeatInterval,
+                repeatCalendarUnit = repeatCalendarUnits,
                 color = color.toArgb()
             )
         } else { // Updating existing task
@@ -85,7 +84,7 @@ class TaskStateHolder(
                 } else {
                     0L
                 },
-                repeat = repeatInterval,
+                repeatCalendarUnit = repeatCalendarUnits,
                 color = color.toArgb()
             )
         }

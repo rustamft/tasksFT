@@ -252,8 +252,8 @@ private fun EditorScreenContent(
                     )
                     Spacer(modifier = Modifier.width(DIMEN_SMALL))
                     DropdownMenuElement(
-                        items = taskStateHolder.reminderRepeatIntervalMap,
-                        selectedItemState = taskStateHolder.repeatIntervalState,
+                        items = taskStateHolder.calendarUnitsMap,
+                        selectedItemState = taskStateHolder.repeatCalendarUnitsState,
                         onClickAdditional = onValueChange
                     )
                 }

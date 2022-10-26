@@ -2,10 +2,10 @@ package com.rustamft.tasksft.di
 
 import android.os.Bundle
 import android.util.Log
-import com.rustamft.tasksft.presentation.util.TAG_COROUTINE_EXCEPTION
 import com.rustamft.tasksft.presentation.screen.editor.EditorViewModel
 import com.rustamft.tasksft.presentation.screen.list.ListViewModel
 import com.rustamft.tasksft.presentation.screen.settings.SettingsViewModel
+import com.rustamft.tasksft.presentation.util.TAG_COROUTINE_EXCEPTION
 import com.rustamft.tasksft.presentation.util.model.UIText
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.channels.Channel
@@ -16,7 +16,7 @@ import org.koin.dsl.module
 val appModule = module {
 
     single<Channel<UIText>> {
-        Channel()
+        Channel(2)
     }
 
     single<CoroutineExceptionHandler> {

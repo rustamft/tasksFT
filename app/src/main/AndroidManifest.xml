@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name=".presentation.notification.receiver.TaskBroadcastReceiver"
+            android:name=".notification.receiver.TaskBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.rustamft.tasksft.FINISH" />

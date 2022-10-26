@@ -11,7 +11,7 @@ import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.ImportTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SavePreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
-import com.rustamft.tasksft.presentation.notification.manager.TaskNotificationSchedulerImpl
+import com.rustamft.tasksft.notification.manager.TaskNotificationSchedulerImpl
 import org.koin.dsl.module
 
 val domainModule = module {

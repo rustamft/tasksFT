@@ -1,8 +1,7 @@
-package com.rustamft.tasksft.presentation.notification.manager
+package com.rustamft.tasksft.notification.manager
 
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.rustamft.tasksft.domain.model.Task
@@ -22,8 +21,8 @@ class TaskNotificationSchedulerImpl(
     override fun schedule(task: Task) {
         val now = System.currentTimeMillis()
         var delay: Long = task.reminder.minus(now)
-        while (delay < 0 && task.repeat > 0) {
-            delay += task.repeat
+        while (delay < 0 && task.repeatCalendarUnit > 0) {
+            delay += task.repeatCalendarUnit
         }
         val data = workDataOf(
             Pair(TASK_ID, task.id),
@@ -31,12 +30,12 @@ class TaskNotificationSchedulerImpl(
             Pair(TASK_DESCRIPTION, task.description)
         )
         workManager.enqueue(
-            if (task.repeat > 0) {
-                PeriodicWorkRequestBuilder<PeriodicWorker>(task.repeat, TimeUnit.MILLISECONDS)
-            } else {
+            if (task.repeatCalendarUnit == 0) {
                 OneTimeWorkRequestBuilder<OneTimeWorker>()
+            } else {
+                OneTimeWorkRequestBuilder<RepetitiveWorker>()
             }
-                .setInitialDelay(delay, TimeUnit.MILLISECONDS) // TODO: isn't sending notification
+                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                 .setInputData(data)
                 .addTag(task.id.toString())
                 .build()

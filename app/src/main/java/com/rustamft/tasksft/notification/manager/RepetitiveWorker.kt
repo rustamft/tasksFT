@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.presentation.notification.manager
+package com.rustamft.tasksft.notification.manager
 
 import android.app.PendingIntent
 import android.app.TaskStackBuilder
@@ -8,24 +8,30 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_FINISH_TASK
-import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_SNOOZE_TASK
-import com.rustamft.tasksft.presentation.util.NOTIFICATION_CHANNEL_ID_TASK
+import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
+import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
+import com.rustamft.tasksft.notification.receiver.TaskBroadcastReceiver
+import com.rustamft.tasksft.presentation.activity.MainActivity
+import com.rustamft.tasksft.presentation.screen.destinations.EditorScreenDestination
 import com.rustamft.tasksft.presentation.util.DEEP_LINK_URI
+import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_OK_TASK
+import com.rustamft.tasksft.presentation.util.NOTIFICATION_CHANNEL_ID_TASK
 import com.rustamft.tasksft.presentation.util.TASK_DESCRIPTION
 import com.rustamft.tasksft.presentation.util.TASK_ID
 import com.rustamft.tasksft.presentation.util.TASK_TITLE
-import com.rustamft.tasksft.presentation.activity.MainActivity
-import com.rustamft.tasksft.presentation.notification.receiver.TaskBroadcastReceiver
-import com.rustamft.tasksft.presentation.screen.destinations.EditorScreenDestination
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
+import org.koin.java.KoinJavaComponent.inject
+import java.util.Calendar
 
-class OneTimeWorker(
+class RepetitiveWorker(
     private val context: Context,
     workerParams: WorkerParameters
-) : Worker(context, workerParams) {
+) : CoroutineWorker(context, workerParams) {
 
     private val data = workerParams.inputData
     private val taskId = data.getInt(TASK_ID, -1)
@@ -36,25 +42,33 @@ class OneTimeWorker(
     } else {
         PendingIntent.FLAG_UPDATE_CURRENT
     }
+    private val getTaskByIdUseCase: GetTaskByIdUseCase by inject(GetTaskByIdUseCase::class.java)
+    private val saveTaskUseCase: SaveTaskUseCase by inject(SaveTaskUseCase::class.java)
 
-    override fun doWork(): Result {
-        displayNotification()
-        return Result.success()
+    override suspend fun doWork(): Result {
+        displayNotification() // TODO not showing because of work below
+        return withContext(Dispatchers.IO) {
+            val task = getTaskByIdUseCase.execute(taskId).first()
+            if (task.repeatCalendarUnit == 0) return@withContext Result.failure()
+            val calendar = Calendar.getInstance().apply {
+                timeInMillis = task.reminder
+                add(task.repeatCalendarUnit, 1)
+            }
+            saveTaskUseCase.execute(task.copy(reminder = calendar.timeInMillis))
+            return@withContext Result.success()
+        }
     }
 
     private fun displayNotification() {
-        val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID_TASK)
+        val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID_TASK)
             .setSmallIcon(R.drawable.ic_event)
             .setContentTitle(taskTitle)
             .setContentText(taskDescription)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(buildMainPendingIntent())
-            .addAction(buildFinishAction())
-            .addAction(buildSnoozeAction())
+            .addAction(buildOkAction())
             .setAutoCancel(true)
-        with(NotificationManagerCompat.from(context)) {
-            notify(taskId, builder.build())
-        }
+        NotificationManagerCompat.from(context).notify(taskId, notification.build())
     }
 
     private fun buildMainPendingIntent(): PendingIntent {
@@ -72,9 +86,9 @@ class OneTimeWorker(
         return deepLinkPendingIntent
     }
 
-    private fun buildFinishAction(): NotificationCompat.Action {
+    private fun buildOkAction(): NotificationCompat.Action {
         val intent = Intent(context, TaskBroadcastReceiver::class.java).apply {
-            action = NOTIFICATION_ACTION_FINISH_TASK
+            action = NOTIFICATION_ACTION_OK_TASK
             putExtra(TASK_ID, taskId)
         }
         val pendingIntent = PendingIntent.getBroadcast(
@@ -85,25 +99,7 @@ class OneTimeWorker(
         )
         return NotificationCompat.Action(
             R.drawable.ic_done,
-            context.getString(R.string.notification_finish),
-            pendingIntent
-        )
-    }
-
-    private fun buildSnoozeAction(): NotificationCompat.Action {
-        val intent = Intent(context, TaskBroadcastReceiver::class.java).apply {
-            action = NOTIFICATION_ACTION_SNOOZE_TASK
-            putExtra(TASK_ID, taskId)
-        }
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            taskId,
-            intent,
-            flags
-        )
-        return NotificationCompat.Action(
-            R.drawable.ic_snooze,
-            context.getString(R.string.notification_snooze),
+            context.getString(android.R.string.ok),
             pendingIntent
         )
     }

@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.presentation.notification.receiver
+package com.rustamft.tasksft.notification.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
