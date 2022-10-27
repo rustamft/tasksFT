@@ -8,30 +8,23 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
-import androidx.work.CoroutineWorker
+import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.rustamft.tasksft.R
-import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
-import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.notification.receiver.TaskBroadcastReceiver
 import com.rustamft.tasksft.presentation.activity.MainActivity
 import com.rustamft.tasksft.presentation.screen.destinations.EditorScreenDestination
 import com.rustamft.tasksft.presentation.util.DEEP_LINK_URI
-import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_OK_TASK
+import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_REPEAT_TASK
 import com.rustamft.tasksft.presentation.util.NOTIFICATION_CHANNEL_ID_TASK
 import com.rustamft.tasksft.presentation.util.TASK_DESCRIPTION
 import com.rustamft.tasksft.presentation.util.TASK_ID
 import com.rustamft.tasksft.presentation.util.TASK_TITLE
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withContext
-import org.koin.java.KoinJavaComponent.inject
-import java.util.Calendar
 
 class RepetitiveWorker(
     private val context: Context,
     workerParams: WorkerParameters
-) : CoroutineWorker(context, workerParams) {
+) : Worker(context, workerParams) {
 
     private val data = workerParams.inputData
     private val taskId = data.getInt(TASK_ID, -1)
@@ -42,21 +35,10 @@ class RepetitiveWorker(
     } else {
         PendingIntent.FLAG_UPDATE_CURRENT
     }
-    private val getTaskByIdUseCase: GetTaskByIdUseCase by inject(GetTaskByIdUseCase::class.java)
-    private val saveTaskUseCase: SaveTaskUseCase by inject(SaveTaskUseCase::class.java)
 
-    override suspend fun doWork(): Result {
-        displayNotification() // TODO not showing because of work below
-        return withContext(Dispatchers.IO) {
-            val task = getTaskByIdUseCase.execute(taskId).first()
-            if (task.repeatCalendarUnit == 0) return@withContext Result.failure()
-            val calendar = Calendar.getInstance().apply {
-                timeInMillis = task.reminder
-                add(task.repeatCalendarUnit, 1)
-            }
-            saveTaskUseCase.execute(task.copy(reminder = calendar.timeInMillis))
-            return@withContext Result.success()
-        }
+    override fun doWork(): Result {
+        displayNotification()
+        return Result.success()
     }
 
     private fun displayNotification() {
@@ -66,7 +48,7 @@ class RepetitiveWorker(
             .setContentText(taskDescription)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(buildMainPendingIntent())
-            .addAction(buildOkAction())
+            .addAction(buildRepeatAction())
             .setAutoCancel(true)
         NotificationManagerCompat.from(context).notify(taskId, notification.build())
     }
@@ -86,9 +68,9 @@ class RepetitiveWorker(
         return deepLinkPendingIntent
     }
 
-    private fun buildOkAction(): NotificationCompat.Action {
+    private fun buildRepeatAction(): NotificationCompat.Action {
         val intent = Intent(context, TaskBroadcastReceiver::class.java).apply {
-            action = NOTIFICATION_ACTION_OK_TASK
+            action = NOTIFICATION_ACTION_REPEAT_TASK
             putExtra(TASK_ID, taskId)
         }
         val pendingIntent = PendingIntent.getBroadcast(
@@ -98,8 +80,8 @@ class RepetitiveWorker(
             flags
         )
         return NotificationCompat.Action(
-            R.drawable.ic_done,
-            context.getString(android.R.string.ok),
+            R.drawable.ic_repeat,
+            context.getString(R.string.reminder_repeat),
             pendingIntent
         )
     }

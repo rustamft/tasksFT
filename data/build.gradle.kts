@@ -53,8 +53,8 @@ dependencies {
     // Gson converter
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     // Koin
-    val koinVersion = "3.2.2"
-    implementation("io.insert-koin:koin-android:3.2.3")
-    testImplementation("io.insert-koin:koin-test:$koinVersion")
-    testImplementation("io.insert-koin:koin-test-junit4:$koinVersion")
+    val koinTestVersion = "3.2.2"
+    implementation("io.insert-koin:koin-android:3.3.0")
+    testImplementation("io.insert-koin:koin-test:$koinTestVersion")
+    testImplementation("io.insert-koin:koin-test-junit4:$koinTestVersion")
 }

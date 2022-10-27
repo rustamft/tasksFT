@@ -26,7 +26,7 @@ android {
         minSdk = 21
         targetSdk = 33
         versionCode = 1
-        versionName = "0.9.17"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -87,17 +87,18 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
     // Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.26.5-rc")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
     // Compose destinations
-    val composeDestinationsVersion = "1.7.22-beta"
+    val composeDestinationsVersion = "1.7.23-beta"
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestinationsVersion")
     ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestinationsVersion")
     // Koin
-    val koinVersion = "3.2.2"
-    implementation("io.insert-koin:koin-android:3.2.3")
+    val koinVersion = "3.3.0"
+    val koinTestVersion = "3.2.2"
+    implementation("io.insert-koin:koin-android:$koinVersion")
     implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
-    testImplementation("io.insert-koin:koin-test:$koinVersion")
-    testImplementation("io.insert-koin:koin-test-junit4:$koinVersion")
+    testImplementation("io.insert-koin:koin-test:$koinTestVersion")
+    testImplementation("io.insert-koin:koin-test-junit4:$koinTestVersion")
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:2.7.1")
     // Coroutines test

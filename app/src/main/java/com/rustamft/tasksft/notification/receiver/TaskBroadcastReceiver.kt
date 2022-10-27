@@ -11,7 +11,7 @@ import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_FINISH_TASK
-import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_OK_TASK
+import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_REPEAT_TASK
 import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_SNOOZE_TASK
 import com.rustamft.tasksft.presentation.util.ONE_HOUR
 import com.rustamft.tasksft.presentation.util.TAG_COROUTINE_EXCEPTION
@@ -24,37 +24,43 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.inject
+import java.util.Calendar
 
 class TaskBroadcastReceiver : BroadcastReceiver() {
 
+    private val scope = CoroutineScope(Dispatchers.IO)
     private val getTaskByIdUseCase: GetTaskByIdUseCase by inject(GetTaskByIdUseCase::class.java)
     private val saveTaskUseCase: SaveTaskUseCase by inject(SaveTaskUseCase::class.java)
-    private var task: Task? = null
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val pendingResult = goAsync()
-        CoroutineScope(Dispatchers.IO).launch(
-            CoroutineExceptionHandler { _, throwable ->
-                Log.e(TAG_COROUTINE_EXCEPTION, Log.getStackTraceString(throwable))
-                CoroutineScope(Dispatchers.IO).launch {
-                    context.displayToast(throwable.message.toString())
-                    pendingResult.finish()
-                }
+        val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.e(TAG_COROUTINE_EXCEPTION, Log.getStackTraceString(throwable))
+            CoroutineScope(Dispatchers.IO).launch {
+                context.displayToast(throwable.message.toString())
+                pendingResult.finish()
             }
-        ) {
+        }
+        scope.launch(exceptionHandler) {
             intent?.extras?.getInt(TASK_ID)?.let { id ->
-                task = getTaskByIdUseCase.execute(taskId = id).first()
+                val task = getTaskByIdUseCase.execute(taskId = id).first()
                 when (intent.action) {
                     NOTIFICATION_ACTION_FINISH_TASK -> {
-                        finishTask()
+                        finishTask(task = task)
                     }
                     NOTIFICATION_ACTION_SNOOZE_TASK -> {
-                        snoozeTask()
+                        snoozeTask(task = task)
                         context.displayToast(R.string.notification_snoozed)
                     }
-                    NOTIFICATION_ACTION_OK_TASK -> {
-                        task?.let {
-                            val difference = it.reminder.toTimeDifference()
+                    NOTIFICATION_ACTION_REPEAT_TASK -> {
+                        if (task.repeatCalendarUnit != 0) {
+                            val calendar = Calendar.getInstance().apply {
+                                timeInMillis = task.reminder
+                                add(task.repeatCalendarUnit, 1)
+                            }
+                            val updatedTask = task.copy(reminder = calendar.timeInMillis)
+                            launch { saveTaskUseCase.execute(updatedTask) }
+                            val difference = updatedTask.reminder.toTimeDifference()
                             context.displayToast(
                                 R.string.reminder_in,
                                 difference.days,
@@ -70,20 +76,18 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    private suspend fun finishTask() {
-        task?.let { saveTaskUseCase.execute(task = it.copy(finished = true)) }
+    private suspend fun finishTask(task: Task) {
+        saveTaskUseCase.execute(task = task.copy(finished = true))
     }
 
-    private suspend fun snoozeTask() {
-        task?.let {
-            saveTaskUseCase.execute(
-                task = it.copy(reminder = System.currentTimeMillis() + ONE_HOUR)
-            )
-        }
+    private suspend fun snoozeTask(task: Task) {
+        saveTaskUseCase.execute(
+            task = task.copy(reminder = System.currentTimeMillis() + ONE_HOUR)
+        )
     }
 
     private suspend fun Context?.displayToast(stringResId: Int, vararg args: Any) {
-        this?.let { displayToast(getString(stringResId, args)) }
+        this?.let { displayToast(getString(stringResId, *args)) }
     }
 
     private suspend fun Context?.displayToast(text: String) {

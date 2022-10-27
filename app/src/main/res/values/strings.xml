@@ -37,6 +37,7 @@
     <string name="reminder_every_month">every month</string>
     <string name="reminder_in">Reminder in %1$d\d %2$d\h %3$d\m</string>
     <string name="reminder_one_time">one time</string>
+    <string name="reminder_repeat">Repeat</string>
 
     <string name="task_color">Task color</string>
     <string name="task_description">Description</string>

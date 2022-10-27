@@ -37,6 +37,7 @@
     <string name="reminder_every_month">ежемесячно</string>
     <string name="reminder_in">Напоминание через %1$d\д %2$d\ч %3$d\м</string>
     <string name="reminder_one_time">единоразово</string>
+    <string name="reminder_repeat">Повторить</string>
 
     <string name="task_color">Цвет задачи</string>
     <string name="task_description">Описание</string>
