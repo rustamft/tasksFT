@@ -27,10 +27,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -65,6 +63,7 @@ import com.rustamft.tasksft.presentation.util.ROUTE_LIST
 import com.rustamft.tasksft.presentation.util.ROUTE_SETTINGS
 import com.rustamft.tasksft.presentation.util.TAG_LIST_SCREEN
 import com.rustamft.tasksft.presentation.util.TAG_LIST_SCREEN_FAB
+import com.rustamft.tasksft.presentation.util.TAG_LIST_SCREEN_TASK_CARD
 import com.rustamft.tasksft.presentation.util.toDateTime
 import org.koin.androidx.compose.koinViewModel
 
@@ -114,10 +113,6 @@ private fun ListScreenContent(
     onSaveTask: (Task) -> Unit,
 ) {
 
-    val listOfTasks by listOfTasksState
-    var openAppInfoDialog by remember { openAppInfoDialogState }
-    var openGitHub by remember { openGitHubState }
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -139,7 +134,7 @@ private fun ListScreenContent(
                     NavItem(
                         painterResId = R.drawable.ic_info,
                         descriptionResId = R.string.app_info,
-                        onClick = { openAppInfoDialog = true }
+                        onClick = { openAppInfoDialogState.value = true }
                     )
                 )
             )
@@ -159,7 +154,7 @@ private fun ListScreenContent(
         LazyColumn(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
 
             items(
-                items = listOfTasks,
+                items = listOfTasksState.value,
                 key = { it.id }
             ) { task ->
 
@@ -178,7 +173,8 @@ private fun ListScreenContent(
                                 onTap = { onSaveTask(task) },
                                 onLongPress = { onNavigateToEditorExistingTask(task.id) }
                             )
-                        },
+                        }
+                        .testTag(TAG_LIST_SCREEN_TASK_CARD),
                     shape = Shapes.large,
                     backgroundColor = backGroundColor.compositeOver(AppTheme.colors.background)
                 ) {
@@ -248,9 +244,9 @@ private fun ListScreenContent(
             }
         }
 
-        if (openAppInfoDialog) {
+        if (openAppInfoDialogState.value) {
             AlertDialog(
-                onDismissRequest = { openAppInfoDialog = false },
+                onDismissRequest = { openAppInfoDialogState.value = false },
                 title = { Text(text = stringResource(id = R.string.app_info)) },
                 text = {
                     Text(
@@ -261,13 +257,13 @@ private fun ListScreenContent(
                 },
                 confirmButton = {
                     TextButtonElement(
-                        onClick = { openAppInfoDialog = false },
+                        onClick = { openAppInfoDialogState.value = false },
                         text = stringResource(R.string.action_close)
                     )
                 },
                 dismissButton = {
                     TextButtonElement(
-                        onClick = { openGitHub = true },
+                        onClick = { openGitHubState.value = true },
                         text = "GitHub"
                     )
                 },
@@ -275,11 +271,11 @@ private fun ListScreenContent(
             )
         }
 
-        if (openGitHub) {
+        if (openGitHubState.value) {
             val uriHandler = LocalUriHandler.current
             val uri = Uri.parse(GITHUB_LINK)
             uriHandler.openUri(uri.toString())
-            openGitHub = false
+            openGitHubState.value = false
         }
     }
 }
@@ -289,30 +285,32 @@ private fun ListScreenContent(
 private fun ListScreenPreview() {
     ListScreenContent(
         scaffoldState = ScaffoldState(DrawerState(DrawerValue.Open), SnackbarHostState()),
-        listOfTasksState = mutableStateOf(
-            listOf(
-                Task(
-                    id = 0,
-                    created = 0L,
-                    title = "first",
-                    color = AppTheme.taskColors[0].toArgb()
-                ),
-                Task(
-                    id = 1,
-                    created = 1L,
-                    title = "second",
-                    color = AppTheme.taskColors[1].toArgb()
-                ),
-                Task(
-                    id = 2,
-                    created = 2L,
-                    title = "third",
-                    color = AppTheme.taskColors[2].toArgb()
+        listOfTasksState = remember {
+            mutableStateOf(
+                listOf(
+                    Task(
+                        id = 0,
+                        created = 0L,
+                        title = "first",
+                        color = AppTheme.taskColors[0].toArgb()
+                    ),
+                    Task(
+                        id = 1,
+                        created = 1L,
+                        title = "second",
+                        color = AppTheme.taskColors[1].toArgb()
+                    ),
+                    Task(
+                        id = 2,
+                        created = 2L,
+                        title = "third",
+                        color = AppTheme.taskColors[2].toArgb()
+                    )
                 )
             )
-        ),
-        openAppInfoDialogState = mutableStateOf(false),
-        openGitHubState = mutableStateOf(false),
+        },
+        openAppInfoDialogState = remember { mutableStateOf(false) },
+        openGitHubState = remember { mutableStateOf(false) },
         onNavigateToSettings = {},
         onNavigateToEditorNewTask = {},
         onNavigateToEditorExistingTask = {},

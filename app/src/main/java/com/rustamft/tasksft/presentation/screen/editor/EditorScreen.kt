@@ -27,10 +27,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,6 +55,9 @@ import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
 import com.rustamft.tasksft.presentation.theme.Shapes
 import com.rustamft.tasksft.presentation.util.DEEP_LINK_URI
 import com.rustamft.tasksft.presentation.util.ROUTE_EDITOR
+import com.rustamft.tasksft.presentation.util.TAG_EDITOR_SCREEN
+import com.rustamft.tasksft.presentation.util.TAG_EDITOR_SCREEN_EDITTEXT_TITLE
+import com.rustamft.tasksft.presentation.util.TAG_EDITOR_SCREEN_FAB
 import com.rustamft.tasksft.presentation.util.TASK_ID
 import com.rustamft.tasksft.presentation.util.model.TaskStateHolder
 import com.rustamft.tasksft.presentation.util.toDateTime
@@ -85,7 +88,7 @@ fun EditorScreen(
 
     EditorScreenContent(
         scaffoldState = scaffoldState,
-        taskStateHolderState = mutableStateOf(viewModel.taskStateHolder),
+        taskStateHolderState = remember { mutableStateOf(viewModel.taskStateHolder) },
         openTaskInfoDialogState = viewModel.openTaskInfoDialogState,
         openChooseColorDialogState = viewModel.openChooseColorDialogState,
         openUnsavedTaskDialogState = viewModel.openUnsavedTaskDialogState,
@@ -109,16 +112,12 @@ private fun EditorScreenContent(
     onDeleteTask: () -> Unit
 ) {
 
-    var openTaskInfoDialog by remember { openTaskInfoDialogState }
-    var openChooseColorDialog by remember { openChooseColorDialogState }
-    var openUnsavedTaskDialog by remember { openUnsavedTaskDialogState }
-    var valueChanged by remember { valueChangedState }
     val taskStateHolder by taskStateHolderState
     val onValueChange = {
         if (taskStateHolder.title.isBlank()) {
-            valueChanged = false
-        } else if (!valueChanged) {
-            valueChanged = true
+            valueChangedState.value = false
+        } else if (!valueChangedState.value) {
+            valueChangedState.value = true
         }
     }
     val pickerDialogThemeResId = if (AppTheme.isDark) {
@@ -128,7 +127,9 @@ private fun EditorScreenContent(
     }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag(TAG_EDITOR_SCREEN),
         scaffoldState = scaffoldState,
         topBar = {
             TopBar(
@@ -137,8 +138,8 @@ private fun EditorScreenContent(
                         painter = painterResource(id = R.drawable.ic_arrow_back),
                         contentDescription = stringResource(id = R.string.action_back),
                         onClick = {
-                            if (valueChanged) {
-                                openUnsavedTaskDialog = true
+                            if (valueChangedState.value) {
+                                openUnsavedTaskDialogState.value = true
                             } else {
                                 onNavigateBack()
                             }
@@ -154,21 +155,21 @@ private fun EditorScreenContent(
                     NavItem(
                         painterResId = R.drawable.ic_info,
                         descriptionResId = R.string.task_info,
-                        onClick = { openTaskInfoDialog = true }
+                        onClick = { openTaskInfoDialogState.value = true }
                     )
                 )
             )
         },
         floatingActionButton = {
-            if (valueChanged) {
-                Fab(
-                    item = NavItem(
-                        painterResId = R.drawable.ic_save,
-                        descriptionResId = R.string.action_save,
-                        onClick = onSaveTask
-                    )
-                )
-            }
+            Fab(
+                modifier = Modifier.testTag(TAG_EDITOR_SCREEN_FAB),
+                item = NavItem(
+                    painterResId = R.drawable.ic_save,
+                    descriptionResId = R.string.action_save,
+                    onClick = onSaveTask
+                ),
+                visibilityState = valueChangedState
+            )
         }
     ) { paddingValues ->
 
@@ -190,7 +191,7 @@ private fun EditorScreenContent(
             )
 
             TextField(
-                modifier = modifier,
+                modifier = modifier.testTag(TAG_EDITOR_SCREEN_EDITTEXT_TITLE),
                 value = taskStateHolder.title,
                 onValueChange = {
                     taskStateHolder.title = it
@@ -219,7 +220,7 @@ private fun EditorScreenContent(
                 Spacer(modifier = Modifier.width(DIMEN_SMALL))
                 ColorButtonElement(
                     color = taskStateHolder.color,
-                    onClick = { openChooseColorDialog = true }
+                    onClick = { openChooseColorDialogState.value = true }
                 )
             }
             Row(
@@ -240,13 +241,13 @@ private fun EditorScreenContent(
             if (taskStateHolder.reminderIsSet) {
                 Row(modifier = modifier) {
                     DatePickerElement(
-                        calendarState = mutableStateOf(taskStateHolder.reminderCalendar),
+                        calendarState = remember { mutableStateOf(taskStateHolder.reminderCalendar) },
                         themeResId = pickerDialogThemeResId,
                         onValueChange = onValueChange
                     )
                     Spacer(modifier = Modifier.width(DIMEN_SMALL))
                     TimePickerElement(
-                        calendarState = mutableStateOf(taskStateHolder.reminderCalendar),
+                        calendarState = remember { mutableStateOf(taskStateHolder.reminderCalendar) },
                         themeResId = pickerDialogThemeResId,
                         onValueChange = onValueChange
                     )
@@ -260,9 +261,9 @@ private fun EditorScreenContent(
             }
         }
 
-        if (openTaskInfoDialog) {
+        if (openTaskInfoDialogState.value) {
             AlertDialog(
-                onDismissRequest = { openTaskInfoDialog = false },
+                onDismissRequest = { openTaskInfoDialogState.value = false },
                 title = { Text(text = stringResource(id = R.string.task_info)) },
                 text = {
                     val createdString = if (taskStateHolder.created == 0L) {
@@ -280,7 +281,7 @@ private fun EditorScreenContent(
                 },
                 confirmButton = {
                     TextButtonElement(
-                        onClick = { openTaskInfoDialog = false },
+                        onClick = { openTaskInfoDialogState.value = false },
                         text = stringResource(R.string.action_close)
                     )
                 },
@@ -288,9 +289,9 @@ private fun EditorScreenContent(
             )
         }
 
-        if (openChooseColorDialog) {
+        if (openChooseColorDialogState.value) {
             AlertDialog(
-                onDismissRequest = { openChooseColorDialog = false },
+                onDismissRequest = { openChooseColorDialogState.value = false },
                 title = { Text(text = stringResource(id = R.string.task_color)) },
                 text = {
                     Row(
@@ -303,7 +304,7 @@ private fun EditorScreenContent(
                                 onClick = {
                                     taskStateHolder.color = color
                                     onValueChange()
-                                    openChooseColorDialog = false
+                                    openChooseColorDialogState.value = false
                                 }
                             )
                         }
@@ -315,15 +316,15 @@ private fun EditorScreenContent(
             )
         }
 
-        if (openUnsavedTaskDialog) {
+        if (openUnsavedTaskDialogState.value) {
             AlertDialog(
-                onDismissRequest = { openUnsavedTaskDialog = false },
+                onDismissRequest = { openUnsavedTaskDialogState.value = false },
                 title = { Text(text = stringResource(id = R.string.task_unsaved)) },
                 text = { Text(text = stringResource(id = R.string.task_unsaved_dialog_content)) },
                 confirmButton = {
                     TextButtonElement(
                         onClick = {
-                            openUnsavedTaskDialog = false
+                            openUnsavedTaskDialogState.value = false
                             onSaveTask()
                         },
                         text = stringResource(R.string.action_save)
@@ -332,7 +333,7 @@ private fun EditorScreenContent(
                 dismissButton = {
                     TextButtonElement(
                         onClick = {
-                            openUnsavedTaskDialog = false
+                            openUnsavedTaskDialogState.value = false
                             onNavigateBack()
                         },
                         text = stringResource(R.string.action_discard)
@@ -350,16 +351,18 @@ private fun EditorScreenPreview() {
     AppTheme(theme = Theme.Auto) {
         EditorScreenContent(
             scaffoldState = ScaffoldState(DrawerState(DrawerValue.Open), SnackbarHostState()),
-            taskStateHolderState = mutableStateOf(
-                TaskStateHolder(
-                    reminderIsSetState = mutableStateOf(true),
-                    colorState = mutableStateOf(AppTheme.taskColors[0])
+            taskStateHolderState = remember {
+                mutableStateOf(
+                    TaskStateHolder(
+                        reminderIsSetState = mutableStateOf(true),
+                        colorState = mutableStateOf(AppTheme.taskColors[0])
+                    )
                 )
-            ),
-            openTaskInfoDialogState = mutableStateOf(false),
-            openChooseColorDialogState = mutableStateOf(false),
-            openUnsavedTaskDialogState = mutableStateOf(false),
-            valueChangedState = mutableStateOf(false),
+            },
+            openTaskInfoDialogState = remember { mutableStateOf(false) },
+            openChooseColorDialogState = remember { mutableStateOf(false) },
+            openUnsavedTaskDialogState = remember { mutableStateOf(false) },
+            valueChangedState = remember { mutableStateOf(false) },
             onNavigateBack = {},
             onSaveTask = {},
             onDeleteTask = {}

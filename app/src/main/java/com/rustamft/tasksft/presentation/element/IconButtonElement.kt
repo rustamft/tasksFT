@@ -12,9 +12,7 @@ fun IconButtonElement(
     onClick: () -> Unit
 ) {
 
-    IconButton(
-        onClick = onClick
-    ) {
+    IconButton(onClick = onClick) {
         Icon(
             painter = painter,
             contentDescription = contentDescription

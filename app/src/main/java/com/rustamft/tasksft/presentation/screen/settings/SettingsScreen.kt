@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.AlertDialog
@@ -29,7 +30,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -117,7 +117,6 @@ private fun SettingsScreenContent(
 ) {
 
     val preferences by preferencesState
-    var openExportConfirmDialog by remember { openExportConfirmDialogState }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -134,9 +133,11 @@ private fun SettingsScreenContent(
                 }
             )
         }
-    ) {
+    ) { paddingValues ->
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = paddingValues.calculateBottomPadding()),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -187,7 +188,7 @@ private fun SettingsScreenContent(
                             if (preferences.backupDirectory.isEmpty()) {
                                 onChooseDirectory()
                             } else {
-                                openExportConfirmDialog = true
+                                openExportConfirmDialogState.value = true
                             }
                         }
                     )
@@ -202,9 +203,9 @@ private fun SettingsScreenContent(
         }
     }
 
-    if (openExportConfirmDialog) {
+    if (openExportConfirmDialogState.value) {
         AlertDialog(
-            onDismissRequest = { openExportConfirmDialog = false },
+            onDismissRequest = { openExportConfirmDialogState.value = false },
             title = { Text(text = stringResource(id = R.string.backup)) },
             text = {
                 Text(
@@ -236,8 +237,8 @@ private fun SettingsScreenContent(
 private fun SettingsScreenPreview() {
     SettingsScreenContent(
         scaffoldState = ScaffoldState(DrawerState(DrawerValue.Open), SnackbarHostState()),
-        preferencesState = mutableStateOf(Preferences()),
-        openExportConfirmDialogState = mutableStateOf(false),
+        preferencesState = remember { mutableStateOf(Preferences()) },
+        openExportConfirmDialogState = remember { mutableStateOf(false) },
         onNavigateBack = {},
         onSetTheme = {},
         onChooseDirectory = {},
