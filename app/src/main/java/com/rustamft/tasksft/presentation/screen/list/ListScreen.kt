@@ -64,6 +64,7 @@ import com.rustamft.tasksft.presentation.util.ROUTE_SETTINGS
 import com.rustamft.tasksft.presentation.util.TAG_LIST_SCREEN
 import com.rustamft.tasksft.presentation.util.TAG_LIST_SCREEN_FAB
 import com.rustamft.tasksft.presentation.util.TAG_LIST_SCREEN_TASK_CARD
+import com.rustamft.tasksft.presentation.util.model.TaskStateHolder
 import com.rustamft.tasksft.presentation.util.toDateTime
 import org.koin.androidx.compose.koinViewModel
 
@@ -236,6 +237,16 @@ private fun ListScreenContent(
                                         fontWeight = FontWeight.Bold,
                                         color = textColor
                                     )
+                                    if (task.repeatCalendarUnit != 0) {
+                                        TaskStateHolder
+                                            .CALENDAR_UNITS_MAP[task.repeatCalendarUnit]
+                                            ?.let { unitNameUiText ->
+                                                Text(
+                                                    text = unitNameUiText.asString(),
+                                                    color = textColor
+                                                )
+                                            }
+                                    }
                                 }
                             }
                         }

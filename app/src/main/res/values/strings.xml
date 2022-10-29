@@ -32,9 +32,9 @@
     <string name="now">Now</string>
 
     <string name="reminder">Reminder</string>
-    <string name="reminder_every_day">every day</string>
-    <string name="reminder_every_week">every week</string>
-    <string name="reminder_every_month">every month</string>
+    <string name="reminder_daily">daily</string>
+    <string name="reminder_weekly">weekly</string>
+    <string name="reminder_monthly">monthly</string>
     <string name="reminder_in">Reminder in %1$d\d %2$d\h %3$d\m</string>
     <string name="reminder_one_time">one time</string>
     <string name="reminder_repeat">Repeat</string>

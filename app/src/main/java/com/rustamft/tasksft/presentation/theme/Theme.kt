@@ -48,7 +48,7 @@ object AppTheme {
         PureCrimson,
         Corn,
         Patina,
-        LightBlue,
+        LapisLazuli,
         WisteriaPurple
     )
 }

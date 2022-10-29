@@ -35,12 +35,15 @@ class TaskStateHolder(
     var reminderIsSet by reminderIsSetState
     var reminderCalendar by reminderCalendarState
     var color by colorState
-    val calendarUnitsMap = mapOf(
-        0 to UIText.StringResource(R.string.reminder_one_time),
-        Calendar.DAY_OF_MONTH to UIText.StringResource(R.string.reminder_every_day),
-        Calendar.WEEK_OF_MONTH to UIText.StringResource(R.string.reminder_every_week),
-        Calendar.MONTH to UIText.StringResource(R.string.reminder_every_month)
-    )
+
+    companion object {
+        val CALENDAR_UNITS_MAP = mapOf(
+            0 to UIText.StringResource(R.string.reminder_one_time),
+            Calendar.DAY_OF_MONTH to UIText.StringResource(R.string.reminder_daily),
+            Calendar.WEEK_OF_MONTH to UIText.StringResource(R.string.reminder_weekly),
+            Calendar.MONTH to UIText.StringResource(R.string.reminder_monthly)
+        )
+    }
 
     fun setStateFromTask(task: Task) {
         id = task.id

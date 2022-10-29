@@ -253,7 +253,7 @@ private fun EditorScreenContent(
                     )
                     Spacer(modifier = Modifier.width(DIMEN_SMALL))
                     DropdownMenuElement(
-                        items = taskStateHolder.calendarUnitsMap,
+                        items = TaskStateHolder.CALENDAR_UNITS_MAP,
                         selectedItemState = taskStateHolder.repeatCalendarUnitsState,
                         onClickAdditional = onValueChange
                     )
