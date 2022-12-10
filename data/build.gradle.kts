@@ -37,8 +37,7 @@ android {
 dependencies {
 
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.4")
 
     implementation(project(":domain"))
     // DocumentFile
@@ -46,7 +45,7 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     // Room
-    val roomVersion = "2.5.0-beta01"
+    val roomVersion = "2.5.0-rc01"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")

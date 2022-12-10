@@ -3,8 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
-    id("com.google.devtools.ksp") version "${Constants.KOTLIN_VERSION}-1.0.6"
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
+    id("com.google.devtools.ksp") version "${Constants.KOTLIN_VERSION}-1.0.8"
+    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
 }
 
 kotlin {
@@ -54,7 +54,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.0-rc02"
+        kotlinCompilerExtensionVersion = "1.4.0-alpha02"
     }
     packagingOptions {
         resources {
@@ -77,19 +77,19 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-service:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
     // Activity
-    implementation("androidx.activity:activity-compose:1.6.0")
+    implementation("androidx.activity:activity-compose:1.6.1")
     // Compose
-    val composeVersion = "1.3.0-rc01"
-    implementation("androidx.compose.ui:ui:1.3.0")
+    val composeVersion = "1.4.0-alpha03"
+    implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
     // Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
     // Compose destinations
-    val composeDestinationsVersion = "1.7.23-beta"
+    val composeDestinationsVersion = "1.7.27-beta"
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestinationsVersion")
     ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestinationsVersion")
     // Koin
@@ -104,16 +104,16 @@ dependencies {
     // Coroutines test
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     // LeakCanary
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.9.1")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.10")
     // JUnit
     val junitVersion = "5.9.1"
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+    androidTestImplementation("androidx.test.ext:junit:1.1.4")
     // MockK
-    testImplementation("io.mockk:mockk:1.13.2")
+    testImplementation("io.mockk:mockk:1.13.3")
     // Kaspresso
-    val kaspressoVersion = "1.4.2"
+    val kaspressoVersion = "1.4.3"
     androidTestImplementation("com.kaspersky.android-components:kaspresso:$kaspressoVersion")
     androidTestImplementation("com.kaspersky.android-components:kaspresso-compose-support:$kaspressoVersion")
 }
