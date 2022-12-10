@@ -1,5 +1,7 @@
 package com.rustamft.tasksft.presentation.util
 
+internal const val REQUEST_CODE_NOTIFICATION = 100
+
 internal const val GITHUB_LINK = "https://github.com/rustamft/tasksFT"
 
 internal const val ROUTE_LIST = "list_screen"

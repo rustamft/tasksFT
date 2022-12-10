@@ -1,1 +1,0 @@
-/home/rustamft/Library/Android/projects/tasksFT/buildSrc/build/classes/kotlin/main/Constants.class
