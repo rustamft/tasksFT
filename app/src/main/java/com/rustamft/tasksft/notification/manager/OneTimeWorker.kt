@@ -59,7 +59,7 @@ class OneTimeWorker(
         val route = EditorScreenDestination(taskId = taskId).route
         val deepLinkIntent = Intent(
             Intent.ACTION_VIEW,
-            "$DEEP_LINK_URI${route}".toUri(),
+            "$DEEP_LINK_URI$route".toUri(),
             context,
             MainActivity::class.java
         )

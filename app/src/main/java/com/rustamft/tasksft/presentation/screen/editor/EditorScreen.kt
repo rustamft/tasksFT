@@ -66,7 +66,7 @@ import org.koin.core.parameter.parametersOf
 
 @Destination(
     route = ROUTE_EDITOR,
-    deepLinks = [DeepLink(uriPattern = "$DEEP_LINK_URI${FULL_ROUTE_PLACEHOLDER}")]
+    deepLinks = [DeepLink(uriPattern = "$DEEP_LINK_URI$FULL_ROUTE_PLACEHOLDER")]
 )
 @Composable
 fun EditorScreen(

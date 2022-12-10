@@ -23,15 +23,15 @@ fun DatePickerElement(
     val calendar by calendarState
     fun getStringFromCalendar(): String {
         return "${
-            calendar.get(Calendar.DAY_OF_MONTH)
+        calendar.get(Calendar.DAY_OF_MONTH)
         } ${
-            calendar.getDisplayName(
-                Calendar.MONTH,
-                Calendar.LONG,
-                Locale.getDefault()
-            )
+        calendar.getDisplayName(
+            Calendar.MONTH,
+            Calendar.LONG,
+            Locale.getDefault()
+        )
         } ${
-            calendar.get(Calendar.YEAR)
+        calendar.get(Calendar.YEAR)
         }"
     }
 

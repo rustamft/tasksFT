@@ -23,9 +23,9 @@ fun TimePickerElement(
     val calendar by calendarState
     fun getStringFromCalendar(): String {
         return "${
-            calendar.get(Calendar.HOUR_OF_DAY).format(2)
+        calendar.get(Calendar.HOUR_OF_DAY).format(2)
         }:${
-            calendar.get(Calendar.MINUTE).format(2)
+        calendar.get(Calendar.MINUTE).format(2)
         }"
     }
 

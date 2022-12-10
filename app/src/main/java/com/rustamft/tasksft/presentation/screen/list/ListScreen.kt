@@ -262,7 +262,7 @@ private fun ListScreenContent(
                 text = {
                     Text(
                         text = "${
-                            stringResource(id = R.string.app_info_dialog_content)
+                        stringResource(id = R.string.app_info_dialog_content)
                         } ${BuildConfig.VERSION_NAME}"
                     )
                 },
