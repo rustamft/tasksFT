@@ -15,7 +15,7 @@ class SaveTaskUseCase(
     suspend fun execute(task: Task) {
         supervisorScope {
             launch {
-                taskRepository.saveTask(task = task)
+                taskRepository.save(task = task)
             }
             launch {
                 taskNotificationScheduler.cancel(task = task)

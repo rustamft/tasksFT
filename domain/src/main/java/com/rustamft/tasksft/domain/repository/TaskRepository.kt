@@ -5,10 +5,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface TaskRepository {
 
-    suspend fun saveTask(task: Task)
-    suspend fun saveTasks(list: List<Task>)
-    suspend fun deleteTask(task: Task)
-    suspend fun deleteTasks(list: List<Task>)
-    fun getAllTasks(): Flow<List<Task>>
-    fun getTaskById(taskId: Int): Flow<Task>
+    suspend fun save(task: Task)
+    suspend fun save(tasks: List<Task>)
+    suspend fun delete(task: Task)
+    suspend fun delete(tasks: List<Task>)
+    fun getAll(): Flow<List<Task>>
+    fun get(taskId: Int): Flow<Task>
 }

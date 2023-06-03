@@ -1,8 +1,7 @@
 package com.rustamft.tasksft.data.repository
 
+import com.rustamft.tasksft.data.model.map
 import com.rustamft.tasksft.data.storage.TaskStorage
-import com.rustamft.tasksft.data.util.mapFromData
-import com.rustamft.tasksft.data.util.mapToData
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.repository.TaskRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,41 +17,40 @@ internal class TaskRepositoryImpl(
 ) : TaskRepository {
 
     @Throws(IOException::class, Exception::class)
-    override suspend fun saveTask(task: Task) {
+    override suspend fun save(task: Task) {
         withContext(dispatcher) {
-            taskStorage.save(taskData = task.mapToData())
+            taskStorage.save(task = task.map())
         }
     }
 
     @Throws(IOException::class, Exception::class)
-    override suspend fun saveTasks(list: List<Task>) {
+    override suspend fun save(tasks: List<Task>) {
         withContext(dispatcher) {
-            taskStorage.save(list = list.mapToData())
+            taskStorage.save(tasks = tasks.map())
         }
     }
 
     @Throws(IOException::class, Exception::class)
-    override suspend fun deleteTask(task: Task) {
+    override suspend fun delete(task: Task) {
         withContext(dispatcher) {
-            taskStorage.delete(task = task.mapToData())
+            taskStorage.delete(task = task.map())
         }
     }
-
 
     @Throws(IOException::class, Exception::class)
-    override suspend fun deleteTasks(list: List<Task>) {
+    override suspend fun delete(tasks: List<Task>) {
         withContext(dispatcher) {
-            taskStorage.delete(list = list.mapToData())
+            taskStorage.delete(tasks = tasks.map())
         }
     }
 
-    override fun getAllTasks(): Flow<List<Task>> {
-        return taskStorage.getAll().mapFromData()
+    override fun getAll(): Flow<List<Task>> {
+        return taskStorage.getAll().map()
     }
 
-    override fun getTaskById(taskId: Int): Flow<Task> {
-        return taskStorage.getById(id = taskId).map { taskData ->
-            taskData?.mapFromData() ?: Task()
+    override fun get(taskId: Int): Flow<Task> {
+        return taskStorage.get(taskId = taskId).map { task ->
+            task?.map() ?: Task()
         }
     }
 }

@@ -15,28 +15,28 @@ import kotlinx.coroutines.flow.Flow
 internal abstract class RoomDao : PreferencesStorage, TaskStorage {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract override suspend fun save(preferencesData: PreferencesData)
+    abstract override suspend fun save(preferences: PreferencesData)
 
     @Query("SELECT * FROM preferences WHERE id = 0")
     abstract override fun get(): Flow<PreferencesData?> // Sends null in flow if nothing's there
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract override suspend fun save(taskData: TaskData)
+    abstract override suspend fun save(task: TaskData)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract override suspend fun save(list: List<TaskData>)
+    abstract override suspend fun save(tasks: List<TaskData>)
 
     @Delete
     abstract override suspend fun delete(task: TaskData)
 
     @Delete
-    abstract override suspend fun delete(list: List<TaskData>)
+    abstract override suspend fun delete(tasks: List<TaskData>)
 
     @Query("SELECT * FROM task ORDER BY finished DESC, reminder, created ASC")
     abstract override fun getAll(): Flow<List<TaskData>>
 
-    @Query("SELECT * FROM task WHERE id = :id")
-    abstract override fun getById(id: Int): Flow<TaskData?>
+    @Query("SELECT * FROM task WHERE id = :taskId")
+    abstract override fun get(taskId: Int): Flow<TaskData?>
 
     @Query("SELECT * FROM task WHERE finished = 1")
     abstract override fun getFinished(): Flow<List<TaskData>>

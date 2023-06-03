@@ -1,8 +1,7 @@
 package com.rustamft.tasksft.data.repository
 
+import com.rustamft.tasksft.data.model.map
 import com.rustamft.tasksft.data.storage.PreferencesStorage
-import com.rustamft.tasksft.data.util.mapFromData
-import com.rustamft.tasksft.data.util.mapToData
 import com.rustamft.tasksft.domain.model.Preferences
 import com.rustamft.tasksft.domain.repository.PreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,13 +17,13 @@ internal class PreferencesRepositoryImpl(
 
     override suspend fun savePreferences(preferences: Preferences) {
         withContext(dispatcher) {
-            preferencesStorage.save(preferencesData = preferences.mapToData())
+            preferencesStorage.save(preferences = preferences.map())
         }
     }
 
     override fun getPreferences(): Flow<Preferences> {
-        return preferencesStorage.get().map { preferencesData ->
-            preferencesData?.mapFromData() ?: Preferences()
+        return preferencesStorage.get().map { preferences ->
+            preferences?.map() ?: Preferences()
         }
     }
 }

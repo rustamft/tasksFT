@@ -14,10 +14,10 @@ class ImportTasksUseCase(
 ) {
 
     suspend fun execute(fileUriString: String) {
-        val list = backupRepository.getBackup(fileUriString = fileUriString).first()
+        val list = backupRepository.get(fileUriString = fileUriString).first()
         supervisorScope {
             launch {
-                tasksRepository.saveTasks(list = list)
+                tasksRepository.save(tasks = list)
             }
             launch {
                 taskNotificationScheduler.schedule(

@@ -1,9 +1,8 @@
 package com.rustamft.tasksft.data.repository
 
 import android.net.Uri
+import com.rustamft.tasksft.data.model.map
 import com.rustamft.tasksft.data.storage.BackupStorage
-import com.rustamft.tasksft.data.util.mapFromData
-import com.rustamft.tasksft.data.util.mapToData
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.repository.BackupRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,16 +15,21 @@ internal class BackupRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : BackupRepository {
 
-    override suspend fun saveBackup(directoryUriString: String, list: List<Task>) {
+    override suspend fun save(
+        fileName: String,
+        tasks: List<Task>,
+        directoryUriString: String
+    ) {
         withContext(dispatcher) {
             backupStorage.save(
-                directoryUri = Uri.parse(directoryUriString),
-                list = list.mapToData()
+                fileName = fileName,
+                tasks = tasks.map(),
+                directoryUri = Uri.parse(directoryUriString)
             )
         }
     }
 
-    override fun getBackup(fileUriString: String): Flow<List<Task>> {
-        return backupStorage.get(fileUri = Uri.parse(fileUriString)).mapFromData()
+    override fun get(fileUriString: String): Flow<List<Task>> {
+        return backupStorage.get(fileUri = Uri.parse(fileUriString)).map()
     }
 }

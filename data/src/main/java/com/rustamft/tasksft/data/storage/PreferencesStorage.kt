@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 internal interface PreferencesStorage {
 
-    suspend fun save(preferencesData: PreferencesData)
+    suspend fun save(preferences: PreferencesData)
     fun get(): Flow<PreferencesData?>
 }

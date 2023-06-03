@@ -8,5 +8,5 @@ class GetListOfTasksUseCase(
     private val taskRepository: TaskRepository
 ) {
 
-    fun execute(): Flow<List<Task>> = taskRepository.getAllTasks()
+    fun execute(): Flow<List<Task>> = taskRepository.getAll()
 }

@@ -16,7 +16,7 @@ class DeleteTaskUseCase(
     suspend fun execute(task: Task) {
         supervisorScope {
             launch {
-                taskRepository.deleteTask(task = task)
+                taskRepository.delete(task = task)
             }
             launch {
                 taskNotificationScheduler.cancel(task = task)
@@ -28,7 +28,7 @@ class DeleteTaskUseCase(
     suspend fun execute(list: List<Task>) {
         supervisorScope {
             launch {
-                taskRepository.deleteTasks(list = list)
+                taskRepository.delete(tasks = list)
             }
             launch {
                 taskNotificationScheduler.cancel(list = list)

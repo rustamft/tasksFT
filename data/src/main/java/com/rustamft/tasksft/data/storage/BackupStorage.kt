@@ -6,6 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 internal interface BackupStorage {
 
-    suspend fun save(directoryUri: Uri, list: List<TaskData>)
+    suspend fun save(
+        fileName: String,
+        tasks: List<TaskData>,
+        directoryUri: Uri
+    )
+
     fun get(fileUri: Uri): Flow<List<TaskData>>
 }

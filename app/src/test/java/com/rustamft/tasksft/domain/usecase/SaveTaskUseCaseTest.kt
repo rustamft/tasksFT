@@ -22,7 +22,7 @@ internal class SaveTaskUseCaseTest {
     fun `task is rescheduled correctly`() {
         suspend fun test(task: Task, shouldSchedule: Boolean) {
             var taskScheduled = false
-            coEvery { taskRepository.saveTask(task) } answers {}
+            coEvery { taskRepository.save(task) } answers {}
             every { taskNotificationScheduler.cancel(task) } answers {}
             every { taskNotificationScheduler.schedule(task) } answers {
                 taskScheduled = true
