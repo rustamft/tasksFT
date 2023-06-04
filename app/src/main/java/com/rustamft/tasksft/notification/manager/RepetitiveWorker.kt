@@ -13,13 +13,13 @@ import androidx.work.WorkerParameters
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.notification.receiver.TaskBroadcastReceiver
 import com.rustamft.tasksft.presentation.activity.MainActivity
+import com.rustamft.tasksft.presentation.global.DEEP_LINK_URI
+import com.rustamft.tasksft.presentation.global.NOTIFICATION_ACTION_REPEAT_TASK
+import com.rustamft.tasksft.presentation.global.NOTIFICATION_CHANNEL_ID_TASK
+import com.rustamft.tasksft.presentation.global.TASK_DESCRIPTION
+import com.rustamft.tasksft.presentation.global.TASK_ID
+import com.rustamft.tasksft.presentation.global.TASK_TITLE
 import com.rustamft.tasksft.presentation.screen.destinations.EditorScreenDestination
-import com.rustamft.tasksft.presentation.util.DEEP_LINK_URI
-import com.rustamft.tasksft.presentation.util.NOTIFICATION_ACTION_REPEAT_TASK
-import com.rustamft.tasksft.presentation.util.NOTIFICATION_CHANNEL_ID_TASK
-import com.rustamft.tasksft.presentation.util.TASK_DESCRIPTION
-import com.rustamft.tasksft.presentation.util.TASK_ID
-import com.rustamft.tasksft.presentation.util.TASK_TITLE
 
 class RepetitiveWorker(
     private val context: Context,

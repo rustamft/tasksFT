@@ -10,8 +10,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import com.rustamft.tasksft.presentation.global.format
 import com.rustamft.tasksft.presentation.theme.Shapes
-import com.rustamft.tasksft.presentation.util.format
 import java.util.Calendar
 
 @Composable

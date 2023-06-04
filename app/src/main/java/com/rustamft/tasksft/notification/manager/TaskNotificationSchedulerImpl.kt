@@ -6,9 +6,9 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.notification.TaskNotificationScheduler
-import com.rustamft.tasksft.presentation.util.TASK_DESCRIPTION
-import com.rustamft.tasksft.presentation.util.TASK_ID
-import com.rustamft.tasksft.presentation.util.TASK_TITLE
+import com.rustamft.tasksft.presentation.global.TASK_DESCRIPTION
+import com.rustamft.tasksft.presentation.global.TASK_ID
+import com.rustamft.tasksft.presentation.global.TASK_TITLE
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import java.util.concurrent.TimeUnit

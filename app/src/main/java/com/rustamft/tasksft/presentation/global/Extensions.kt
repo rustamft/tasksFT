@@ -1,11 +1,13 @@
-package com.rustamft.tasksft.presentation.util
+package com.rustamft.tasksft.presentation.global
 
-import com.rustamft.tasksft.presentation.util.model.DateTime
-import com.rustamft.tasksft.presentation.util.model.TimeDifference
+import com.rustamft.tasksft.presentation.model.DateTime
+import com.rustamft.tasksft.presentation.model.TimeDifference
 import java.util.Calendar
 import java.util.Locale
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
+
+internal fun Int.format(digits: Int) = String.format("%0${digits}d", this)
 
 internal fun Long.toDateTime(): DateTime {
 
@@ -15,7 +17,7 @@ internal fun Long.toDateTime(): DateTime {
     }
 
     val date = "${
-    calendar.get(Calendar.DAY_OF_MONTH)
+        calendar.get(Calendar.DAY_OF_MONTH)
     } ${
     calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault())
     } ${

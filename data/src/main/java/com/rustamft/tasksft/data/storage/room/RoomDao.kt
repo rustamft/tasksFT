@@ -32,7 +32,7 @@ internal abstract class RoomDao : PreferencesStorage, TaskStorage {
     @Delete
     abstract override suspend fun delete(tasks: List<TaskData>)
 
-    @Query("SELECT * FROM task ORDER BY finished DESC, reminder, created ASC")
+    @Query("SELECT * FROM task")
     abstract override fun getAll(): Flow<List<TaskData>>
 
     @Query("SELECT * FROM task WHERE id = :taskId")

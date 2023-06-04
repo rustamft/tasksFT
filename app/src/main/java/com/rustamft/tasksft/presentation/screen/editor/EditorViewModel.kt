@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
-import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
+import com.rustamft.tasksft.domain.usecase.GetTaskUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
-import com.rustamft.tasksft.presentation.util.TASK_ID
-import com.rustamft.tasksft.presentation.util.model.TaskStateHolder
-import com.rustamft.tasksft.presentation.util.model.UIText
-import com.rustamft.tasksft.presentation.util.toTimeDifference
+import com.rustamft.tasksft.presentation.global.TASK_ID
+import com.rustamft.tasksft.presentation.global.toTimeDifference
+import com.rustamft.tasksft.presentation.model.TaskStateHolder
+import com.rustamft.tasksft.presentation.model.UIText
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class EditorViewModel(
     arguments: Bundle,
-    getTaskByIdUseCase: GetTaskByIdUseCase,
+    getTaskUseCase: GetTaskUseCase,
     private val saveTaskUseCase: SaveTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
     private val snackbarChannel: Channel<UIText>,
@@ -39,10 +39,8 @@ class EditorViewModel(
 
     init {
         viewModelScope.launch(exceptionHandler) {
-            val task = getTaskByIdUseCase.execute(taskId = taskId).first()
-            if (task.id != -1) {
-                taskStateHolder.setStateFromTask(task = task)
-            }
+            val task = getTaskUseCase.execute(taskId = taskId).first() ?: return@launch
+            taskStateHolder.setStateFromTask(task = task)
         }
     }
 

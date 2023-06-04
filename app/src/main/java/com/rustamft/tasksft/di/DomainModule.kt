@@ -5,9 +5,9 @@ import androidx.work.WorkManager
 import com.rustamft.tasksft.domain.notification.TaskNotificationScheduler
 import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.ExportTasksUseCase
-import com.rustamft.tasksft.domain.usecase.GetListOfTasksUseCase
+import com.rustamft.tasksft.domain.usecase.GetAllTasksUseCase
 import com.rustamft.tasksft.domain.usecase.GetPreferencesUseCase
-import com.rustamft.tasksft.domain.usecase.GetTaskByIdUseCase
+import com.rustamft.tasksft.domain.usecase.GetTaskUseCase
 import com.rustamft.tasksft.domain.usecase.ImportTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SavePreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
@@ -27,12 +27,12 @@ val domainModule = module {
         GetPreferencesUseCase(preferencesRepository = get())
     }
 
-    factory<GetListOfTasksUseCase> {
-        GetListOfTasksUseCase(taskRepository = get())
+    factory<GetAllTasksUseCase> {
+        GetAllTasksUseCase(taskRepository = get())
     }
 
-    factory<GetTaskByIdUseCase> {
-        GetTaskByIdUseCase(taskRepository = get())
+    factory<GetTaskUseCase> {
+        GetTaskUseCase(taskRepository = get())
     }
 
     factory<SavePreferencesUseCase> {

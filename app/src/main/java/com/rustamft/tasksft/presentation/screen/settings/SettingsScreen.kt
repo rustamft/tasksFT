@@ -43,9 +43,9 @@ import com.rustamft.tasksft.domain.model.Preferences
 import com.rustamft.tasksft.domain.model.Preferences.Theme
 import com.rustamft.tasksft.presentation.element.IconButtonElement
 import com.rustamft.tasksft.presentation.element.TextButtonElement
+import com.rustamft.tasksft.presentation.global.ROUTE_SETTINGS
 import com.rustamft.tasksft.presentation.navigation.TopBar
 import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
-import com.rustamft.tasksft.presentation.util.ROUTE_SETTINGS
 import org.koin.androidx.compose.koinViewModel
 
 @Destination(route = ROUTE_SETTINGS)

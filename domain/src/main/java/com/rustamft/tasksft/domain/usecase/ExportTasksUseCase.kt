@@ -1,5 +1,6 @@
 package com.rustamft.tasksft.domain.usecase
 
+import com.rustamft.tasksft.domain.global.defaultSort
 import com.rustamft.tasksft.domain.repository.BackupRepository
 import com.rustamft.tasksft.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.first
@@ -18,7 +19,7 @@ class ExportTasksUseCase(
         val fileName = "$filePrefix $currentTime.$fileExtension"
         backupRepository.save(
             fileName = fileName,
-            tasks = tasksRepository.getAll().first(),
+            tasks = tasksRepository.getAll().first().defaultSort(),
             directoryUriString = directoryUriString
         )
     }

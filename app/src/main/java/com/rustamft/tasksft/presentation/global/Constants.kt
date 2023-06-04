@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.presentation.util
+package com.rustamft.tasksft.presentation.global
 
 internal const val REQUEST_CODE_NOTIFICATION = 100
 

@@ -48,6 +48,15 @@ import com.rustamft.tasksft.BuildConfig
 import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.presentation.element.TextButtonElement
+import com.rustamft.tasksft.presentation.global.GITHUB_LINK
+import com.rustamft.tasksft.presentation.global.ROUTE_EDITOR
+import com.rustamft.tasksft.presentation.global.ROUTE_LIST
+import com.rustamft.tasksft.presentation.global.ROUTE_SETTINGS
+import com.rustamft.tasksft.presentation.global.TAG_LIST_SCREEN
+import com.rustamft.tasksft.presentation.global.TAG_LIST_SCREEN_FAB
+import com.rustamft.tasksft.presentation.global.TAG_LIST_SCREEN_TASK_CARD
+import com.rustamft.tasksft.presentation.global.toDateTime
+import com.rustamft.tasksft.presentation.model.TaskStateHolder
 import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
@@ -57,15 +66,6 @@ import com.rustamft.tasksft.presentation.theme.DIMEN_SMALL
 import com.rustamft.tasksft.presentation.theme.Gray
 import com.rustamft.tasksft.presentation.theme.Shapes
 import com.rustamft.tasksft.presentation.theme.TEXT_SMALL
-import com.rustamft.tasksft.presentation.util.GITHUB_LINK
-import com.rustamft.tasksft.presentation.util.ROUTE_EDITOR
-import com.rustamft.tasksft.presentation.util.ROUTE_LIST
-import com.rustamft.tasksft.presentation.util.ROUTE_SETTINGS
-import com.rustamft.tasksft.presentation.util.TAG_LIST_SCREEN
-import com.rustamft.tasksft.presentation.util.TAG_LIST_SCREEN_FAB
-import com.rustamft.tasksft.presentation.util.TAG_LIST_SCREEN_TASK_CARD
-import com.rustamft.tasksft.presentation.util.model.TaskStateHolder
-import com.rustamft.tasksft.presentation.util.toDateTime
 import org.koin.androidx.compose.koinViewModel
 
 @Destination(start = true, route = ROUTE_LIST)
@@ -90,7 +90,7 @@ fun ListScreen(
         },
         onDeleteFinishedTasks = {
             viewModel.deleteTasks(
-                list = listOfTasksState.value.filter { it.finished }
+                tasks = listOfTasksState.value.filter { it.finished }
             )
         },
         onSaveTask = { task ->

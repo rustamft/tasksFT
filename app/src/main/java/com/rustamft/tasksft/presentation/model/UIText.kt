@@ -1,4 +1,4 @@
-package com.rustamft.tasksft.presentation.util.model
+package com.rustamft.tasksft.presentation.model
 
 import android.content.Context
 import androidx.annotation.StringRes

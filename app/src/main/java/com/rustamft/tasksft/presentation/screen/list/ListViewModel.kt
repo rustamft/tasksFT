@@ -5,20 +5,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
-import com.rustamft.tasksft.domain.usecase.GetListOfTasksUseCase
+import com.rustamft.tasksft.domain.usecase.GetAllTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class ListViewModel(
-    getListOfTasksUseCase: GetListOfTasksUseCase,
+    getAllTasksUseCase: GetAllTasksUseCase,
     private val saveTaskUseCase: SaveTaskUseCase,
     private val deleteTasksUseCase: DeleteTaskUseCase,
     private val exceptionHandler: CoroutineExceptionHandler
 ) : ViewModel() {
 
-    val listOfTasksFlow = getListOfTasksUseCase.execute()
+    val listOfTasksFlow = getAllTasksUseCase.execute()
     val openAppInfoDialogState = mutableStateOf(false)
     val openGitHubState = mutableStateOf(false)
 
@@ -26,8 +26,8 @@ class ListViewModel(
         launchInViewModelScope { saveTaskUseCase.execute(task = task) }
     }
 
-    fun deleteTasks(list: List<Task>) {
-        launchInViewModelScope { deleteTasksUseCase.execute(list = list) }
+    fun deleteTasks(tasks: List<Task>) {
+        launchInViewModelScope { deleteTasksUseCase.execute(tasks = tasks) }
     }
 
     private fun launchInViewModelScope(block: suspend CoroutineScope.() -> Unit) {

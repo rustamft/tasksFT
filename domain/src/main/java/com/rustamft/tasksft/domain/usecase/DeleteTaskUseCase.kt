@@ -25,13 +25,13 @@ class DeleteTaskUseCase(
     }
 
     @Throws(IOException::class, Exception::class)
-    suspend fun execute(list: List<Task>) {
+    suspend fun execute(tasks: List<Task>) {
         supervisorScope {
             launch {
-                taskRepository.delete(tasks = list)
+                taskRepository.delete(tasks = tasks)
             }
             launch {
-                taskNotificationScheduler.cancel(list = list)
+                taskNotificationScheduler.cancel(list = tasks)
             }
         }
     }
