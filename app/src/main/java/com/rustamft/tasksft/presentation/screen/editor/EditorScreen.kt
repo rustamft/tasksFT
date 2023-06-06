@@ -54,7 +54,7 @@ import com.rustamft.tasksft.presentation.global.TAG_EDITOR_SCREEN_EDITTEXT_TITLE
 import com.rustamft.tasksft.presentation.global.TAG_EDITOR_SCREEN_FAB
 import com.rustamft.tasksft.presentation.global.TASK_ID
 import com.rustamft.tasksft.presentation.global.toDateTime
-import com.rustamft.tasksft.presentation.model.TaskStateHolder
+import com.rustamft.tasksft.presentation.model.TaskViewState
 import com.rustamft.tasksft.presentation.navigation.Fab
 import com.rustamft.tasksft.presentation.navigation.NavItem
 import com.rustamft.tasksft.presentation.navigation.TopBar
@@ -88,7 +88,7 @@ fun EditorScreen(
 
     EditorScreenContent(
         scaffoldState = scaffoldState,
-        taskStateHolderState = remember { mutableStateOf(viewModel.taskStateHolder) },
+        taskViewState = remember { mutableStateOf(viewModel.taskViewState) },
         openTaskInfoDialogState = viewModel.openTaskInfoDialogState,
         openChooseColorDialogState = viewModel.openChooseColorDialogState,
         openUnsavedTaskDialogState = viewModel.openUnsavedTaskDialogState,
@@ -102,7 +102,7 @@ fun EditorScreen(
 @Composable
 private fun EditorScreenContent(
     scaffoldState: ScaffoldState,
-    taskStateHolderState: State<TaskStateHolder>,
+    taskViewState: State<TaskViewState>,
     openTaskInfoDialogState: MutableState<Boolean>,
     openChooseColorDialogState: MutableState<Boolean>,
     openUnsavedTaskDialogState: MutableState<Boolean>,
@@ -112,9 +112,9 @@ private fun EditorScreenContent(
     onDeleteTask: () -> Unit
 ) {
 
-    val taskStateHolder by taskStateHolderState
+    val task by taskViewState
     val onValueChange = {
-        if (taskStateHolder.title.isBlank()) {
+        if (task.title.isBlank()) {
             valueChangedState.value = false
         } else if (!valueChangedState.value) {
             valueChangedState.value = true
@@ -175,10 +175,12 @@ private fun EditorScreenContent(
 
         Column(modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
 
-            val modifier = Modifier.padding(DIMEN_SMALL)
+            val modifier = Modifier
+                .padding(top = DIMEN_SMALL)
+                .padding(horizontal = DIMEN_SMALL)
             val textFieldShape = Shapes.large
             val textFieldColors = TextFieldDefaults.textFieldColors(
-                backgroundColor = taskStateHolder.color,
+                backgroundColor = task.color,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
@@ -192,9 +194,9 @@ private fun EditorScreenContent(
 
             TextField(
                 modifier = modifier.testTag(TAG_EDITOR_SCREEN_EDITTEXT_TITLE),
-                value = taskStateHolder.title,
+                value = task.title,
                 onValueChange = {
-                    taskStateHolder.title = it
+                    task.title = it
                     onValueChange()
                 },
                 placeholder = { Text(text = stringResource(id = R.string.task_title)) },
@@ -203,9 +205,9 @@ private fun EditorScreenContent(
             )
             TextField(
                 modifier = modifier,
-                value = taskStateHolder.description,
+                value = task.description,
                 onValueChange = {
-                    taskStateHolder.description = it
+                    task.description = it
                     onValueChange()
                 },
                 placeholder = { Text(text = stringResource(id = R.string.task_description)) },
@@ -219,7 +221,7 @@ private fun EditorScreenContent(
                 Text(text = stringResource(id = R.string.task_color))
                 Spacer(modifier = Modifier.width(DIMEN_SMALL))
                 ColorButtonElement(
-                    color = taskStateHolder.color,
+                    color = task.color,
                     onClick = { openChooseColorDialogState.value = true }
                 )
             }
@@ -230,31 +232,31 @@ private fun EditorScreenContent(
                 Text(text = stringResource(id = R.string.reminder))
                 Spacer(modifier = Modifier.width(DIMEN_SMALL))
                 Switch(
-                    checked = taskStateHolder.reminderIsSet,
+                    checked = task.isReminderSet,
                     onCheckedChange = {
-                        taskStateHolder.reminderIsSet = it
+                        task.isReminderSet = it
                         onValueChange()
                     },
                     colors = switchColors
                 )
             }
-            if (taskStateHolder.reminderIsSet) {
+            if (task.isReminderSet) {
                 Row(modifier = modifier) {
                     DatePickerElement(
-                        calendarState = remember { mutableStateOf(taskStateHolder.reminderCalendar) },
+                        calendarState = remember { mutableStateOf(task.reminder) },
                         themeResId = pickerDialogThemeResId,
                         onValueChange = onValueChange
                     )
                     Spacer(modifier = Modifier.width(DIMEN_SMALL))
                     TimePickerElement(
-                        calendarState = remember { mutableStateOf(taskStateHolder.reminderCalendar) },
+                        calendarState = remember { mutableStateOf(task.reminder) },
                         themeResId = pickerDialogThemeResId,
                         onValueChange = onValueChange
                     )
                     Spacer(modifier = Modifier.width(DIMEN_SMALL))
                     DropdownMenuElement(
-                        items = TaskStateHolder.CALENDAR_UNITS_MAP,
-                        selectedItemState = taskStateHolder.repeatCalendarUnitsState,
+                        itemToName = TaskViewState.CALENDAR_UNIT_TO_NAME,
+                        selectedItemState = task.stateRepeatCalendarUnits,
                         onClickAdditional = onValueChange
                     )
                 }
@@ -266,10 +268,10 @@ private fun EditorScreenContent(
                 onDismissRequest = { openTaskInfoDialogState.value = false },
                 title = { Text(text = stringResource(id = R.string.task_info)) },
                 text = {
-                    val createdString = if (taskStateHolder.created == 0L) {
+                    val createdString = if (task.created == 0L) {
                         stringResource(id = R.string.now)
                     } else {
-                        val dateTime = taskStateHolder.created.toDateTime()
+                        val dateTime = task.created.toDateTime()
                         "${dateTime.date} ${dateTime.time}"
                     }
                     Text(
@@ -302,7 +304,7 @@ private fun EditorScreenContent(
                             ColorButtonElement(
                                 color = color,
                                 onClick = {
-                                    taskStateHolder.color = color
+                                    task.color = color
                                     onValueChange()
                                     openChooseColorDialogState.value = false
                                 }
@@ -348,14 +350,14 @@ private fun EditorScreenContent(
 @Preview
 @Composable
 private fun EditorScreenPreview() {
-    AppTheme(theme = Theme.Auto) {
+    AppTheme(theme = Theme.Dark) {
         EditorScreenContent(
             scaffoldState = ScaffoldState(DrawerState(DrawerValue.Open), SnackbarHostState()),
-            taskStateHolderState = remember {
+            taskViewState = remember {
                 mutableStateOf(
-                    TaskStateHolder(
-                        reminderIsSetState = mutableStateOf(true),
-                        colorState = mutableStateOf(AppTheme.taskColors[0])
+                    TaskViewState(
+                        isReminderSet = mutableStateOf(true),
+                        color = mutableStateOf(AppTheme.taskColors[0])
                     )
                 )
             },

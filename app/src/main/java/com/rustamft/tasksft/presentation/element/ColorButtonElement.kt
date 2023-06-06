@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import com.rustamft.tasksft.domain.model.Preferences.Theme
 import com.rustamft.tasksft.presentation.theme.AppTheme
 import com.rustamft.tasksft.presentation.theme.BORDER_SMALL
 import com.rustamft.tasksft.presentation.theme.DIMEN_MEDIUM
@@ -22,14 +24,25 @@ fun ColorButtonElement(
 
     Box(
         modifier = Modifier
-            .clickable(onClick = onClick)
+            .size(size = DIMEN_MEDIUM)
+            .clip(shape = CircleShape)
             .border(
                 width = BORDER_SMALL,
                 color = AppTheme.colors.onBackground,
                 shape = CircleShape
             )
-            .size(DIMEN_MEDIUM)
-            .clip(CircleShape)
-            .background(color)
+            .background(color = color)
+            .clickable(onClick = onClick)
     )
+}
+
+@Preview
+@Composable
+private fun ColorButtonElementPreview() {
+    AppTheme(theme = Theme.Dark) {
+        ColorButtonElement(
+            color = AppTheme.taskColors[0],
+            onClick = {}
+        )
+    }
 }

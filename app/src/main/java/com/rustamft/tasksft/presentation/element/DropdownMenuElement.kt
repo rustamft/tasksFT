@@ -18,7 +18,7 @@ import com.rustamft.tasksft.presentation.theme.Shapes
 
 @Composable
 internal fun <T> DropdownMenuElement(
-    items: Map<T, UIText>,
+    itemToName: Map<T, UIText>,
     selectedItemState: MutableState<T>,
     onClickAdditional: () -> Unit = {}
 ) {
@@ -30,20 +30,22 @@ internal fun <T> DropdownMenuElement(
     ) {
         Button(
             onClick = { expanded = true },
-            content = { Text(text = items[selectedItemState.value]?.asString() ?: "null") },
+            content = { Text(text = itemToName[selectedItemState.value]?.asString() ?: "") },
             shape = Shapes.large
         )
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            items.forEach { (item, uiText) ->
-                DropdownMenuItem(onClick = {
-                    expanded = false
-                    selectedItemState.value = item
-                    onClickAdditional()
-                }) {
-                    Text(uiText.asString())
+            itemToName.forEach { (item, name) ->
+                DropdownMenuItem(
+                    onClick = {
+                        expanded = false
+                        selectedItemState.value = item
+                        onClickAdditional()
+                    }
+                ) {
+                    Text(name.asString())
                 }
             }
         }

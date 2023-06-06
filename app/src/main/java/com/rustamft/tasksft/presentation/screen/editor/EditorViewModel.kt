@@ -10,7 +10,7 @@ import com.rustamft.tasksft.domain.usecase.GetTaskUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
 import com.rustamft.tasksft.presentation.global.TASK_ID
 import com.rustamft.tasksft.presentation.global.toTimeDifference
-import com.rustamft.tasksft.presentation.model.TaskStateHolder
+import com.rustamft.tasksft.presentation.model.TaskViewState
 import com.rustamft.tasksft.presentation.model.UIText
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -28,10 +28,10 @@ class EditorViewModel(
     private val exceptionHandler: CoroutineExceptionHandler,
 ) : ViewModel() {
 
-    private val taskId: Int = arguments.getInt(TASK_ID)
+    private val taskId = arguments.getInt(TASK_ID)
     private val successChannel = Channel<Boolean>()
     val successFlow = successChannel.receiveAsFlow()
-    val taskStateHolder: TaskStateHolder = TaskStateHolder()
+    val taskViewState = TaskViewState()
     val openTaskInfoDialogState = mutableStateOf(false)
     val openChooseColorDialogState = mutableStateOf(false)
     val openUnsavedTaskDialogState = mutableStateOf(false)
@@ -40,29 +40,29 @@ class EditorViewModel(
     init {
         viewModelScope.launch(exceptionHandler) {
             val task = getTaskUseCase.execute(taskId = taskId).first() ?: return@launch
-            taskStateHolder.setStateFromTask(task = task)
+            taskViewState.setStateFromTask(task = task)
         }
     }
 
     fun saveTask() {
         launchInViewModelScope(
-            successMessage = if (taskStateHolder.reminderIsSet) {
-                val difference = taskStateHolder.reminderCalendar.timeInMillis.toTimeDifference()
+            successMessage = if (taskViewState.isReminderSet) null else {
+                val difference = taskViewState.reminder.timeInMillis.toTimeDifference()
                 UIText.StringResource(
                     R.string.reminder_in,
                     difference.days,
                     difference.hours,
                     difference.minutes
                 )
-            } else null
+            }
         ) {
-            saveTaskUseCase.execute(task = taskStateHolder.getStateAsTask())
+            saveTaskUseCase.execute(task = taskViewState.getStateAsTask())
         }
     }
 
     fun deleteTask() {
         launchInViewModelScope {
-            deleteTaskUseCase.execute(task = taskStateHolder.getStateAsTask())
+            deleteTaskUseCase.execute(task = taskViewState.getStateAsTask())
         }
     }
 

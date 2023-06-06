@@ -36,15 +36,42 @@ internal class SaveTaskUseCaseTest {
         }
         runBlocking {
             test(
-                task = Task(finished = false, reminder = 1L),
+                task = Task(
+                    id = 0,
+                    created = 0L,
+                    title = "",
+                    description = "",
+                    reminder = 1L,
+                    repeatCalendarUnit = 0,
+                    finished = false,
+                    color = 0x00000000
+                ),
                 shouldSchedule = true
             )
             test(
-                task = Task(finished = false, reminder = -1L),
+                task = Task(
+                    id = 0,
+                    created = 0L,
+                    title = "",
+                    description = "",
+                    reminder = -1L,
+                    repeatCalendarUnit = 0,
+                    finished = false,
+                    color = 0x00000000
+                ),
                 shouldSchedule = false
             )
             test(
-                task = Task(finished = true, reminder = 1L),
+                task = Task(
+                    id = 0,
+                    created = 0L,
+                    title = "",
+                    description = "",
+                    reminder = 1L,
+                    repeatCalendarUnit = 0,
+                    finished = true,
+                    color = 0x00000000
+                ),
                 shouldSchedule = false
             )
         }

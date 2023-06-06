@@ -2,6 +2,8 @@ package com.rustamft.tasksft.presentation.model
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
@@ -11,33 +13,34 @@ import com.rustamft.tasksft.domain.model.Task
 import com.rustamft.tasksft.presentation.theme.AppTheme
 import java.util.Calendar
 
-class TaskStateHolder(
-    idState: MutableState<Int> = mutableStateOf(-1),
-    titleState: MutableState<String> = mutableStateOf(""),
-    descriptionState: MutableState<String> = mutableStateOf(""),
-    createdState: MutableState<Long> = mutableStateOf(0L),
-    reminderIsSetState: MutableState<Boolean> = mutableStateOf(false),
-    reminderCalendarState: MutableState<Calendar> = mutableStateOf(
+class TaskViewState(
+    id: MutableState<Int> = mutableIntStateOf(-1),
+    title: MutableState<String> = mutableStateOf(""),
+    description: MutableState<String> = mutableStateOf(""),
+    created: MutableState<Long> = mutableLongStateOf(0L),
+    isReminderSet: MutableState<Boolean> = mutableStateOf(false),
+    reminder: MutableState<Calendar> = mutableStateOf(
         Calendar.getInstance().apply {
             set(Calendar.MINUTE, 0)
             add(Calendar.HOUR_OF_DAY, 1)
         }
     ),
-    val repeatCalendarUnitsState: MutableState<Int> = mutableStateOf(0),
-    colorState: MutableState<Color> = mutableStateOf(AppTheme.taskColors.random())
+    repeatCalendarUnits: MutableState<Int> = mutableIntStateOf(0),
+    color: MutableState<Color> = mutableStateOf(AppTheme.taskColors.random())
 ) {
 
-    private var id by idState
-    private var repeatCalendarUnits by repeatCalendarUnitsState
-    var title by titleState
-    var description by descriptionState
-    var created by createdState
-    var reminderIsSet by reminderIsSetState
-    var reminderCalendar by reminderCalendarState
-    var color by colorState
+    val stateRepeatCalendarUnits by lazy { repeatCalendarUnits }
+    var title by title
+    var description by description
+    var created by created
+    var isReminderSet by isReminderSet
+    var reminder by reminder
+    var color by color
+    private var id by id
+    private var repeatCalendarUnits by repeatCalendarUnits
 
     companion object {
-        val CALENDAR_UNITS_MAP = mapOf(
+        val CALENDAR_UNIT_TO_NAME = mapOf(
             0 to UIText.StringResource(R.string.reminder_one_time),
             Calendar.DAY_OF_MONTH to UIText.StringResource(R.string.reminder_daily),
             Calendar.WEEK_OF_MONTH to UIText.StringResource(R.string.reminder_weekly),
@@ -51,8 +54,8 @@ class TaskStateHolder(
         description = task.description
         created = task.created
         if (task.reminder > 0L) {
-            reminderIsSet = true
-            reminderCalendar = Calendar.getInstance().apply {
+            isReminderSet = true
+            reminder = Calendar.getInstance().apply {
                 timeInMillis = task.reminder
             }
             repeatCalendarUnits = task.repeatCalendarUnit
@@ -68,12 +71,9 @@ class TaskStateHolder(
                 created = now,
                 title = title,
                 description = description,
-                reminder = if (reminderIsSet) {
-                    reminderCalendar.timeInMillis
-                } else {
-                    0L
-                },
+                reminder = if (!isReminderSet) 0L else reminder.timeInMillis,
                 repeatCalendarUnit = repeatCalendarUnits,
+                finished = false,
                 color = color.toArgb()
             )
         } else { // Updating existing task
@@ -82,12 +82,9 @@ class TaskStateHolder(
                 created = created,
                 title = title,
                 description = description,
-                reminder = if (reminderIsSet) {
-                    reminderCalendar.timeInMillis
-                } else {
-                    0L
-                },
+                reminder = if (!isReminderSet) 0L else reminder.timeInMillis,
                 repeatCalendarUnit = repeatCalendarUnits,
+                finished = false,
                 color = color.toArgb()
             )
         }
