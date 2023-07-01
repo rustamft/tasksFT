@@ -8,6 +8,7 @@ import com.rustamft.tasksft.R
 import com.rustamft.tasksft.domain.usecase.DeleteTaskUseCase
 import com.rustamft.tasksft.domain.usecase.GetTaskUseCase
 import com.rustamft.tasksft.domain.usecase.SaveTaskUseCase
+import com.rustamft.tasksft.presentation.global.SnackbarFlow
 import com.rustamft.tasksft.presentation.global.TASK_ID
 import com.rustamft.tasksft.presentation.global.toTimeDifference
 import com.rustamft.tasksft.presentation.model.TaskViewState
@@ -24,7 +25,7 @@ class EditorViewModel(
     getTaskUseCase: GetTaskUseCase,
     private val saveTaskUseCase: SaveTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
-    private val snackbarChannel: Channel<UIText>,
+    private val snackbarFlow: SnackbarFlow,
     private val exceptionHandler: CoroutineExceptionHandler,
 ) : ViewModel() {
 
@@ -46,7 +47,7 @@ class EditorViewModel(
 
     fun saveTask() {
         launchInViewModelScope(
-            successMessage = if (taskViewState.isReminderSet) null else {
+            successMessage = if (!taskViewState.isReminderSet) null else {
                 val difference = taskViewState.reminder.timeInMillis.toTimeDifference()
                 UIText.StringResource(
                     R.string.reminder_in,
@@ -72,9 +73,7 @@ class EditorViewModel(
     ) {
         viewModelScope.launch(exceptionHandler) {
             launch { block() }.join()
-            if (successMessage != null) {
-                snackbarChannel.send(successMessage)
-            }
+            successMessage?.let { snackbarFlow.emit(it) }
             successChannel.send(true)
         }
     }

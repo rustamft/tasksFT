@@ -10,6 +10,7 @@ import com.rustamft.tasksft.domain.usecase.ExportTasksUseCase
 import com.rustamft.tasksft.domain.usecase.GetPreferencesUseCase
 import com.rustamft.tasksft.domain.usecase.ImportTasksUseCase
 import com.rustamft.tasksft.domain.usecase.SavePreferencesUseCase
+import com.rustamft.tasksft.presentation.global.SnackbarFlow
 import com.rustamft.tasksft.presentation.model.UIText
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -24,7 +25,7 @@ class SettingsViewModel(
     private val savePreferencesUseCase: SavePreferencesUseCase,
     private val exportTasksUseCase: ExportTasksUseCase,
     private val importTasksUseCase: ImportTasksUseCase,
-    private val snackbarChannel: Channel<UIText>,
+    private val snackbarFlow: SnackbarFlow,
     private val exceptionHandler: CoroutineExceptionHandler
 ) : ViewModel() {
 
@@ -78,9 +79,7 @@ class SettingsViewModel(
         viewModelScope.launch(exceptionHandler) {
             val jobs = blocks.map { block -> launch { block() } }
             jobs.joinAll()
-            if (successMessage != null) {
-                snackbarChannel.send(successMessage)
-            }
+            successMessage?.let { snackbarFlow.emit(it) }
             successChannel.send(true)
         }
     }

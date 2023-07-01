@@ -14,17 +14,15 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.dependency
 import com.rustamft.tasksft.domain.model.Preferences
 import com.rustamft.tasksft.domain.usecase.GetPreferencesUseCase
-import com.rustamft.tasksft.presentation.model.UIText
+import com.rustamft.tasksft.presentation.global.SnackbarFlow
 import com.rustamft.tasksft.presentation.screen.NavGraphs
 import com.rustamft.tasksft.presentation.theme.AppTheme
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.androidx.compose.get
 
 @Composable
 fun MainActivityContent(
     context: Context = LocalContext.current,
-    snackbarChannel: Channel<UIText> = get(),
+    snackbarFlow: SnackbarFlow = get(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     navController: NavHostController = rememberNavController(),
     getPreferencesUseCase: GetPreferencesUseCase = get()
@@ -32,8 +30,8 @@ fun MainActivityContent(
 
     val preferences by getPreferencesUseCase.execute().collectAsState(initial = Preferences())
 
-    LaunchedEffect(Unit) {
-        snackbarChannel.receiveAsFlow().collect { uiText ->
+    LaunchedEffect(true) {
+        snackbarFlow.collect { uiText ->
             scaffoldState.snackbarHostState.showSnackbar(
                 message = uiText.asString(context)
             )

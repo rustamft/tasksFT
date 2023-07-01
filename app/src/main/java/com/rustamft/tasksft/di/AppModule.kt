@@ -2,31 +2,28 @@ package com.rustamft.tasksft.di
 
 import android.os.Bundle
 import android.util.Log
+import com.rustamft.tasksft.presentation.global.SnackbarFlow
 import com.rustamft.tasksft.presentation.global.TAG_COROUTINE_EXCEPTION
 import com.rustamft.tasksft.presentation.model.UIText
 import com.rustamft.tasksft.presentation.screen.editor.EditorViewModel
 import com.rustamft.tasksft.presentation.screen.list.ListViewModel
 import com.rustamft.tasksft.presentation.screen.settings.SettingsViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.onSuccess
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
+@Suppress("RemoveExplicitTypeArguments")
 val appModule = module {
 
-    single<Channel<UIText>> {
-        Channel(2)
+    single<SnackbarFlow> {
+        SnackbarFlow()
     }
 
     single<CoroutineExceptionHandler> {
-        val snackbarChannel: Channel<UIText> = get()
+        val snackbarFlow: SnackbarFlow = get()
         CoroutineExceptionHandler { _, throwable ->
             Log.e(TAG_COROUTINE_EXCEPTION, Log.getStackTraceString(throwable))
-            repeat(3) {
-                snackbarChannel.trySend(UIText.DynamicString(throwable.message.toString()))
-                    .onSuccess { return@repeat }
-            }
+            snackbarFlow.tryEmit(UIText.DynamicString(throwable.message.toString()))
         }
     }
 
@@ -45,7 +42,7 @@ val appModule = module {
             getTaskUseCase = get(),
             saveTaskUseCase = get(),
             deleteTaskUseCase = get(),
-            snackbarChannel = get(),
+            snackbarFlow = get(),
             exceptionHandler = get()
         )
     }
@@ -56,7 +53,7 @@ val appModule = module {
             savePreferencesUseCase = get(),
             exportTasksUseCase = get(),
             importTasksUseCase = get(),
-            snackbarChannel = get(),
+            snackbarFlow = get(),
             exceptionHandler = get()
         )
     }
