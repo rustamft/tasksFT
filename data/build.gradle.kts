@@ -1,16 +1,13 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp") version "${Constants.KOTLIN_VERSION}-1.0.13"
 }
 
 android {
-    compileSdk = 33
-
+    compileSdk = 34
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -45,10 +42,10 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Constants.COROUTINES_VERSION}")
     // Room
-    val roomVersion = "2.6.0-alpha01"
+    val roomVersion = "2.6.0-rc01"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
     // Gson converter
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     // Koin

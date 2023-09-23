@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
-    id("com.google.devtools.ksp") version "${Constants.KOTLIN_VERSION}-1.0.11"
+    id("com.google.devtools.ksp") version "${Constants.KOTLIN_VERSION}-1.0.13"
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
 }
 
@@ -19,15 +19,13 @@ kotlin {
 }
 
 android {
-    compileSdk = 33
-
+    compileSdk = 34
     defaultConfig {
         applicationId = "com.rustamft.tasksft"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
-        versionName = "1.0.7"
-
+        versionName = "1.0.8"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -54,7 +52,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packaging {
         resources {
@@ -70,16 +68,16 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     // Kotlin extensions for 'core' artifact
-    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.core:core-ktx:1.12.0")
     // Lifecycle
-    val lifecycleVersion = "2.6.1"
+    val lifecycleVersion = "2.6.2"
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-service:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
     // Activity
     implementation("androidx.activity:activity-compose:1.7.2")
     // Compose
-    val composeVersion = "1.5.0-beta01"
+    val composeVersion = "1.5.1"
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
@@ -89,7 +87,7 @@ dependencies {
     // Accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
     // Compose destinations
-    val composeDestinationsVersion = "1.9.42-beta"
+    val composeDestinationsVersion = "1.9.53"
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestinationsVersion")
     ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestinationsVersion")
     // Koin
@@ -102,16 +100,16 @@ dependencies {
     // Coroutines test
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${Constants.COROUTINES_VERSION}")
     // LeakCanary
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.11")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
     // JUnit
-    val junitVersion = "5.9.1"
+    val junitVersion = "5.10.0"
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     // MockK
-    testImplementation("io.mockk:mockk:1.13.5")
+    testImplementation("io.mockk:mockk:1.13.8")
     // Kaspresso
-    val kaspressoVersion = "1.5.2"
+    val kaspressoVersion = "1.5.3"
     androidTestImplementation("com.kaspersky.android-components:kaspresso:$kaspressoVersion")
     androidTestImplementation("com.kaspersky.android-components:kaspresso-compose-support:$kaspressoVersion")
 }
