@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp") version "${Constants.KOTLIN_VERSION}-1.0.13"
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -32,24 +32,19 @@ android {
 }
 
 dependencies {
-
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-
     implementation(project(":domain"))
     // DocumentFile
-    implementation("androidx.documentfile:documentfile:1.0.1")
+    implementation(libs.documentFile)
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Constants.COROUTINES_VERSION}")
+    implementation(libs.coroutines.android)
     // Room
-    val roomVersion = "2.6.0-rc01"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
     // Gson converter
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.gsonConverter)
     // Koin
-    implementation("io.insert-koin:koin-android:${Constants.KOIN_VERSION}")
-    testImplementation("io.insert-koin:koin-test:${Constants.KOIN_VERSION}")
-    testImplementation("io.insert-koin:koin-test-junit4:${Constants.KOIN_VERSION}")
+    implementation(libs.koin.android)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.testJunit4)
 }

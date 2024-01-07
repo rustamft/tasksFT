@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
-    id("com.google.devtools.ksp") version "${Constants.KOTLIN_VERSION}-1.0.13"
+    alias(libs.plugins.ksp)
     id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
 }
 
@@ -25,7 +25,7 @@ android {
         minSdk = 21
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.8"
+        versionName = "1.0.9"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -52,7 +52,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
     packaging {
         resources {
@@ -68,48 +68,43 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     // Kotlin extensions for 'core' artifact
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation(libs.core.ktx)
     // Lifecycle
-    val lifecycleVersion = "2.6.2"
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-service:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
+    implementation(libs.lifecycle.runtimeKtx)
+    implementation(libs.lifecycle.service)
+    implementation(libs.lifecycle.viewmodelCompose)
     // Activity
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation(libs.activity.compose)
     // Compose
-    val composeVersion = "1.5.1"
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
-    debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
+    implementation(libs.compose.ui)
+    implementation(libs.compose.uiToolingPreview)
+    implementation(libs.compose.material)
+    androidTestImplementation(libs.compose.uiTestJunit4)
+    debugImplementation(libs.compose.debugUiTooling)
+    debugImplementation(libs.compose.debugUiTestManifest)
     // Accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
+    implementation(libs.accompanist)
     // Compose destinations
-    val composeDestinationsVersion = "1.9.53"
-    implementation("io.github.raamcosta.compose-destinations:core:$composeDestinationsVersion")
-    ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestinationsVersion")
+    implementation(libs.composeDestinations.core)
+    ksp(libs.composeDestinations.ksp)
     // Koin
-    implementation("io.insert-koin:koin-android:${Constants.KOIN_VERSION}")
-    implementation("io.insert-koin:koin-androidx-compose:${Constants.KOIN_VERSION}")
-    testImplementation("io.insert-koin:koin-test:${Constants.KOIN_VERSION}")
-    testImplementation("io.insert-koin:koin-test-junit4:${Constants.KOIN_VERSION}")
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.testJunit4)
     // WorkManager
-    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation(libs.work.runtimeKtx)
     // Coroutines test
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${Constants.COROUTINES_VERSION}")
+    implementation(libs.coroutines.test)
     // LeakCanary
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
+    debugImplementation(libs.leakCanary)
     // JUnit
-    val junitVersion = "5.10.0"
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation(libs.junit.api)
+    testRuntimeOnly(libs.junit.engine)
+    androidTestImplementation(libs.junit.android)
     // MockK
-    testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation(libs.mockk)
     // Kaspresso
-    val kaspressoVersion = "1.5.3"
-    androidTestImplementation("com.kaspersky.android-components:kaspresso:$kaspressoVersion")
-    androidTestImplementation("com.kaspersky.android-components:kaspresso-compose-support:$kaspressoVersion")
+    androidTestImplementation(libs.kaspresso.core)
+    androidTestImplementation(libs.kaspresso.compose)
 }

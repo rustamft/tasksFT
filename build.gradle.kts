@@ -1,8 +1,8 @@
 plugins {
-    id("com.android.application") version "8.1.1" apply false
-    id("com.android.library") version "8.1.1" apply false
-    id("org.jetbrains.kotlin.android") version Constants.KOTLIN_VERSION apply false
-    id("org.jetbrains.kotlin.jvm") version Constants.KOTLIN_VERSION apply false
+    id("com.android.application") version "8.2.1" apply false
+    id("com.android.library") version "8.2.1" apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
 }
 
 task<Delete>("clean") {

@@ -9,7 +9,6 @@ java {
 }
 
 dependencies {
-
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Constants.COROUTINES_VERSION}")
+    implementation(libs.coroutines.android)
 }
