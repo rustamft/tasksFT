@@ -98,7 +98,7 @@ fun ListScreen(
                 tasks = listOfTasksState.value.filter { it.finished }
             )
         },
-        onSaveTask = { task ->
+        onFinishTask = { task ->
             viewModel.saveTask(
                 task = task.copy(finished = !task.finished)
             )
@@ -116,7 +116,7 @@ private fun ListScreenContent(
     onNavigateToEditorNewTask: () -> Unit,
     onNavigateToEditorExistingTask: (Int) -> Unit,
     onDeleteFinishedTasks: () -> Unit,
-    onSaveTask: (Task) -> Unit,
+    onFinishTask: (Task) -> Unit,
 ) {
 
     Scaffold(
@@ -177,8 +177,8 @@ private fun ListScreenContent(
                         .padding(horizontal = DIMEN_SMALL)
                         .pointerInput(key1 = task.finished) {
                             detectTapGestures(
-                                onTap = { onSaveTask(task) },
-                                onLongPress = { onNavigateToEditorExistingTask(task.id) }
+                                onTap = { onNavigateToEditorExistingTask(task.id) },
+                                onLongPress = { onFinishTask(task) }
                             )
                         }
                         .testTag(TAG_LIST_SCREEN_TASK_CARD),
@@ -344,7 +344,7 @@ private fun ListScreenPreview() {
             onNavigateToEditorNewTask = {},
             onNavigateToEditorExistingTask = {},
             onDeleteFinishedTasks = {},
-            onSaveTask = {}
+            onFinishTask = {}
         )
     }
 }

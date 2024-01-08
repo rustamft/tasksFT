@@ -12,7 +12,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-@Suppress("RemoveExplicitTypeArguments")
 val appModule = module {
 
     single<SnackbarFlow> {
